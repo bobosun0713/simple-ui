@@ -1,0 +1,15 @@
+{
+  "name": "@simple/components",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.ts",
+  "scripts": {
+    "build": "vite build "
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@simple/utils": "workspace:^1.0.0"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "name": "@simple-ui/examples",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "dev": "vite"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@simple/components": "workspace:^1.0.0"
+  }
+}
