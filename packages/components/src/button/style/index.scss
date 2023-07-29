@@ -1,0 +1,177 @@
+@import "../../../styles/index.scss";
+
+:root {
+  --su-button-info: #3e8ed0;
+  --su-button-success: #48c78e;
+  --su-button-danger: #f14668;
+  --su-button-warning: #e6a23c;
+  --su-button-text-sm: 1.2rem;
+  --su-button-text-dft: 1.6rem;
+  --su-button-text-md: 2rem;
+  --su-button-text-lg: 2.4rem;
+  --su-button-size-sm: 6px 12px;
+  --su-button-size-dft: 8px 16px;
+  --su-button-size-md: 10px 20px;
+  --su-button-size-lg: 12px 24px;
+}
+
+$text-sm: var(--su-button-text-sm);
+$text-dft: var(--su-button-text-dft);
+$text-md: var(--su-button-text-md);
+$text-lg: var(--su-button-text-lg);
+$info: var(--su-button-info);
+$success: var(--su-button-success);
+$warning: var(--su-button-warning);
+$danger: var(--su-button-danger);
+
+@mixin hover($hover, $active) {
+  &:hover {
+    opacity: $hover;
+  }
+  &:active {
+    opacity: $active;
+  }
+}
+
+@mixin focus($type) {
+  &:focus:not(:active) {
+    box-shadow: 0 0 0 0.25rem $type;
+  }
+}
+
+@mixin rounded($size) {
+  border-radius: $size;
+}
+
+@mixin loading($size) {
+  margin-right: 8px;
+  width: calc($size * 0.5);
+  height: calc($size * 0.5);
+  border: 2px solid #dbdbdb;
+  border-top-color: #dbdbdb;
+  border-right-color: transparent;
+  border-bottom-color: transparent;
+  border-radius: 100%;
+  animation: circle infinite 0.6s linear;
+}
+
+@keyframes circle {
+  0% {
+    transform: rotate(0);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@mixin disabled() {
+  opacity: 0.6;
+  cursor: no-drop;
+}
+
+@mixin outlined($type) {
+  background-color: #fff;
+  color: $type;
+  border: 1px solid $type;
+}
+
+.su-button {
+  display: flex;
+  align-items: center;
+  border: 0;
+  border-radius: 4px;
+  font-size: $text-dft;
+  white-space: nowrap;
+  color: #fff;
+
+  @include hover(0.8, 1);
+
+  &-info {
+    background-color: $info;
+    @include focus(rgba(#3e8ed0, 0.3));
+  }
+
+  &-success {
+    background-color: $success;
+    @include focus(rgba(#48c78e, 0.3));
+  }
+
+  &-warning {
+    background-color: $warning;
+    @include focus(rgba(#e6a23c, 0.3));
+  }
+
+  &-danger {
+    background-color: $danger;
+    @include focus(rgba(#f14668, 0.3));
+  }
+
+  &-size {
+    &-sm {
+      padding: var(--su-button-size-sm);
+      font-size: $text-sm;
+    }
+    &-dft {
+      padding: var(--su-button-size-dft);
+      font-size: $text-dft;
+    }
+    &-md {
+      padding: var(--su-button-size-md);
+      font-size: $text-md;
+    }
+    &-lg {
+      padding: var(--su-button-size-lg);
+      font-size: $text-lg;
+    }
+  }
+
+  &-rounded {
+    &-sm {
+      @include rounded(calc($text-sm * 1.25));
+    }
+    &-dft {
+      @include rounded(calc($text-dft * 1.25));
+    }
+    &-md {
+      @include rounded(calc($text-md * 1.25));
+    }
+    &-lg {
+      @include rounded(calc($text-lg * 1.25));
+    }
+  }
+
+  &-loading {
+    &-sm {
+      @include loading($text-sm);
+    }
+    &-dft {
+      @include loading($text-dft);
+    }
+    &-md {
+      @include loading($text-md);
+    }
+    &-lg {
+      @include loading($text-lg);
+    }
+  }
+
+  &--outlined {
+    &.su-button-info {
+      @include outlined($info);
+    }
+    &.su-button-success {
+      @include outlined($success);
+    }
+    &.su-button-warning {
+      @include outlined($warning);
+    }
+    &.su-button-danger {
+      @include outlined($danger);
+    }
+  }
+
+  &--disabled {
+    @include disabled();
+    @include hover(0.6, 0.6);
+  }
+}
