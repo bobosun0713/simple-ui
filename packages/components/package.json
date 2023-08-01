@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.ts",
   "scripts": {
-    "build": "vite build "
+    "build": "vite build ",
+    "test": "vitest",
+    "test:cg": "vitest --coverage"
   },
   "keywords": [],
   "author": "",
