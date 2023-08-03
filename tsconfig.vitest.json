@@ -1,6 +1,9 @@
 {
   "compilerOptions": {
     "composite": true,
-    "types": ["node", "jsdom", "vitest/globals"]
-  }
+    "skipLibCheck": true,
+    "types": ["node", "vitest/globals"]
+  },
+  "include": ["packages/**/*.vue", "packages/**/*.ts", "**/__tests__/**/*"],
+  "exclude": ["node_modules", "dist"]
 }
