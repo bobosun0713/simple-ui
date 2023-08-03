@@ -1,12 +1,13 @@
 <script lang="ts" setup>
 import { computed, defineAsyncComponent } from "vue";
 import type { IconProps } from "./Icon";
+
 defineOptions({
   name: "SIcon"
 });
 
 const props = withDefaults(defineProps<IconProps>(), {
-  name: "",
+  name: "github",
   width: 20,
   height: 20
 });
