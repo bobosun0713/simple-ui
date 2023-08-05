@@ -5,13 +5,6 @@
   box-sizing: border-box;
 }
 
-*,
-::before,
-::after {
-  background-repeat: no-repeat;
-  box-sizing: inherit;
-}
-
 ::before,
 ::after {
   text-decoration: inherit;
