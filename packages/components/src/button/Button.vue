@@ -4,8 +4,12 @@ import type { ButtonProps } from "./Button";
 defineOptions({
   name: "SButton"
 });
+const props = withDefaults(defineProps<ButtonProps>(), {
+  type: "info",
+  size: "dft"
+});
 
-const suClass = computed(() => [
+const classes = computed(() => [
   "su-button",
   `su-button-size-${props.size}`,
   props.type ? `su-button-${props.type}` : "",
@@ -13,15 +17,10 @@ const suClass = computed(() => [
   props.outlined ? "su-button--outlined" : "",
   props.disabled ? "su-button--disabled" : ""
 ]);
-
-const props = withDefaults(defineProps<ButtonProps>(), {
-  type: "info",
-  size: "dft"
-});
 </script>
 
 <template>
-  <button type="button" :class="suClass">
+  <button type="button" :class="classes">
     <div v-if="props.loading" :class="`su-button-loading-${props.size}`"></div>
     <slot>Button</slot>
   </button>
