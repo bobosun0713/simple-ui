@@ -26,5 +26,11 @@ const currentIcon = computed(() => {
 </script>
 
 <template>
-  <component :is="currentIcon" v-if="currentIcon" :width="props.width" :height="props.height"></component>
+  <component
+    :is="currentIcon"
+    v-if="currentIcon"
+    :fill="props.fill"
+    :width="props.width"
+    :height="props.height"
+  ></component>
 </template>
