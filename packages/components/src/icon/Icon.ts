@@ -16,7 +16,8 @@ type IconNames =
   | "search"
   | "trash"
   | "user"
-  | "warning";
+  | "warning"
+  | "loading";
 
 export interface IconProps {
   name: IconNames;
