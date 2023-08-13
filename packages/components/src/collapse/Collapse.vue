@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { ref, onMounted, computed } from "vue";
-import type { CollapseProps } from "./Collapse.ts";
+import type { CollapseProps } from "./types";
 import SIcon from "../icon/Icon.vue";
 defineOptions({
   name: "SCollapse"
