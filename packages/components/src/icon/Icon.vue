@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { computed, defineAsyncComponent } from "vue";
-import type { IconProps } from "./Icon";
+import type { IconProps } from "./types";
 
 defineOptions({
   name: "SIcon"
