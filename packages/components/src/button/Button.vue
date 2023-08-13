@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { computed } from "vue";
-import type { ButtonProps } from "./Button";
+import type { ButtonProps } from "./types";
 defineOptions({
   name: "SButton"
 });
