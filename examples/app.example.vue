@@ -5,7 +5,7 @@ defineOptions({
 </script>
 
 <template>
-  <SDemo></SDemo>
+  <h1>Example</h1>
 </template>
 
 <style></style>
