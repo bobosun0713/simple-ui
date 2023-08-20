@@ -1,5 +1,9 @@
 export interface LoadingProps {
-  visible: boolean;
+  visible?: boolean;
   spinner?: string;
   timer?: number;
+}
+
+export interface LoadingProvideProps {
+  spinner?: string;
 }

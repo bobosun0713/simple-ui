@@ -1,17 +1,19 @@
 import type { ComponentInternalInstance } from "vue";
+import type { LoadingProvideProps } from "./types";
 import { createComponent } from "@simple/utils";
 import Loading from "./Loading.vue";
 
-export default () => {
+export default (options?: LoadingProvideProps) => {
   const { vNode, component } = createComponent(Loading);
   const props = (vNode.component as ComponentInternalInstance).props;
+
+  if (options) Object.assign(props, options);
+
   let clearTimer: number;
 
-  function show(spinner?: string) {
+  function show() {
     if (clearTimer) clearTimeout(clearTimer);
-    if (spinner) Object.assign(props, { spinner });
     props.visible = true;
-
     document.body.appendChild(component as HTMLElement);
   }
 
@@ -26,6 +28,7 @@ export default () => {
   }
 
   return {
+    instance: props,
     show,
     close
   };
