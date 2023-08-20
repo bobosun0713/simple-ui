@@ -8,8 +8,7 @@ defineOptions({
 });
 
 const props = withDefaults(defineProps<LoadingProps>(), {
-  visible: false,
-  timer: 2000
+  visible: false
 });
 
 const isLoading = ref(false);
@@ -29,9 +28,9 @@ onMounted(() => {
 });
 
 const setTimer = () => {
+  clearInterval(timer);
   timer = window.setTimeout(() => {
     isLoading.value = false;
-    clearInterval(timer);
   }, props.timer);
 };
 </script>
@@ -45,7 +44,7 @@ const setTimer = () => {
       <template v-else>
         <div class="su-loading-content">
           <slot>
-            <SIcon name="loading" class="su-loading-spinner"></SIcon>
+            <SIcon name="loading" width="60" height="60" fill="#3e8ed0" class="su-loading-spinner"></SIcon>
           </slot>
         </div>
       </template>
