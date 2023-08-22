@@ -1,8 +1,7 @@
+@use "../../../styles/reset";
+@use "../../../styles/variables" as *;
+
 :root {
-  --su-button-info: #3e8ed0;
-  --su-button-success: #48c78e;
-  --su-button-danger: #f14668;
-  --su-button-warning: #e6a23c;
   --su-button-text-sm: 1.2rem;
   --su-button-text-dft: 1.6rem;
   --su-button-text-md: 2rem;
@@ -17,10 +16,6 @@ $text-sm: var(--su-button-text-sm);
 $text-dft: var(--su-button-text-dft);
 $text-md: var(--su-button-text-md);
 $text-lg: var(--su-button-text-lg);
-$info: var(--su-button-info);
-$success: var(--su-button-success);
-$warning: var(--su-button-warning);
-$danger: var(--su-button-danger);
 
 @mixin hover($hover, $active) {
   &:hover {
@@ -43,8 +38,8 @@ $danger: var(--su-button-danger);
 
 @mixin loading($size) {
   margin-right: 8px;
-  width: calc($size * 0.5);
-  height: calc($size * 0.5);
+  width: calc($size * 0.8);
+  height: calc($size * 0.8);
   border: 2px solid #dbdbdb;
   border-top-color: #dbdbdb;
   border-right-color: transparent;
@@ -68,7 +63,7 @@ $danger: var(--su-button-danger);
 }
 
 @mixin outlined($type) {
-  background-color: #fff;
+  background-color: $light;
   color: $type;
   border: 1px solid $type;
 }
@@ -80,28 +75,28 @@ $danger: var(--su-button-danger);
   border-radius: 4px;
   font-size: $text-dft;
   white-space: nowrap;
-  color: #fff;
+  color: $light;
 
   @include hover(0.8, 1);
 
   &-info {
-    background-color: $info;
-    @include focus(rgba(#3e8ed0, 0.3));
+    background-color: $primary;
+    @include focus(rgba($primary, 0.3));
   }
 
   &-success {
     background-color: $success;
-    @include focus(rgba(#48c78e, 0.3));
+    @include focus(rgba($success, 0.3));
   }
 
   &-warning {
     background-color: $warning;
-    @include focus(rgba(#e6a23c, 0.3));
+    @include focus(rgba($warning, 0.3));
   }
 
   &-danger {
     background-color: $danger;
-    @include focus(rgba(#f14668, 0.3));
+    @include focus(rgba($danger, 0.3));
   }
 
   &-size {
@@ -154,8 +149,8 @@ $danger: var(--su-button-danger);
   }
 
   &--outlined {
-    &.su-button-info {
-      @include outlined($info);
+    &.su-primary {
+      @include outlined($primary);
     }
     &.su-button-success {
       @include outlined($success);
