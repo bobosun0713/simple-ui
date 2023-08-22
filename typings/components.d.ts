@@ -6,6 +6,7 @@ declare module "@vue/runtime-core" {
     SCollapse: typeof import("../packages/components")["SCollapse"];
     SIcon: typeof import("../packages/components")["SIcon"];
     SLoading: typeof import("../packages/components")["SLoading"];
+    STooltip: typeof import("../packages/components")["STooltip"];
   }
 }
 export {};
