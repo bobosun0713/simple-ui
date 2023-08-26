@@ -12,9 +12,9 @@ describe("Button.vue", () => {
   const createComponent = (props: object | any = {}, content: string | VNode = "") =>
     mount(
       {
-        template: `<Tooltip label="${props?.label}" position="${
-          props?.position && "top"
-        }" :show-arrow="${props?.showArrow}">  ${content} </Tooltip>`,
+        template: `<Tooltip label="${props.label}" position="${props.position || "top"}" :show-arrow="${
+          props.showArrow
+        }">  ${content} </Tooltip>`,
         components: {
           Tooltip
         }
@@ -25,11 +25,18 @@ describe("Button.vue", () => {
     );
 
   it("should render default structure", async () => {
-    const wrapper = createComponent({ label: "testing" }, "<button type='button'>Button</button>");
+    const wrapper = createComponent({ label: "testing", showArrow: true }, "<button type='button'>Button</button>");
 
     await wrapper.find("button").trigger("mouseenter");
 
-    expect(document.querySelector(".su-tooltip-content").textContent).toBe("testing");
+    expect(wrapper.find(".su-tooltip-content").text()).toBe("testing");
+    expect(wrapper.find(".su-tooltip-content").classes()).toContain("su-tooltip-content--top");
+  });
+
+  it("should render slot content", async () => {
+    const wrapper = createComponent({ label: "testing", showArrow: true }, "<h1>Tooltip</h1>");
+
+    expect(wrapper.find(".su-tooltip-trigger").text()).toBe("Tooltip");
   });
 
   it("should not show arrow", async () => {
@@ -38,11 +45,5 @@ describe("Button.vue", () => {
     await wrapper.find("button").trigger("mouseenter");
 
     expect(wrapper.find(".su-tooltip-content").classes()).toContain("su-tooltip-content--disabled-arrow");
-  });
-
-  it("should render slot content", async () => {
-    const wrapper = createComponent({ label: "testing", showArrow: false }, "<h1>Tooltip</h1>");
-
-    expect(wrapper.find(".su-tooltip-trigger").text()).toBe("Tooltip");
   });
 });
