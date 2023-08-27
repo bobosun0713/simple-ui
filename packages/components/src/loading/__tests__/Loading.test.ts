@@ -1,6 +1,6 @@
 import { nextTick } from "vue";
 import Loading from "../Loading.vue";
-import Provide from "../provide";
+import service from "../service";
 import { mount } from "@vue/test-utils";
 
 describe("Loading.vue", () => {
@@ -41,7 +41,7 @@ describe("Loading.vue", () => {
     });
 
     it("should display loading state", () => {
-      const loadingProvide = Provide();
+      const loadingProvide = service();
 
       loadingProvide.show();
 
@@ -49,7 +49,7 @@ describe("Loading.vue", () => {
     });
 
     it("should display `spinner` prop content", async () => {
-      const loadingProvide = Provide({ spinner: "Loading" });
+      const loadingProvide = service({ spinner: "Loading" });
 
       loadingProvide.show();
 
@@ -59,7 +59,7 @@ describe("Loading.vue", () => {
     });
 
     describe("when loading state is open", () => {
-      const loadingProvide = Provide();
+      const loadingProvide = service();
       loadingProvide.show();
 
       it("should close loading state", () => {

@@ -1,8 +1,6 @@
-import { withInstall } from "@simple/utils";
-import provide from "./provide";
-import Loading from "./Loading.vue";
+import { withInstallFunction } from "@simple/utils";
+import service from "./service";
 
-const SLoading = withInstall(Loading);
-
-export { SLoading, provide as SLoadingService };
+const SLoading = withInstallFunction(service, "SLoadingService");
+export { SLoading as SLoadingService };
 export default SLoading;
