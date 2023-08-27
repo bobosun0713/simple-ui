@@ -1,17 +1,31 @@
-import type { App, Plugin, Directive } from "vue";
+import type { App, AppContext, Plugin, Directive } from "vue";
+
 type SFCWithInstall<T> = T & Plugin;
-type SFCOptions = {
-  provide?: Record<string, any>;
-  directive?: Directive;
+type SFCInstallWithContext<T> = SFCWithInstall<T> & {
+  _context: AppContext | null;
 };
 
-export const withInstall = <T>(component: T, options?: SFCOptions) => {
+export const withInstall = <T>(component: T) => {
   (component as SFCWithInstall<T>).install = (app: App) => {
     const name = (component as any).name;
     app.component(name, component as SFCWithInstall<T>);
-
-    if (options?.directive) app.directive(name, options.directive);
-    if (options?.provide) app.provide("$" + name, options.provide);
   };
   return component as SFCWithInstall<T>;
+};
+
+export const withInstallFunction = <T>(fn: T, name: string) => {
+  (fn as SFCWithInstall<T>).install = (app: App) => {
+    (fn as SFCInstallWithContext<T>)._context = app._context;
+    app.config.globalProperties[name] = fn;
+  };
+
+  return fn as SFCInstallWithContext<T>;
+};
+
+export const withInstallDirective = <T extends Directive>(directive: T, name: string) => {
+  (directive as SFCWithInstall<T>).install = (app: App): void => {
+    app.directive(name, directive);
+  };
+
+  return directive as SFCWithInstall<T>;
 };
