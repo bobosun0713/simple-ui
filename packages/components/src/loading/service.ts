@@ -1,18 +1,17 @@
-import type { ComponentInternalInstance } from "vue";
 import type { LoadingProvideProps } from "./types";
 import { dynamicCreate, destroyDynamicCreate } from "@simple/utils";
 import Loading from "./Loading.vue";
 
 export default (options?: LoadingProvideProps) => {
-  const { vNode, component } = dynamicCreate(Loading, options);
-  const props = (vNode.component as ComponentInternalInstance).props;
+  const vm = dynamicCreate(Loading, options);
+  const props = vm.component!.props;
 
   let timer: number;
 
   function show() {
     if (timer) clearTimeout(timer);
     props.visible = true;
-    document.body.appendChild(component as HTMLElement);
+    document.body.appendChild(vm.el as HTMLElement);
   }
 
   function close() {
@@ -21,7 +20,7 @@ export default (options?: LoadingProvideProps) => {
     props.visible = false;
 
     timer = window.setTimeout(() => {
-      destroyDynamicCreate(component as HTMLDivElement);
+      destroyDynamicCreate(vm.el as HTMLDivElement);
     }, 1000);
   }
 
