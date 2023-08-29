@@ -1,0 +1,58 @@
+@use "../../../styles/reset";
+@use "../../../styles/variables" as *;
+
+$message-colors: (
+  info: $primary,
+  warning: $warning,
+  success: $success,
+  danger: $danger
+);
+
+.su-message {
+  position: fixed;
+  padding: 8px 12px;
+  top: 0;
+  left: 50%;
+  border-radius: 4px;
+  transform: translateX(-50%);
+  transition: $default-transition;
+
+  display: flex;
+  align-items: center;
+
+  &-body {
+    font-size: 1.6rem;
+    color: $light;
+  }
+
+  &-cancel {
+    padding-left: 6px;
+    line-height: 0;
+    height: 100%;
+    border: 0;
+    background: transparent;
+    fill: $dark;
+  }
+
+  // Modifiers (background-color)
+  @each $key, $value in $message-colors {
+    &--#{$key} {
+      background-color: $value;
+    }
+  }
+}
+
+/* Animation */
+.message-enter-active,
+.message-leave-active {
+  opacity: 1;
+  left: 50%;
+  transform: translate(-50%, 0);
+}
+
+.message-enter-from,
+.message-leave-to {
+  opacity: 0;
+  left: 50%;
+  transform: translate(-50%, -30px);
+}
