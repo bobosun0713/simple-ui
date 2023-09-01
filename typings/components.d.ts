@@ -9,8 +9,8 @@ declare module "@vue/runtime-core" {
   }
 
   interface ComponentCustomProperties {
-    SLoadingService: typeof import("../packages/components")["SLoadingService"];
-    SMessageService: typeof import("../packages/components")["SMessageService"];
+    $message: typeof import("../packages/components")["SLoadingService"];
+    $loading: typeof import("../packages/components")["SMessageService"];
   }
 }
 export {};
