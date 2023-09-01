@@ -29,10 +29,10 @@ onUnmounted(() => {
 <template>
   <transition name="message" mode="out-in">
     <div v-show="visible" class="su-message" :class="`su-message--${props.type}`" :style="verticalStyle">
-      <div class="su-message-body">
+      <div class="su-message__content">
         {{ message }}
       </div>
-      <button v-if="props.showClose" type="button" class="su-message-cancel" @click="props.onClose">
+      <button v-if="props.showClose" type="button" class="su-message__cancel" @click="props.onClose">
         <SIcon name="close" width="24" height="24"></SIcon>
       </button>
     </div>

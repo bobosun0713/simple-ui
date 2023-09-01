@@ -3,8 +3,8 @@
 
 $message-colors: (
   info: $primary,
-  warning: $warning,
   success: $success,
+  warning: $warning,
   danger: $danger
 );
 
@@ -20,12 +20,12 @@ $message-colors: (
   display: flex;
   align-items: center;
 
-  &-body {
+  &__content {
     font-size: 1.6rem;
     color: $light;
   }
 
-  &-cancel {
+  &__cancel {
     padding-left: 6px;
     line-height: 0;
     height: 100%;
