@@ -1,8 +1,11 @@
+import { nextTick } from "vue";
 import service from "../service";
 
 describe("Message.vue", () => {
+  const messageInstance = service;
   afterEach(() => {
     document.body.innerHTML = "";
+    messageInstance.closeAll();
   });
 
   it("should display message", () => {
@@ -34,14 +37,33 @@ describe("Message.vue", () => {
     expect(document.querySelector(".su-message").className).toContain(expected);
   });
 
-  it("should auto close message", () => {
+  it("should auto close message", async () => {
     vi.useFakeTimers();
-
-    service();
+    const message = service();
 
     vi.advanceTimersToNextTimer();
     vi.advanceTimersToNextTimer();
 
-    expect(document.querySelector(".su-message")).toBeFalsy();
+    expect(message.instance.exposed.visible.value).toBe(false);
+  });
+
+  it("should have spacing between messages", async () => {
+    service({ message: "message 1", offsetTop: 10, eleSpacing: 20 });
+
+    await nextTick();
+
+    expect((document.querySelectorAll(".su-message")[0] as HTMLDivElement).style.top).toBe("10px");
+
+    service({ message: "message 2", offsetTop: 10, eleSpacing: 20 });
+
+    await nextTick();
+
+    expect((document.querySelectorAll(".su-message")[1] as HTMLDivElement).style.top).toBe("30px");
+
+    service({ message: "message 3", offsetTop: 10, eleSpacing: 20 });
+
+    await nextTick();
+
+    expect((document.querySelectorAll(".su-message")[2] as HTMLDivElement).style.top).toBe("50px");
   });
 });
