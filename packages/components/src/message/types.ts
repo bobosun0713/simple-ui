@@ -1,5 +1,4 @@
 export type MessageProps = {
-  visible?: boolean;
   type?: string;
   message?: number | string;
   duration?: number | string;
@@ -7,4 +6,5 @@ export type MessageProps = {
   eleSpacing?: number | string;
   showClose?: boolean;
   onClose?: () => void;
+  onClear?: () => void;
 };

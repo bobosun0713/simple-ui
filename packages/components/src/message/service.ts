@@ -7,31 +7,31 @@ import type { MessageProps } from "./types";
 const instances: VNode[] = [];
 let instanceIdx = 0;
 
-export default (options?: MessageProps) => {
+function message(options?: MessageProps) {
   const mergeProps = Object.assign({}, messageDefault, options);
-  const vm = dynamicCreate(Message, {
+  const vnode = dynamicCreate(Message, {
     ...mergeProps,
-    onClose: close
+    onClose: close,
+    onClear: clear
   });
 
-  const props = vm.component!.props;
+  const vm = vnode.component!;
+  const props = vm.props;
+
   props.id = instanceIdx;
 
   instances.forEach(item => ((props.offsetTop as number) += Number(item.el!.offsetHeight + props.eleSpacing)));
-  instances.push(vm);
+  instances.push(vnode);
 
-  document.body.appendChild(vm.el as HTMLElement);
-  props.visible = true;
+  document.body.appendChild(vnode.el as HTMLElement);
 
   instanceIdx++;
 
   function close() {
-    props.visible = false;
+    vm.exposed!.visible.value = false;
 
-    const instanceIdx = instances.findIndex(item => item.component!.props.id === props.id);
+    const instanceIdx = instances.indexOf(vnode);
     if (instanceIdx < 0 || !instances.length) return;
-
-    instances[instanceIdx].component!.props.visible = false;
     instances.splice(instanceIdx, 1);
 
     let verticalOffset = mergeProps.offsetTop;
@@ -39,9 +39,25 @@ export default (options?: MessageProps) => {
       verticalOffset += idx === 0 ? 0 : item.el!.offsetHeight + props.eleSpacing;
       item.component!.props.offsetTop = verticalOffset;
     });
-
-    window.setTimeout(() => {
-      destroyDynamicCreate(vm.el as HTMLDivElement);
-    }, 1000);
   }
-};
+
+  function clear() {
+    destroyDynamicCreate(vnode.el as HTMLDivElement);
+  }
+
+  return {
+    instance: vm,
+    close
+  };
+}
+
+function closeAll() {
+  for (const instance of instances) {
+    instance.component!.exposed!.visible.value = false;
+  }
+  instances.length = 0;
+}
+
+message.closeAll = closeAll;
+
+export default message;

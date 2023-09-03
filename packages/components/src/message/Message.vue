@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, onMounted, onUnmounted } from "vue";
+import { ref, computed, onMounted, onUnmounted } from "vue";
 import { messageDefault } from "./Message";
 import SIcon from "../icon/Icon.vue";
 import type { MessageProps } from "./types";
@@ -10,10 +10,14 @@ defineOptions({
 
 const props = withDefaults(defineProps<MessageProps>(), messageDefault);
 
+const visible = ref(false);
 let timer: number;
+
 const verticalStyle = computed(() => `top:${props.offsetTop}px;`);
+const onLeave = () => props.onClear?.();
 
 onMounted(() => {
+  visible.value = true;
   if (!props.duration) return;
   if (timer) clearTimeout(timer);
   timer = window.setTimeout(() => {
@@ -24,10 +28,12 @@ onMounted(() => {
 onUnmounted(() => {
   if (timer) clearTimeout(timer);
 });
+
+defineExpose({ visible });
 </script>
 
 <template>
-  <transition name="message" mode="out-in">
+  <transition name="message" @after-leave="onLeave">
     <div v-show="visible" class="su-message" :class="`su-message--${props.type}`" :style="verticalStyle">
       <div class="su-message__content">
         {{ message }}
