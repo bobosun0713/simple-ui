@@ -13,11 +13,11 @@ const props = withDefaults(defineProps<NotificationProps>(), notificationDefault
 const visible = ref(false);
 let timer: number;
 
-const horizontalDirectionClass = computed(() => (/right/.test(props.position) ? "right" : "left"));
 const verticalDirection = computed(() => (/bottom/.test(props.position) ? "bottom" : "top"));
-const verticalStyle = computed(() => `${verticalDirection.value}:${props.offsetTop}px;`);
+const verticalOffsetTop = computed(() => `${verticalDirection.value}:${props.offsetTop}px;`);
+const horizontalDirection = computed(() => (/right/.test(props.position) ? "right" : "left"));
 const selectAnimation = computed(() =>
-  horizontalDirectionClass.value.includes("right") ? "notificationR" : "notificationL"
+  horizontalDirection.value.includes("right") ? "notificationR" : "notificationL"
 );
 
 onMounted(() => {
@@ -37,22 +37,22 @@ defineExpose({ visible });
 </script>
 
 <template>
-  <transition :name="selectAnimation" @after-leave="props.onClear">
+  <transition :name="selectAnimation" @after-leave="onClear">
     <div
       v-show="visible"
       class="su-notification"
-      :class="[horizontalDirectionClass, `su-notification--${props.type}`]"
-      :style="verticalStyle"
+      :class="[horizontalDirection, type && `su-notification--${type}`]"
+      :style="verticalOffsetTop"
     >
-      <div v-if="props.title" class="su-notification__header">
-        <div class="su-notification__title" v-html="props.title"></div>
+      <div v-if="title" class="su-notification__header">
+        <div class="su-notification__title" v-html="title"></div>
       </div>
 
-      <button v-if="props.showClose" type="button" class="su-notification__cancel" @click="props.onClose">
+      <button v-if="showClose" type="button" class="su-notification__cancel" @click="onClose">
         <SIcon name="close"></SIcon>
       </button>
 
-      <div class="su-notification__body" v-html="props.message"></div>
+      <div class="su-notification__body" v-html="message"></div>
     </div>
   </transition>
 </template>
