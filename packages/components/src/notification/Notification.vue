@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { ref, computed, onMounted, onUnmounted } from "vue";
-import { notificationDefault } from "./Notification";
+import { notificationDefault } from "./props";
 import SIcon from "../icon/Icon.vue";
 import type { NotificationProps } from "./types";
 
@@ -37,7 +37,7 @@ defineExpose({ visible });
 </script>
 
 <template>
-  <transition :name="selectAnimation" @after-leave="onClear">
+  <transition :name="selectAnimation" @after-leave="onClosed">
     <div
       v-show="visible"
       class="su-notification"

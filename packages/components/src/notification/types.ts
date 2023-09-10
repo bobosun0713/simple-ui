@@ -8,5 +8,5 @@ export type NotificationProps = {
   showClose?: boolean;
   position?: string;
   onClose?: () => void;
-  onClear?: () => void;
+  onClosed?: () => void;
 };

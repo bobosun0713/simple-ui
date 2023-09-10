@@ -1,6 +1,6 @@
 import { withInstallFunction } from "@simple/utils";
-import service from "./service";
+import Notification from "./Notification";
 
-const SNotification = withInstallFunction(service, "$notification");
-export { SNotification as SNotificationService };
+const SNotification = withInstallFunction(Notification, "$notification");
+export { SNotification };
 export default SNotification;
