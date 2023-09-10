@@ -1,6 +1,6 @@
 import { withInstallFunction } from "@simple/utils";
-import service from "./service";
+import Message from "./Message";
 
-const SMessage = withInstallFunction(service, "$message");
-export { SMessage as SMessageService };
+const SMessage = withInstallFunction(Message, "$message");
+export { SMessage };
 export default SMessage;

@@ -6,5 +6,5 @@ export type MessageProps = {
   eleSpacing?: number | string;
   showClose?: boolean;
   onClose?: () => void;
-  onClear?: () => void;
+  onClosed?: () => void;
 };

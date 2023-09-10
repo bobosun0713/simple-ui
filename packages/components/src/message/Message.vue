@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { ref, computed, onMounted, onUnmounted } from "vue";
-import { messageDefault } from "./Message";
+import { messageDefault } from "./props";
 import SIcon from "../icon/Icon.vue";
 import type { MessageProps } from "./types";
 
@@ -14,7 +14,6 @@ const visible = ref(false);
 let timer: number;
 
 const verticalStyle = computed(() => `top:${props.offsetTop}px;`);
-const onLeave = () => props.onClear?.();
 
 onMounted(() => {
   visible.value = true;
@@ -33,7 +32,7 @@ defineExpose({ visible });
 </script>
 
 <template>
-  <transition name="message" @after-leave="onLeave">
+  <transition name="message" @after-leave="onClosed">
     <div v-show="visible" class="su-message" :class="`su-message--${props.type}`" :style="verticalStyle">
       <div class="su-message__content">
         {{ message }}
