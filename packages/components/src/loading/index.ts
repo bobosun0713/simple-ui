@@ -1,6 +1,6 @@
 import { withInstallFunction } from "@simple/utils";
-import service from "./service";
+import Loading from "./Loading";
 
-const SLoading = withInstallFunction(service, "$loading");
-export { SLoading as SLoadingService };
+const SLoading = withInstallFunction(Loading, "$loading");
+export { SLoading };
 export default SLoading;

@@ -1,43 +1,35 @@
 <script lang="ts" setup>
-import { watch, ref, onMounted } from "vue";
-import type { LoadingProps } from "./types";
+import { ref, onUnmounted, watch } from "vue";
 import SIcon from "../icon/Icon.vue";
+import type { LoadingProps } from "./types";
 
 defineOptions({
   name: "SLoading"
 });
 
-const props = withDefaults(defineProps<LoadingProps>(), {
-  visible: false
-});
+const props = defineProps<LoadingProps>();
 
-const isLoading = ref(false);
+const visible = ref(false);
 let timer: number;
 
-watch(
-  () => props.visible,
-  val => {
-    if (val) isLoading.value = true;
-    else isLoading.value = false;
-    if (props.timer) setTimer();
-  }
-);
-
-onMounted(() => {
-  isLoading.value = props.visible;
+watch(visible, () => {
+  if (timer) clearTimeout(timer);
+  if (!props.duration) return;
+  timer = window.setTimeout(() => {
+    visible.value = false;
+  }, props.duration);
 });
 
-const setTimer = () => {
-  clearInterval(timer);
-  timer = window.setTimeout(() => {
-    isLoading.value = false;
-  }, props.timer);
-};
+onUnmounted(() => {
+  if (timer) clearTimeout(timer);
+});
+
+defineExpose({ visible });
 </script>
 
 <template>
   <transition name="loading">
-    <div v-show="isLoading" class="su-loading">
+    <div v-show="visible" class="su-loading">
       <template v-if="props.spinner">
         <div class="su-loading-content" v-html="props.spinner"></div>
       </template>
