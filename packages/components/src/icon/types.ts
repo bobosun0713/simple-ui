@@ -1,4 +1,4 @@
-type IconNames =
+export type IconNames =
   | "add"
   | "arrowLeft"
   | "arrowRight"
@@ -18,7 +18,9 @@ type IconNames =
   | "user"
   | "warning"
   | "loading"
-  | "eye";
+  | "eye"
+  | "success"
+  | "info";
 
 export interface IconProps {
   name: IconNames;
