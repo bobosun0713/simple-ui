@@ -1,12 +1,12 @@
+export type NotificationTypes = "success" | "warning" | "info" | "danger";
+
 export type NotificationProps = {
-  type?: string;
-  title?: number | string;
+  id?: number | string;
+  type?: NotificationTypes;
+  summary?: number | string;
   message?: number | string;
   duration?: number | string;
-  offsetTop?: number | string;
-  eleSpacing?: number | string;
-  showClose?: boolean;
+  spacing?: number | string;
   position?: string;
-  onClose?: () => void;
-  onClosed?: () => void;
+  slots?: object | null;
 };

@@ -1,8 +1,10 @@
+import type { NotificationTypes } from "./types";
+
 export const notificationDefault = {
-  message: "Content...",
+  type: "success" as NotificationTypes,
+  summary: "Message",
+  message: "Message Content",
   duration: 2500,
-  offsetTop: 20,
-  eleSpacing: 10,
-  position: "left",
-  showClose: true
+  spacing: 10,
+  position: "left"
 };
