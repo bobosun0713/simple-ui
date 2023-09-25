@@ -16,8 +16,12 @@ const props = withDefaults(defineProps<NotificationProps>(), notificationDefault
 const notification = ref<NotificationProps[]>([]);
 const notificationIdx = ref(0);
 
-const verticalDirection = computed(() => (/bottom/.test(props.position) ? "bottom" : "top"));
-const horizontalDirection = computed(() => (/right/.test(props.position) ? "right" : "left"));
+const verticalDirection = computed(() =>
+  /bottom/.test(props.position) ? "su-notification--bottom" : "su-notification--top"
+);
+const horizontalDirection = computed(() =>
+  /right/.test(props.position) ? "su-notification--right" : "su-notification--left"
+);
 const animationType = computed(() =>
   horizontalDirection.value.includes("right") ? "notification-right" : "notification-left"
 );
@@ -26,7 +30,7 @@ function openHandler(data: object): void {
   let result = { id: notificationIdx.value, ...data };
   notificationIdx.value += 1;
 
-  if (verticalDirection.value === "bottom") notification.value.unshift(result);
+  if (verticalDirection.value === "su-notification--bottom") notification.value.unshift(result);
   else notification.value.push(result);
 }
 function removeHandler(idx: string | number) {
@@ -36,6 +40,8 @@ function removeHandler(idx: string | number) {
 function removeAllHandler() {
   notification.value = [];
 }
+
+defineExpose({ notification });
 </script>
 
 <template>

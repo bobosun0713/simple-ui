@@ -1,71 +1,111 @@
 import { nextTick } from "vue";
-import service from "../service";
+import { mount } from "@vue/test-utils";
+import Notification from "../Notification.vue";
+import NotificationService from "../Notification";
 
 describe("Notification.vue", () => {
-  const notificationInstance = service;
-  afterEach(() => {
-    document.body.innerHTML = "";
-    notificationInstance.closeAll();
-  });
+  it("should render default structure", async () => {
+    const wrapper = mount(Notification, {
+      global: {
+        stubs: { SIcon: true }
+      }
+    });
+    wrapper.vm.notification = [{ type: "success", summary: "Message", message: "Message Content" }];
 
-  it("should display notification", () => {
-    service();
+    await nextTick();
 
-    expect(document.querySelector(".su-notification")).toBeTruthy();
-  });
-
-  it("should display `message` content when `message` prop is set", () => {
-    service({ message: "Testing..." });
-
-    expect(document.querySelector(".su-notification__body").textContent).toBe("Testing...");
+    expect(wrapper.find(".su-notification").exists()).toBeTruthy();
+    expect(wrapper.find(".su-notification-container").classes()).toContain("su-notification-container--success");
+    expect(wrapper.find(".su-notification-summary").text()).toBe("Message");
+    expect(wrapper.find(".su-notification-message").text()).toBe("Message Content");
   });
 
   it.each([
-    ["info", "su-notification--info"],
-    ["success", "su-notification--success"],
-    ["warning", "su-notification--warning"],
-    ["danger", "su-notification--danger"]
-  ])("should display different types within the notification", (type, expected) => {
-    service({ type });
+    ["right", "su-notification--right"],
+    ["left", "su-notification--left"],
+    ["rightbottom", "su-notification--bottom"],
+    ["leftbottom", "su-notification--bottom"]
+  ])("should be displayed at the correct position", async (position, expected) => {
+    const wrapper = mount(Notification, {
+      props: {
+        position
+      },
+      global: {
+        stubs: { SIcon: true }
+      }
+    });
 
-    expect(document.querySelector(".su-notification").className).toContain(expected);
+    expect(wrapper.find(".su-notification").classes(expected)).toBeTruthy();
   });
 
-  it("should auto close notification", async () => {
-    vi.useFakeTimers();
-    const notification = service();
-
-    vi.advanceTimersToNextTimer();
-    vi.advanceTimersToNextTimer();
-
-    expect(notification.instance.exposed.visible.value).toBe(false);
-  });
-
-  it("should close notification when click `close` btn", async () => {
-    const notification = service({ duration: 0 });
-
-    (document.querySelector(".su-notification__cancel") as HTMLDivElement).click();
-
-    expect(notification.instance.exposed.visible.value).toBe(false);
-  });
-
-  it("should have spacing between notification", async () => {
-    service({ message: "notification 1", offsetTop: 10, eleSpacing: 20 });
+  it("should close notification", async () => {
+    const wrapper = mount(Notification, {
+      global: {
+        stubs: { SIcon: true }
+      }
+    });
+    wrapper.vm.notification = [{ type: "success", summary: "Message", message: "Message Content" }];
 
     await nextTick();
 
-    expect((document.querySelectorAll(".su-notification")[0] as HTMLDivElement).style.top).toBe("10px");
+    await wrapper.find(".su-notification-cancel").trigger("click");
 
-    service({ message: "notification 2", offsetTop: 10, eleSpacing: 20 });
+    expect(wrapper.vm.notification.length).toBe(0);
+  });
+
+  it("should show multiple notification", async () => {
+    const wrapper = mount(Notification, {
+      global: {
+        stubs: { SIcon: true }
+      }
+    });
+    wrapper.vm.notification = [
+      { type: "success", summary: "Message", message: "Message Content" },
+      { type: "success", summary: "Message", message: "Message Content" },
+      { type: "success", summary: "Message", message: "Message Content" }
+    ];
 
     await nextTick();
 
-    expect((document.querySelectorAll(".su-notification")[1] as HTMLDivElement).style.top).toBe("30px");
+    expect(wrapper.findAll(".su-notification-container")).toHaveLength(3);
+  });
 
-    service({ message: "notification 3", offsetTop: 10, eleSpacing: 20 });
+  describe("when use service API", () => {
+    const toast = NotificationService();
 
-    await nextTick();
+    it("should show notification when call `open` API", async () => {
+      const wrapper = mount(Notification, {
+        global: {
+          stubs: { SIcon: true }
+        }
+      });
 
-    expect((document.querySelectorAll(".su-notification")[2] as HTMLDivElement).style.top).toBe("50px");
+      toast.open({ type: "success", summary: "Message", message: "Message Content" });
+
+      await nextTick();
+
+      expect(wrapper.findAll(".su-notification-container")).toHaveLength(1);
+    });
+
+    it("should close multiple notification when call `removeAll` API", async () => {
+      const wrapper = mount(Notification, {
+        global: {
+          stubs: { SIcon: true }
+        }
+      });
+      wrapper.vm.notification = [
+        { type: "success", summary: "Message", message: "Message Content" },
+        { type: "success", summary: "Message", message: "Message Content" },
+        { type: "success", summary: "Message", message: "Message Content" }
+      ];
+
+      await nextTick();
+
+      toast.removeAll();
+
+      await nextTick();
+
+      expect(wrapper.findAll(".su-notification-container")).toHaveLength(0);
+    });
   });
 });

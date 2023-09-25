@@ -19,6 +19,19 @@ $notification-bg-colors: (
   position: fixed;
   max-width: 600px;
 
+  &--right {
+    right: 1rem;
+  }
+  &--left {
+    left: 1rem;
+  }
+  &--top {
+    top: 1rem;
+  }
+  &--bottom {
+    bottom: 1rem;
+  }
+
   &-container {
     box-shadow: 0.1rem 0 1.2rem 0 rgb(218, 214, 214);
     border-left: 0.4rem solid $primary;
@@ -66,19 +79,6 @@ $notification-bg-colors: (
       height: 100%;
       fill: $light;
     }
-  }
-
-  &.right {
-    right: 1rem;
-  }
-  &.left {
-    left: 1rem;
-  }
-  &.top {
-    top: 1rem;
-  }
-  &.bottom {
-    bottom: 1rem;
   }
 }
 
