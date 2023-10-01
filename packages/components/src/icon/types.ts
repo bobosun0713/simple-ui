@@ -20,7 +20,9 @@ export type IconNames =
   | "loading"
   | "eye"
   | "success"
-  | "info";
+  | "info"
+  | "asc"
+  | "desc";
 
 export interface IconProps {
   name: IconNames;
