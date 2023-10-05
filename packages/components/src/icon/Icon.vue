@@ -13,16 +13,7 @@ const props = withDefaults(defineProps<IconProps>(), {
 });
 
 const iconModules = import.meta.glob("./svg/*.vue");
-const currentIcon = computed(() => {
-  const fileName = "/" + props.name + ".vue";
-  for (const path in iconModules) {
-    const mod: any = iconModules[path];
-    if (path.endsWith(fileName)) {
-      return defineAsyncComponent(mod);
-    }
-  }
-  return false;
-});
+const currentIcon = computed(() => defineAsyncComponent(iconModules[`./svg/${props.name}.vue`] as any));
 </script>
 
 <template>
