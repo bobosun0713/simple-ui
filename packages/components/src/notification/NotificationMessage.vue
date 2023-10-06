@@ -35,14 +35,14 @@ onUnmounted(() => {
     <template v-if="!props.slots">
       <SIcon :name="`${props.type as IconNames}`"></SIcon>
 
-      <div class="su-notification-content">
-        <div class="su-notification-summary">{{ props.summary }}</div>
-        <div class="su-notification-message">
+      <div class="su-notification__content">
+        <div class="su-notification__summary">{{ props.summary }}</div>
+        <div class="su-notification__message">
           {{ props.message }}
         </div>
       </div>
 
-      <button type="button" class="su-notification-cancel" @click="closeHandler(props.id as string)">
+      <button type="button" class="su-notification__cancel" @click="closeHandler(props.id as string)">
         <SIcon name="close"></SIcon>
       </button>
     </template>

@@ -15,9 +15,9 @@ describe("Notification.vue", () => {
     await nextTick();
 
     expect(wrapper.find(".su-notification").exists()).toBeTruthy();
-    expect(wrapper.find(".su-notification-container").classes()).toContain("su-notification-container--success");
-    expect(wrapper.find(".su-notification-summary").text()).toBe("Message");
-    expect(wrapper.find(".su-notification-message").text()).toBe("Message Content");
+    expect(wrapper.find(".su-notification__container").classes()).toContain("su-notification__container--success");
+    expect(wrapper.find(".su-notification__summary").text()).toBe("Message");
+    expect(wrapper.find(".su-notification__message").text()).toBe("Message Content");
   });
 
   it.each([
@@ -48,7 +48,7 @@ describe("Notification.vue", () => {
 
     await nextTick();
 
-    await wrapper.find(".su-notification-cancel").trigger("click");
+    await wrapper.find(".su-notification__cancel").trigger("click");
 
     expect(wrapper.vm.notification.length).toBe(0);
   });
@@ -67,7 +67,7 @@ describe("Notification.vue", () => {
 
     await nextTick();
 
-    expect(wrapper.findAll(".su-notification-container")).toHaveLength(3);
+    expect(wrapper.findAll(".su-notification__container")).toHaveLength(3);
   });
 
   describe("when use service API", () => {
@@ -84,7 +84,7 @@ describe("Notification.vue", () => {
 
       await nextTick();
 
-      expect(wrapper.findAll(".su-notification-container")).toHaveLength(1);
+      expect(wrapper.findAll(".su-notification__container")).toHaveLength(1);
     });
 
     it("should close multiple notification when call `removeAll` API", async () => {
@@ -105,7 +105,7 @@ describe("Notification.vue", () => {
 
       await nextTick();
 
-      expect(wrapper.findAll(".su-notification-container")).toHaveLength(0);
+      expect(wrapper.findAll(".su-notification__container")).toHaveLength(0);
     });
   });
 });

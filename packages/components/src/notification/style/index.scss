@@ -32,7 +32,7 @@ $notification-bg-colors: (
     bottom: 1rem;
   }
 
-  &-container {
+  &__container {
     box-shadow: 0.1rem 0 1.2rem 0 rgb(218, 214, 214);
     border-left: 0.4rem solid $primary;
     border-radius: 0.4rem;
@@ -52,21 +52,21 @@ $notification-bg-colors: (
     }
   }
 
-  &-content {
+  &__content {
     margin: 0 1.2rem;
     min-width: 20rem;
   }
 
-  &-summary {
+  &__summary {
     font-size: 1.6rem;
     font-weight: 700;
   }
 
-  &-message {
+  &__message {
     font-size: 1.4rem;
   }
 
-  &-cancel {
+  &__cancel {
     width: 2.4rem;
     height: 2.4rem;
     padding: 0;
