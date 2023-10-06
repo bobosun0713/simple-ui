@@ -9,7 +9,7 @@ const emit = defineEmits(["on-close"]);
 
 let timer: number | null = null;
 
-const classes = computed(() => ["su-notification-container", `su-notification-container--${props.type}`]);
+const classes = computed(() => ["su-notification__container", `su-notification__container--${props.type}`]);
 
 function closeHandler(idx: string | number) {
   emit("on-close", idx);
