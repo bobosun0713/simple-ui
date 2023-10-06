@@ -30,16 +30,16 @@ onMounted(() => {
 
 <template>
   <div class="su-collapse">
-    <div class="su-collapse-header" :class="{ 'su-collapse-header--active': isActive }" @click="onClickHandler">
+    <div class="su-collapse__header" :class="{ 'su-collapse__header--active': isActive }" @click="onClickHandler">
       <slot name="header">
         {{ props.title }}
       </slot>
-      <slot name="su-collapse-icon">
-        <SIcon class="su-collapse-icon" :class="{ 'su-collapse-icon--active': isActive }" name="arrowLeft"></SIcon>
+      <slot name="icon">
+        <SIcon class="su-collapse__icon" :class="{ 'su-collapse__icon--active': isActive }" name="arrowLeft"></SIcon>
       </slot>
     </div>
-    <div class="su-collapse-body" :style="`height:${getContentHeight}`">
-      <div ref="contentRef" class="su-collapse-content">
+    <div class="su-collapse__body" :style="`height:${getContentHeight}`">
+      <div ref="contentRef" class="su-collapse__content">
         <slot name="content">
           {{ props.content }}
         </slot>
