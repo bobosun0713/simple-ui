@@ -1,0 +1,67 @@
+@use "../../../styles/reset";
+@use "../../../styles/variables" as *;
+
+.su-table-wrapper {
+  height: inherit;
+  overflow: auto;
+}
+
+.su-table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: separate;
+  border-spacing: 0;
+  background-color: $light;
+  color: $dark;
+
+  &__tr {
+    transition: $default-transition;
+    &:hover {
+      background-color: rgba($light-grey, 0.1);
+    }
+  }
+
+  &__th,
+  &__td {
+    font-size: 1.6rem;
+    padding: 0.8rem 1.2rem;
+  }
+
+  &__th {
+    font-weight: bold;
+    text-align: left;
+    border: 1px solid #dbdbdb;
+    border-width: 0 0 2px;
+    user-select: none;
+
+    &--sort {
+      cursor: pointer;
+    }
+    &--sort:hover,
+    &--active {
+      border-bottom: 2px solid $dark;
+    }
+    &--sticky {
+      background-color: $light;
+      position: sticky;
+      top: 0;
+      z-index: 3;
+    }
+  }
+
+  &__td {
+    border-bottom: 1px solid $light-grey;
+
+    &--empty {
+      text-align: center;
+    }
+  }
+
+  &__sort {
+    margin-left: 0.4rem;
+    transition: all 0.2s;
+    &--asc {
+      transform: rotate(180deg);
+    }
+  }
+}

@@ -6,6 +6,8 @@ declare module "@vue/runtime-core" {
     SCollapse: typeof import("../packages/components")["SCollapse"];
     SIcon: typeof import("../packages/components")["SIcon"];
     STooltip: typeof import("../packages/components")["STooltip"];
+    STable: typeof import("../packages/components")["STable"];
+    STableColumn: typeof import("../packages/components")["STableColumn"];
   }
 
   interface ComponentCustomProperties {
