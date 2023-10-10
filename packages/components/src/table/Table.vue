@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { ref, useSlots, onMounted } from "vue";
-import Icon from "../icon/Icon.vue";
+import { ref, useSlots, onMounted, watch } from "vue";
+import { deepClone } from "@simple/utils";
+import SIcon from "../icon/Icon.vue";
 import type { TableProps, RowProvider } from "./types";
 
 defineOptions({
@@ -17,8 +18,20 @@ const emit = defineEmits(["on-sort"]);
 const slots = useSlots();
 
 const columns = ref<any>([]);
-const rows = ref(props.data);
-const orderBy = ref(props.defaultSort.orderBy);
+const rows = ref([]);
+const orderBy = ref("");
+
+watch(
+  () => props.data,
+  newVal => (rows.value = deepClone(newVal as [])),
+  { immediate: true, deep: true }
+);
+
+watch(
+  () => props.defaultSort,
+  newVal => (orderBy.value = newVal.orderBy),
+  { immediate: true, deep: true }
+);
 
 onMounted(() => {
   transformColumns();
@@ -120,13 +133,13 @@ function sortHandler(col: RowProvider) {
               {{ col.label }}
             </template>
 
-            <Icon
+            <SIcon
               v-show="isSortState(col)"
               name="asc"
               width="16"
               height="16"
               :class="['su-table__sort', isSortState(col) && `su-table__sort--${col.sortBy}`]"
-            ></Icon>
+            ></SIcon>
           </th>
         </tr>
       </thead>
@@ -148,7 +161,7 @@ function sortHandler(col: RowProvider) {
         <template v-else>
           <tr>
             <td class="su-table__td su-table__td--empty" :colspan="columns.length">
-              <slot name="no-result"> No Data</slot>
+              <slot name="no-result">No Data</slot>
             </td>
           </tr>
         </template>
