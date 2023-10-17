@@ -4,7 +4,11 @@ import dts from "vite-plugin-dts";
 
 export default defineConfig({
   plugins: [
-    vue(),
+    vue({
+      script: {
+        defineModel: true
+      }
+    }),
     dts({
       entryRoot: "./src",
       outDir: ["../simple/es/src", "../simple/lib/src"],
