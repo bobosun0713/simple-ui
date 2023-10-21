@@ -3,11 +3,9 @@ import Loading from "./Loading.vue";
 import type { LoadingProps } from "./types";
 
 export default (options?: LoadingProps) => {
-  const vnode = dynamicCreate(Loading, options);
-
-  const vm = vnode.component!;
-
-  document.body.appendChild(vnode.el as HTMLElement);
+  const vNode = dynamicCreate(Loading, options);
+  const vm = vNode.component!;
+  document.body.appendChild(vNode.el as HTMLElement);
 
   function show() {
     vm.exposed!.visible.value = true;

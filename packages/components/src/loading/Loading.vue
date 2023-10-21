@@ -13,8 +13,9 @@ const visible = ref(false);
 let timer: number;
 
 watch(visible, () => {
-  if (timer) clearTimeout(timer);
   if (!props.duration) return;
+  if (timer) clearTimeout(timer);
+
   timer = window.setTimeout(() => {
     visible.value = false;
   }, props.duration);
@@ -35,9 +36,7 @@ defineExpose({ visible });
       </template>
       <template v-else>
         <div class="su-loading-content">
-          <slot>
-            <SIcon name="loading" width="60" height="60" fill="#3e8ed0" class="su-loading-spinner"></SIcon>
-          </slot>
+          <SIcon name="loading" width="60" height="60" fill="#3e8ed0" class="su-loading-spinner"></SIcon>
         </div>
       </template>
     </div>
