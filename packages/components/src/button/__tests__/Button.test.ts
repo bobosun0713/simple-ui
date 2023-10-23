@@ -6,36 +6,77 @@ describe("Button.vue", () => {
     const wrapper = mount(Button);
 
     expect(wrapper.classes()).toContain("su-button-info");
-    expect(wrapper.classes()).toContain("su-button-size-dft");
+    expect(wrapper.classes()).toContain("su-button-size-md");
   });
 
-  describe("when `type` prop is set", () => {
-    it("should have different `type` class", async () => {
-      const wrapper = mount(Button);
+  describe("when type props is set", () => {
+    it("should have success class", () => {
+      const wrapper = mount(Button, {
+        props: {
+          type: "success"
+        }
+      });
 
-      await wrapper.setProps({ type: "success" });
       expect(wrapper.classes()).toContain("su-button-success");
+    });
 
-      await wrapper.setProps({ type: "warning" });
+    it("should have warning class", () => {
+      const wrapper = mount(Button, {
+        props: {
+          type: "warning"
+        }
+      });
+
       expect(wrapper.classes()).toContain("su-button-warning");
+    });
 
-      await wrapper.setProps({ type: "danger" });
+    it("should have danger class", () => {
+      const wrapper = mount(Button, {
+        props: {
+          type: "danger"
+        }
+      });
+
       expect(wrapper.classes()).toContain("su-button-danger");
     });
   });
 
-  describe("when `size` prop is set", () => {
-    it("should have different `size` class", async () => {
-      const wrapper = mount(Button);
+  describe("when size props is set", () => {
+    it("should have sm class", () => {
+      const wrapper = mount(Button, {
+        props: {
+          size: "sm"
+        }
+      });
 
-      await wrapper.setProps({ size: "sm" });
       expect(wrapper.classes()).toContain("su-button-size-sm");
+    });
+    it("should have md class", async () => {
+      const wrapper = mount(Button, {
+        props: {
+          size: "md"
+        }
+      });
 
-      await wrapper.setProps({ size: "md" });
       expect(wrapper.classes()).toContain("su-button-size-md");
+    });
+    it("should have lg class", async () => {
+      const wrapper = mount(Button, {
+        props: {
+          size: "lg"
+        }
+      });
 
-      await wrapper.setProps({ size: "lg" });
       expect(wrapper.classes()).toContain("su-button-size-lg");
+    });
+    it("should have xl class", async () => {
+      const wrapper = mount(Button, {
+        props: {
+          size: "xl"
+        }
+      });
+
+      expect(wrapper.classes()).toContain("su-button-size-xl");
     });
   });
 
@@ -43,12 +84,12 @@ describe("Button.vue", () => {
     it("should show rounded button", () => {
       const wrapper = mount(Button, {
         props: {
-          size: "dft",
+          size: "sm",
           rounded: true
         }
       });
 
-      expect(wrapper.classes()).toContain("su-button-rounded-dft");
+      expect(wrapper.classes()).toContain("su-button-rounded-sm");
     });
 
     it("should show outlined button", () => {
