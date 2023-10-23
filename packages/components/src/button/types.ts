@@ -1,5 +1,5 @@
 type ButtonTypes = "success" | "warning" | "info" | "danger";
-type ButtonSizes = "sm" | "dft" | "md" | "lg";
+type ButtonSizes = "sm" | "md" | "lg" | "xl";
 
 export interface ButtonProps {
   type?: ButtonTypes;
