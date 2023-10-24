@@ -8,6 +8,7 @@ declare module "@vue/runtime-core" {
     STooltip: typeof import("../packages/components")["STooltip"];
     STable: typeof import("../packages/components")["STable"];
     STableColumn: typeof import("../packages/components")["STableColumn"];
+    SPagination: typeof import("../packages/components")["SPagination"];
   }
 
   interface ComponentCustomProperties {

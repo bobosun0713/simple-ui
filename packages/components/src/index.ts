@@ -6,3 +6,4 @@ export * from "./tooltip";
 export * from "./table";
 export * from "./message";
 export * from "./notification";
+export * from "./pagination";

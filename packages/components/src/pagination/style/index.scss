@@ -1,0 +1,110 @@
+@use "../../../styles/reset";
+@use "../../../styles/variables" as *;
+
+:root {
+  --su-pagination-font-color: #{$dark};
+  --su-pagination-button-color: #{$dark};
+  --su-pagination-font-size: 1.8rem;
+  --su-pagination-button-size: 3.2rem;
+  --su-pagination-paper-gap: 0 1rem;
+  --su-pagination-pager-padding: 0.4rem;
+  --su-pagination-active-bg-color: #{$primary};
+  --su-pagination-active-font-color: #{$light};
+  --su-pagination-disable-font-color: #{$dark-grey};
+  --su-pagination-disable-button-bg-color: #dbdbdb;
+}
+
+@mixin disabled() {
+  background-color: $light;
+  border-color: $light-grey;
+  color: var(--su-pagination-disable-font-color);
+  cursor: not-allowed;
+
+  &:active {
+    border: 1px solid $light-grey !important;
+  }
+  &:hover {
+    border-color: $light-grey !important;
+  }
+
+  @content;
+}
+
+.su-pagination {
+  display: flex;
+  align-items: stretch;
+  transition: $default-transition;
+  color: var(--su-pagination-font-color);
+
+  &__btn {
+    width: var(--su-pagination-button-size);
+    height: var(--su-pagination-button-size);
+    border: 1px solid $light-grey;
+    background-color: $light;
+    border-radius: 0.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+
+    &:hover {
+      border-color: $dark-grey;
+    }
+    &:active {
+      border-color: $primary;
+    }
+
+    &--rounded {
+      border-radius: 50%;
+    }
+    &--disabled {
+      @include disabled() {
+        background-color: var(--su-pagination-disable-button-bg-color);
+        opacity: 0.6;
+      }
+    }
+  }
+
+  &__btn-icon {
+    width: var(--su-pagination-font-size);
+    height: var(--su-pagination-font-size);
+    fill: var(--su-pagination-button-color);
+  }
+
+  &__pagers {
+    display: flex;
+    list-style: none;
+    margin: 0 12px;
+    gap: var(--su-pagination-paper-gap);
+  }
+
+  &__pager {
+    width: var(--su-pagination-button-size);
+    height: var(--su-pagination-button-size);
+    font-size: var(--su-pagination-font-size);
+    background-color: $light;
+    border: 1px solid $light-grey;
+    border-radius: 0.4rem;
+    color: inherit;
+    cursor: pointer;
+
+    &:hover:not(&--active) {
+      border-color: $dark-grey;
+    }
+    &:active {
+      border: 1px solid $primary !important;
+    }
+
+    &--rounded {
+      border-radius: 50%;
+    }
+    &--active {
+      background-color: var(--su-pagination-active-bg-color);
+      border-color: var(--su-pagination-active-bg-color);
+      color: var(--su-pagination-active-font-color);
+    }
+    &--disabled {
+      @include disabled();
+    }
+  }
+}
