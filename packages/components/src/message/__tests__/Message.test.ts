@@ -1,45 +1,47 @@
 import { nextTick } from "vue";
-import service from "../service";
+import MessageService from "../Message";
 
 describe("Message.vue", () => {
-  const messageInstance = service;
+  const messageInstance = MessageService;
   afterEach(() => {
     document.body.innerHTML = "";
     messageInstance.closeAll();
   });
 
   it("should display message", () => {
-    service();
+    MessageService();
 
     expect(document.querySelector(".su-message")).toBeTruthy();
   });
 
-  it("should display close button when `showClose` prop is set to true", async () => {
-    service({ showClose: true });
+  describe("when props are set", () => {
+    it("should display close button", async () => {
+      MessageService({ showClose: true });
 
-    expect(document.querySelector(".su-message__cancel")).toBeTruthy();
-  });
+      expect(document.querySelector(".su-message__cancel")).toBeTruthy();
+    });
 
-  it("should display message when `message` prop is set", () => {
-    service({ message: "Testing" });
+    it("should display message content", () => {
+      MessageService({ message: "Testing" });
 
-    expect(document.querySelector(".su-message__content").textContent).toBe("Testing");
-  });
+      expect(document.querySelector(".su-message__content").textContent).toBe("Testing");
+    });
 
-  it.each([
-    ["info", "su-message--info"],
-    ["success", "su-message--success"],
-    ["warning", "su-message--warning"],
-    ["danger", "su-message--danger"]
-  ])("should display different types within the message", (type, expected) => {
-    service({ type });
+    it.each([
+      ["info", "su-message--info"],
+      ["success", "su-message--success"],
+      ["warning", "su-message--warning"],
+      ["danger", "su-message--danger"]
+    ])("should display %s type within the message", (type, expected) => {
+      MessageService({ type });
 
-    expect(document.querySelector(".su-message").className).toContain(expected);
+      expect(document.querySelector(".su-message").className).toContain(expected);
+    });
   });
 
   it("should auto close message", async () => {
     vi.useFakeTimers();
-    const message = service();
+    const message = MessageService();
 
     vi.advanceTimersToNextTimer();
     vi.advanceTimersToNextTimer();
@@ -47,23 +49,25 @@ describe("Message.vue", () => {
     expect(message.instance.exposed.visible.value).toBe(false);
   });
 
-  it("should have spacing between messages", async () => {
-    service({ message: "message 1", offsetTop: 10, eleSpacing: 20 });
+  describe("when have multiple message", () => {
+    it("should have spacing between messages", async () => {
+      MessageService({ message: "message 1", offsetTop: 10, eleSpacing: 20 });
 
-    await nextTick();
+      await nextTick();
 
-    expect((document.querySelectorAll(".su-message")[0] as HTMLDivElement).style.top).toBe("10px");
+      expect((document.querySelectorAll(".su-message")[0] as HTMLDivElement).style.top).toBe("10px");
 
-    service({ message: "message 2", offsetTop: 10, eleSpacing: 20 });
+      MessageService({ message: "message 2", offsetTop: 10, eleSpacing: 20 });
 
-    await nextTick();
+      await nextTick();
 
-    expect((document.querySelectorAll(".su-message")[1] as HTMLDivElement).style.top).toBe("30px");
+      expect((document.querySelectorAll(".su-message")[1] as HTMLDivElement).style.top).toBe("30px");
 
-    service({ message: "message 3", offsetTop: 10, eleSpacing: 20 });
+      MessageService({ message: "message 3", offsetTop: 10, eleSpacing: 20 });
 
-    await nextTick();
+      await nextTick();
 
-    expect((document.querySelectorAll(".su-message")[2] as HTMLDivElement).style.top).toBe("50px");
+      expect((document.querySelectorAll(".su-message")[2] as HTMLDivElement).style.top).toBe("50px");
+    });
   });
 });
