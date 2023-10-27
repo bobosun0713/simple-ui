@@ -23,7 +23,8 @@ export type IconNames =
   | "info"
   | "asc"
   | "desc"
-  | "home";
+  | "home"
+  | "notification";
 
 export interface IconProps {
   name: IconNames;
