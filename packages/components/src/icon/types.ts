@@ -25,7 +25,8 @@ export type IconNames =
   | "desc"
   | "home"
   | "notification"
-  | "setting";
+  | "setting"
+  | "heart";
 
 export interface IconProps {
   name: IconNames;
