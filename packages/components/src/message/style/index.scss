@@ -8,31 +8,22 @@ $message-colors: (
   danger: $danger
 );
 
-.su-message {
+.su-message-wrap {
   position: fixed;
-  padding: 8px 12px;
   top: 0;
   left: 50%;
-  border-radius: 4px;
   transform: translateX(-50%);
-  transition: $default-transition;
+}
 
+.su-message {
   display: flex;
   align-items: center;
-
-  &__content {
-    font-size: 1.6rem;
-    color: $light;
-  }
-
-  &__cancel {
-    padding-left: 6px;
-    line-height: 0;
-    height: 100%;
-    border: 0;
-    background: transparent;
-    fill: $dark;
-  }
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 1.6rem;
+  color: $light;
+  transition: $default-transition;
 
   // Modifiers (background-color)
   @each $key, $value in $message-colors {
@@ -40,19 +31,31 @@ $message-colors: (
       background-color: $value;
     }
   }
+
+  &__cancel {
+    margin-left: 8px;
+    line-height: 0;
+    height: 100%;
+    border: 0;
+    background: transparent;
+    fill: $dark;
+  }
 }
 
 /* Animation */
+.message-move,
 .message-enter-active,
 .message-leave-active {
   opacity: 1;
-  left: 50%;
-  transform: translate(-50%, 0);
+  transform: translateY(0);
 }
 
 .message-enter-from,
 .message-leave-to {
   opacity: 0;
-  left: 50%;
-  transform: translate(-50%, -30px);
+  transform: translateY(-30px);
+}
+
+.message-leave-active {
+  position: absolute;
 }

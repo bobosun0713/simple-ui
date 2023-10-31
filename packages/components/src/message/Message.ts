@@ -1,72 +1,32 @@
-import { dynamicCreate, destroyDynamicCreate } from "@simple/utils";
-import { messageDefault } from "./props";
+import { dynamicCreate } from "@simple/utils";
 import Message from "./Message.vue";
 import type { VNode } from "vue";
-import type { MessageProps } from "./types";
+import type { MessageProps, MessageCommand, MessageTypeCommand } from "./types";
 
-const instances: VNode[] = [];
-let instanceUid = 0;
+let instances: VNode;
 
 function message(options?: MessageProps) {
-  instanceUid += 1;
+  instances = instances || dynamicCreate(Message, options);
 
-  const mergeProps = { ...messageDefault, ...options, uid: instanceUid };
-  const uid = mergeProps.uid;
+  document.body.appendChild(instances.el as HTMLElement);
 
-  const vnode = dynamicCreate(Message, {
-    ...mergeProps,
-    onClose: () => {
-      close(uid);
-    },
-    onClosed: () => {
-      closed(vnode);
-    }
-  });
+  const vm = instances.component!;
 
-  const vm = vnode.component!;
-
-  instances.forEach(
-    item => ((vm.props.offsetTop as number) += Number(item.el!.offsetHeight + vnode.props!.eleSpacing))
-  );
-  instances.push(vnode);
-
-  document.body.appendChild(vnode.el as HTMLElement);
+  const open = (data: MessageCommand) => vm!.exposed!.handleAdd({ type: "info", ...data });
+  const info = (data: MessageTypeCommand) => vm!.exposed!.handleAdd({ ...data, type: "info" });
+  const success = (data: MessageTypeCommand) => vm!.exposed!.handleAdd({ ...data, type: "success" });
+  const warning = (data: MessageTypeCommand) => vm!.exposed!.handleAdd({ ...data, type: "warning" });
+  const error = (data: MessageTypeCommand) => vm!.exposed!.handleAdd({ ...data, type: "error" });
+  const closeAll = () => vm!.exposed!.handleRemoveAll();
 
   return {
-    instance: vm,
-    close: () => close(uid)
+    open,
+    info,
+    success,
+    warning,
+    error,
+    closeAll
   };
 }
-
-function close(uid: number) {
-  const vm = instances.find(item => item.props!.uid === uid);
-  if (!vm) return;
-
-  vm.component!.exposed!.visible.value = false;
-
-  const instanceIdx = instances.indexOf(vm);
-  if (instanceIdx < 0 || !instances.length) return;
-  instances.splice(instanceIdx, 1);
-
-  const eleSpacing = vm.props!.eleSpacing;
-  let verticalOffset = vm.props!.offsetTop;
-  instances.forEach((item, idx) => {
-    verticalOffset += idx === 0 ? 0 : item.el!.offsetHeight + eleSpacing;
-    item.component!.props.offsetTop = verticalOffset;
-  });
-}
-
-function closeAll() {
-  for (const instance of instances) {
-    instance.component!.exposed!.visible.value = false;
-  }
-  instances.length = 0;
-}
-
-function closed(vnode: VNode) {
-  destroyDynamicCreate(vnode.el as HTMLDivElement);
-}
-
-message.closeAll = closeAll;
 
 export default message;

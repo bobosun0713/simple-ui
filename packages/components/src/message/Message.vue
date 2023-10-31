@@ -1,47 +1,51 @@
 <script lang="ts" setup>
-import { ref, computed, onMounted, onUnmounted } from "vue";
-import { messageDefault } from "./props";
-import SIcon from "../icon/Icon.vue";
-import type { MessageProps } from "./types";
+import { ref, computed } from "vue";
+import MessageContent from "./MessageContent.vue";
+import type { MessageProps, MessageContentProps } from "./types";
 
 defineOptions({
   name: "SMessage"
 });
 
-const props = withDefaults(defineProps<MessageProps>(), messageDefault);
-
-const visible = ref(false);
-let timer: number;
-
-const verticalStyle = computed(() => `top:${props.offsetTop}px;`);
-
-onMounted(() => {
-  visible.value = true;
-  if (!props.duration) return;
-  if (timer) clearTimeout(timer);
-  timer = window.setTimeout(() => {
-    props.onClose?.();
-  }, props.duration as number);
+const props = withDefaults(defineProps<MessageProps>(), {
+  offsetTop: 10
 });
 
-onUnmounted(() => {
-  if (timer) clearTimeout(timer);
-});
+const messages = ref<any[]>([]);
+const messagesIdx = ref(0);
 
-defineExpose({ visible });
+const offsetTop = computed(() => `top:${props.offsetTop}px;`);
+
+function handleAdd(data: MessageContentProps) {
+  const message = { id: messagesIdx.value, ...data };
+  messagesIdx.value += 1;
+  messages.value.push(message);
+}
+function handleRemove(idx: string | number) {
+  const findIdx = messages.value.findIndex(item => item.id === idx);
+  messages.value.splice(findIdx, 1);
+}
+function handleRemoveAll() {
+  messages.value = [];
+}
+
+defineExpose({ handleAdd, handleRemoveAll });
 </script>
 
 <template>
-  <transition name="message" @after-leave="onClosed">
-    <div v-show="visible" class="su-message" :class="`su-message--${props.type}`" :style="verticalStyle">
-      <div class="su-message__content">
-        {{ message }}
-      </div>
-      <button v-if="props.showClose" type="button" class="su-message__cancel" @click="props.onClose">
-        <SIcon name="close" width="24" height="24"></SIcon>
-      </button>
-    </div>
-  </transition>
+  <transition-group tag="div" mode="out-in" name="message" class="su-message-wrap" :style="offsetTop">
+    <MessageContent
+      v-for="(note, noteIdx) in messages"
+      :id="note.id"
+      :key="note.id"
+      :type="note.type"
+      :show-close="note.showClose"
+      :message="note.message"
+      :ele-spacing="note.eleSpacing"
+      :style="noteIdx !== 0 && `margin-top:${note.eleSpacing}px`"
+      @on-close="handleRemove"
+    ></MessageContent>
+  </transition-group>
 </template>
 
 <style lang="scss">

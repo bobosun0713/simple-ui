@@ -1,10 +1,17 @@
-export type MessageProps = {
+export interface MessageProps {
+  offsetTop?: string | number;
+}
+
+export interface MessageCommand {
   type?: string;
-  message?: number | string;
-  duration?: number | string;
-  offsetTop?: number | string;
-  eleSpacing?: number | string;
+  message?: string | number;
+  duration?: string | number;
+  eleSpacing?: string | number;
   showClose?: boolean;
-  onClose?: () => void;
-  onClosed?: () => void;
-};
+}
+
+export interface MessageContentProps extends MessageCommand {
+  id?: string | number;
+}
+
+export interface MessageTypeCommand extends Omit<MessageCommand, "type"> {}
