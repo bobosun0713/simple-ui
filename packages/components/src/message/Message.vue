@@ -8,13 +8,19 @@ defineOptions({
 });
 
 const props = withDefaults(defineProps<MessageProps>(), {
-  offsetTop: 10
+  width: 300,
+  offsetTop: 10,
+  eleSpacing: 10,
+  duration: 3000,
+  showClose: true
 });
 
 const messages = ref<any[]>([]);
 const messagesIdx = ref(0);
 
+const width = computed(() => `width:${props.width}px;`);
 const offsetTop = computed(() => `top:${props.offsetTop}px;`);
+const eleSpacing = computed(() => `margin-top:${props.eleSpacing}px;`);
 
 function handleAdd(data: MessageContentProps) {
   const message = { id: messagesIdx.value, ...data };
@@ -33,16 +39,16 @@ defineExpose({ handleAdd, handleRemoveAll });
 </script>
 
 <template>
-  <transition-group tag="div" mode="out-in" name="message" class="su-message-wrap" :style="offsetTop">
+  <transition-group tag="div" mode="out-in" name="message" class="su-message-wrap" :style="[width, offsetTop]">
     <MessageContent
       v-for="(note, noteIdx) in messages"
       :id="note.id"
       :key="note.id"
       :type="note.type"
-      :show-close="note.showClose"
       :message="note.message"
-      :ele-spacing="note.eleSpacing"
-      :style="noteIdx !== 0 && `margin-top:${note.eleSpacing}px`"
+      :show-close="props.showClose"
+      :duration="props.duration"
+      :style="noteIdx !== 0 && eleSpacing"
       @on-close="handleRemove"
     ></MessageContent>
   </transition-group>
