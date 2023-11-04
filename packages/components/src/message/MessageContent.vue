@@ -7,7 +7,10 @@ defineOptions({
   name: "SMessageContent"
 });
 
-const props = defineProps<MessageContentProps>();
+const props = withDefaults(defineProps<MessageContentProps>(), {
+  type: "info",
+  message: "Message Content"
+});
 const emit = defineEmits(["on-close"]);
 
 let timer: number | null = null;
@@ -18,11 +21,14 @@ function handleClose(idx: string | number) {
 function handleAutoHide() {
   timer = window.setTimeout(() => {
     handleClose(props.id as number);
+
+    console.log(1123);
   }, props.duration as number);
 }
 
 onMounted(() => {
   if (!props.duration) return;
+
   handleAutoHide();
 });
 

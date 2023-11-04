@@ -12,7 +12,7 @@ function message(options?: MessageProps) {
 
   const vm = instances.component!;
 
-  const open = (data: MessageCommand) => vm!.exposed!.handleAdd({ type: "info", ...data });
+  const open = (data: MessageCommand) => vm!.exposed!.handleAdd(data);
   const info = (data: MessageTypeCommand) => vm!.exposed!.handleAdd({ ...data, type: "info" });
   const success = (data: MessageTypeCommand) => vm!.exposed!.handleAdd({ ...data, type: "success" });
   const warning = (data: MessageTypeCommand) => vm!.exposed!.handleAdd({ ...data, type: "warning" });
