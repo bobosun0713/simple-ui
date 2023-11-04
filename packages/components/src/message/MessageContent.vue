@@ -21,8 +21,6 @@ function handleClose(idx: string | number) {
 function handleAutoHide() {
   timer = window.setTimeout(() => {
     handleClose(props.id as number);
-
-    console.log(1123);
   }, props.duration as number);
 }
 
