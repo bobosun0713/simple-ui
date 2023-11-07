@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "composite": true,
     "target": "ES2020",
     "useDefineForClassFields": true,
     "module": "ESNext",
@@ -7,7 +8,7 @@
     "skipLibCheck": true,
 
     /* Bundler mode */
-    "moduleResolution": "bundler",
+    "moduleResolution": "Bundler",
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
@@ -21,8 +22,7 @@
     "packages/**/*.vue",
     "packages/**/*.ts",
     "typings/components.d.ts",
-    "typings/vite-env.d.ts",
-    "typings/vue-shim.d.ts"
+    "typings/vite-env.d.ts"
   ],
   "exclude": ["node_modules", "dist", "**/__tests__/**/*"]
 }
