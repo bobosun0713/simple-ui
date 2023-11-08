@@ -1,5 +1,6 @@
 module.exports = {
   root: true,
+  ignorePatterns: ["!.*.js", "node_modules", "simple"],
   env: {
     browser: true,
     es2021: true,
@@ -11,13 +12,16 @@ module.exports = {
     "prettier",
     "prettier/prettier"
   ],
-  plugins: ["@typescript-eslint", "vue"],
+  plugins: ["vue", "@typescript-eslint"],
 
   parser: "vue-eslint-parser",
   parserOptions: {
     ecmaVersion: "latest",
+    sourceType: "module",
+    tsconfigRootDir: __dirname,
     parser: "@typescript-eslint/parser",
-    sourceType: "module"
+    project: ["./tsconfig.json", "./tsconfig.web.json", "./tsconfig.eslint.json", "./tsconfig.vitest.json"],
+    extraFileExtensions: [".vue"]
   },
   rules: {
     "vue/multi-word-component-names": "off",
