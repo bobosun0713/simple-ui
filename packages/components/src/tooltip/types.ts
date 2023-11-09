@@ -1,7 +1,7 @@
-type TooltipPosition = "top" | "bottom" | "left" | "right";
+export type TooltipPlacement = "top" | "bottom" | "left" | "right";
 
 export interface TooltipProps {
-  label: string | number;
-  position?: TooltipPosition;
+  content?: string | number;
+  placement?: TooltipPlacement;
   showArrow?: boolean;
 }
