@@ -46,8 +46,8 @@ defineExpose({ handleAdd, handleRemoveAll });
       :key="note.id"
       :type="note.type"
       :message="note.message"
-      :show-close="props.showClose"
-      :duration="props.duration"
+      :show-close="showClose"
+      :duration="duration"
       :style="noteIdx !== 0 && eleSpacing"
       @on-close="handleRemove"
     ></MessageContent>

@@ -36,9 +36,9 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div :class="['su-message', `su-message--${props.type}`]">
-    {{ props.message }}
-    <button v-if="props.showClose" type="button" class="su-message__cancel" @click="handleClose(props.id as number)">
+  <div :class="['su-message', `su-message--${type}`]">
+    {{ message }}
+    <button v-if="showClose" type="button" class="su-message__cancel" @click="handleClose(id as number)">
       <SIcon name="close" width="24" height="24"></SIcon>
     </button>
   </div>
