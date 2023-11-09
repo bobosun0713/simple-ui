@@ -15,7 +15,7 @@ const props = withDefaults(defineProps<MessageProps>(), {
   showClose: true
 });
 
-const messages = ref<any[]>([]);
+const messages = ref<MessageContentProps[]>([]);
 const messagesIdx = ref(0);
 
 const width = computed(() => `width:${props.width}px;`);
