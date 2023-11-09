@@ -1,6 +1,6 @@
 function mapFiles(filenames, { lint = true, ts = false } = {}) {
   const eslint = "eslint --fix --cache";
-  const typeCheck = "tsc --noEmit -p tsconfig.web.json --composite false";
+  const typeCheck = "vue-tsc --noEmit -p tsconfig.web.json --composite false";
   const commands = ["prettier --write"];
 
   if (filenames.length) {
