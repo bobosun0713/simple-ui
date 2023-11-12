@@ -61,9 +61,8 @@ function transformColumns() {
     }
   }
 
-  /**
-   * Find the currently sorted property, If there are identical props, only the first one will be assigned.
-   */
+  // Find the currently sorted property,
+  // If there are identical props, only the first one will be assigned.
   for (const col of columns.value) {
     if (col.prop === props.defaultSort.orderBy) {
       col.sortActive = true;
@@ -76,7 +75,7 @@ function isSortState(col: RowProvider) {
   return col.prop === orderBy.value && col.sort && col.prop && col.sortActive;
 }
 
-function sortHandler(col: RowProvider) {
+function handleSort(col: RowProvider) {
   if (col.sort === "none") return;
 
   columns.value.forEach((col: RowProvider) => {
@@ -120,10 +119,10 @@ function sortHandler(col: RowProvider) {
               {
                 'su-table__th--sort': col.sort !== 'none',
                 'su-table__th--active': col.prop === orderBy && col.sortActive,
-                'su-table__th--sticky': props.stickyHeader
+                'su-table__th--sticky': stickyHeader
               }
             ]"
-            @click="sortHandler(col)"
+            @click="handleSort(col)"
           >
             <template v-if="col.children?.th">
               <component :is="col.children.th"></component>
