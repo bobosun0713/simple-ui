@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { ref, computed, useSlots, nextTick, watch } from "vue";
 import { useElementBounding, useWindowSize } from "@vueuse/core";
-import type { TooltipProps, TooltipPlacement, TooltipTrigger } from "./types";
+import type { TooltipProps, TooltipPlacement, TooltipTrigger, TooltipEventName } from "./types";
 
 defineOptions({
   name: "STooltip"
@@ -23,7 +23,6 @@ const left = ref(0);
 const tooltipRef = ref<HTMLDivElement | null>(null);
 const tooltipContentRef = ref<HTMLDivElement | null>(null);
 const triedPlacements = new Set();
-
 const { width: windowWidth, height: windowHeight } = useWindowSize();
 
 const placementPos = computed(() => `top:${top.value}px;left:${left.value}px;`);
@@ -95,33 +94,55 @@ function checkTouchEdge() {
     });
   }
 }
-function handleCalcPlacementPos() {
+function onMouseIn() {
+  isVisible.value = true;
+  emits("update:modelValue", true);
+
+  handlePlacement();
+}
+function onMouseOut() {
+  isVisible.value = false;
+  emits("update:modelValue", false);
+
+  handlePlacement();
+}
+function onToggle() {
+  isVisible.value = !isVisible.value;
+  emits("update:modelValue", isVisible.value);
+
+  handlePlacement();
+}
+
+function handlePlacement() {
   nextTick(() => {
     calcPlacementPos(props.placement);
     checkTouchEdge();
   });
 }
-function handleToggle(trigger: TooltipTrigger, event: TooltipTrigger) {
-  if (trigger === event) {
-    isVisible.value = !isVisible.value;
-    emits("update:modelValue", isVisible.value);
-  }
+function handleTooltipEvent(event: TooltipTrigger, currentEvent: TooltipTrigger, eventName: TooltipEventName) {
+  if (event !== currentEvent) return;
 
-  if (!isVisible.value) return;
-  handleCalcPlacementPos();
+  const events = {
+    in: onMouseIn,
+    out: onMouseOut,
+    click: onToggle
+  };
+
+  events[eventName]?.();
 }
 
 watch(
   () => props.modelValue,
   () => {
     isVisible.value = props.modelValue;
-    handleCalcPlacementPos();
+    handlePlacement();
   },
   { immediate: true }
 );
+
 watch(
   () => windowWidth.value,
-  () => handleCalcPlacementPos()
+  () => handlePlacement()
 );
 </script>
 
@@ -129,14 +150,14 @@ watch(
   <div ref="tooltipRef" class="su-tooltip">
     <div
       class="su-tooltip__trigger"
-      @click="handleToggle(trigger, 'click')"
-      @mouseenter="handleToggle(trigger, 'hover')"
-      @mouseleave="handleToggle(trigger, 'hover')"
+      @click="handleTooltipEvent('click', trigger, 'click')"
+      @mouseenter="handleTooltipEvent('hover', trigger, 'in')"
+      @mouseleave="handleTooltipEvent('hover', trigger, 'out')"
     >
       <slot name="default"></slot>
     </div>
     <Teleport to="body">
-      <transition name="fade">
+      <Transition name="fade">
         <div v-show="isVisible" ref="tooltipContentRef" :style="placementPos" class="su-tooltip__content">
           <template v-if="slots.content">
             <slot name="content"></slot>
@@ -145,7 +166,7 @@ watch(
             {{ content }}
           </template>
         </div>
-      </transition>
+      </Transition>
     </Teleport>
   </div>
 </template>
