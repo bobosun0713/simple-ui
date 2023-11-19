@@ -1,49 +1,115 @@
-import Tooltip from "../Tooltip.vue";
 import { mount } from "@vue/test-utils";
-import type { VNode } from "vue";
+import { nextTick } from "vue";
+import Tooltip from "../Tooltip.vue";
 
-describe("Button.vue", () => {
-  document.body.innerHTML = `
-  <div>
-    <div id="app"></div>
-  </div>
-`;
-
-  const createComponent = (props: object | any = {}, content: string | VNode = "") =>
-    mount(
-      {
-        template: `<Tooltip label="${props.label}" position="${props.position || "top"}" :show-arrow="${
-          props.showArrow
-        }">  ${content} </Tooltip>`,
-        components: {
-          Tooltip
-        }
-      },
-      {
-        attachTo: "#app"
+describe("Tooltip.vue", () => {
+  it("should render default structure", () => {
+    const wrapper = mount(Tooltip, {
+      slots: {
+        default: `<div>Demo</div>`
       }
-    );
+    });
 
-  it("should render default structure", async () => {
-    const wrapper = createComponent({ label: "testing", showArrow: true }, "<button type='button'>Button</button>");
-
-    await wrapper.find("button").trigger("mouseenter");
-
-    expect(wrapper.find(".su-tooltip-content").text()).toBe("testing");
-    expect(wrapper.find(".su-tooltip-content").classes()).toContain("su-tooltip-content--top");
+    expect(wrapper.find(".su-tooltip").exists()).toBe(true);
+    expect(wrapper.find(".su-tooltip__trigger").exists()).toBe(true);
+    expect(wrapper.find(".su-tooltip__trigger").text()).toBe("Demo");
   });
 
-  it("should render slot content", async () => {
-    const wrapper = createComponent({ label: "testing", showArrow: true }, "<h1>Tooltip</h1>");
+  describe("when set props", () => {
+    let wrapper;
 
-    expect(wrapper.find(".su-tooltip-trigger").text()).toBe("Tooltip");
+    beforeEach(() => {
+      wrapper = mount(Tooltip, {
+        props: {
+          content: "Tooltip content"
+        },
+        slots: {
+          default: `<div>Demo</div>`
+        },
+        global: {
+          stubs: {
+            teleport: true
+          }
+        }
+      });
+    });
+
+    it("should show tooltip content when content props is set", async () => {
+      await wrapper.find(".su-tooltip__trigger").trigger("mouseenter");
+      await nextTick();
+
+      expect(wrapper.find(".su-tooltip__content").exists()).toBe(true);
+      expect(wrapper.find(".su-tooltip__content").text()).toBe("Tooltip content");
+    });
+
+    it("should show tooltip content when modelValue set to true", async () => {
+      await wrapper.setProps({ modelValue: true });
+      await nextTick();
+
+      expect(wrapper.find(".su-tooltip__content").exists()).toBe(true);
+      expect(wrapper.find(".su-tooltip__content").text()).toBe("Tooltip content");
+    });
   });
 
-  it("should not show arrow", async () => {
-    const wrapper = createComponent({ label: "testing", showArrow: false }, "<button type='button'>Button</button>");
+  describe("when set slots", () => {
+    it("should show tooltip content when set content slot", async () => {
+      const wrapper = mount(Tooltip, {
+        slots: {
+          default: `<div>Demo</div>`,
+          content: `Tooltip slots content`
+        },
+        global: {
+          stubs: {
+            teleport: true
+          }
+        }
+      });
 
-    await wrapper.find("button").trigger("mouseenter");
+      await wrapper.find(".su-tooltip__trigger").trigger("mouseenter");
+      await nextTick();
 
-    expect(wrapper.find(".su-tooltip-content").classes()).toContain("su-tooltip-content--disabled-arrow");
+      expect(wrapper.find(".su-tooltip__content").exists()).toBe(true);
+      expect(wrapper.find(".su-tooltip__content").text()).toBe("Tooltip slots content");
+    });
+  });
+
+  describe("when set events", () => {
+    it("should emits update:modelValue event when tooltip trigger is clicked", async () => {
+      const wrapper = mount(Tooltip, {
+        props: {
+          trigger: "click"
+        }
+      });
+
+      await wrapper.find(".su-tooltip__trigger").trigger("click");
+
+      expect(wrapper.emitted("update:modelValue")).toBeTruthy();
+      expect(wrapper.emitted("update:modelValue")[0][0]).toBe(true);
+    });
+
+    it("should emits update:modelValue event when mouse enters the tooltip trigger", async () => {
+      const wrapper = mount(Tooltip, {
+        props: {
+          trigger: "hover"
+        }
+      });
+      await wrapper.find(".su-tooltip__trigger").trigger("mouseenter");
+
+      expect(wrapper.emitted("update:modelValue")).toBeTruthy();
+      expect(wrapper.emitted("update:modelValue")[0][0]).toBe(true);
+    });
+
+    it("should emits update:modelValue event when mouse leaves the tooltip trigger", async () => {
+      const wrapper = mount(Tooltip, {
+        props: {
+          trigger: "hover"
+        }
+      });
+
+      await wrapper.find(".su-tooltip__trigger").trigger("mouseleave");
+
+      expect(wrapper.emitted("update:modelValue")).toBeTruthy();
+      expect(wrapper.emitted("update:modelValue")[0][0]).toBe(false);
+    });
   });
 });
