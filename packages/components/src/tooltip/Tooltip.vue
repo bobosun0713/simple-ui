@@ -22,6 +22,7 @@ const top = ref(0);
 const left = ref(0);
 const tooltipRef = ref<HTMLDivElement | null>(null);
 const tooltipContentRef = ref<HTMLDivElement | null>(null);
+const tooltipContentWidth = ref(0);
 const triedPlacements = new Set();
 const { width: windowWidth, height: windowHeight } = useWindowSize();
 
@@ -35,17 +36,17 @@ function calcPlacementPos(placement: TooltipPlacement) {
     y: tooltipY,
     x: tooltipX
   } = useElementBounding(tooltipRef, boundingOptions);
-  const { width: tooltipContentWidth, height: tooltipContentHeight } = useElementBounding(
-    tooltipContentRef,
-    boundingOptions
-  );
-  const commonTopValue = Number(tooltipY.value + (tooltipHeight.value - tooltipContentHeight.value) / 2);
+  const { width: contentWidth, height: contentHeight } = useElementBounding(tooltipContentRef, boundingOptions);
+
+  tooltipContentWidth.value = contentWidth.value;
+
+  const commonTopValue = Number(tooltipY.value + (tooltipHeight.value - contentHeight.value) / 2);
   const commonLeftValue = Number(tooltipX.value + (tooltipWidth.value - tooltipContentWidth.value) / 2);
 
   const placementMap = {
     top() {
       left.value = commonLeftValue;
-      top.value = Number(tooltipY.value - tooltipContentHeight.value) - Number(props.offset);
+      top.value = Number(tooltipY.value - contentHeight.value) - Number(props.offset);
     },
     right() {
       left.value = Number(tooltipX.value + tooltipWidth.value) + Number(props.offset);
@@ -64,14 +65,12 @@ function calcPlacementPos(placement: TooltipPlacement) {
   placementMap[placement]?.();
 }
 function checkTouchEdge() {
-  const tooltipContentWidth = tooltipContentRef.value!.getBoundingClientRect().width;
-
   const edges = [
     { name: "top", condition: () => top.value <= 0, opposite: "bottom" },
     { name: "left", condition: () => left.value <= 0, opposite: "right" },
     {
       name: "right",
-      condition: () => left.value + tooltipContentWidth >= windowWidth.value,
+      condition: () => left.value + tooltipContentWidth.value >= windowWidth.value,
       opposite: "left"
     },
     { name: "bottom", condition: () => top.value >= windowHeight.value, opposite: "top" }
