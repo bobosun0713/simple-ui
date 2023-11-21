@@ -150,7 +150,7 @@ $text-xl: var(--su-button-text-xl);
   }
 
   &--outlined {
-    &.su-primary {
+    &.su-button-info {
       @include outlined($primary);
     }
     &.su-button-success {
