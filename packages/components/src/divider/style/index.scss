@@ -1,0 +1,21 @@
+@use "../../../styles/reset";
+@use "../../../styles/variables" as *;
+
+.su-divider {
+  display: block;
+  border: 0;
+  border-color: $light-grey;
+}
+
+.jx-divider--horizontal {
+  height: 1px;
+  width: 100px;
+}
+
+.jx-divider--vertical {
+  display: inline-block;
+  max-height: 100%;
+  min-height: 1em;
+  width: 1px;
+  vertical-align: middle;
+}

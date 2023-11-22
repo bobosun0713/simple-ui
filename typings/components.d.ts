@@ -10,6 +10,7 @@ declare module "@vue/runtime-core" {
     STableColumn: typeof import("../packages/components")["STableColumn"];
     SPagination: typeof import("../packages/components")["SPagination"];
     SMessage: typeof import("../packages/components")["SMessage"];
+    SDivider: typeof import("../packages/components")["SDivider"];
   }
 
   interface ComponentCustomProperties {
