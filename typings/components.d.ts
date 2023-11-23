@@ -11,12 +11,14 @@ declare module "@vue/runtime-core" {
     SPagination: typeof import("../packages/components")["SPagination"];
     SMessage: typeof import("../packages/components")["SMessage"];
     SDivider: typeof import("../packages/components")["SDivider"];
+    SDialog: typeof import("../packages/components")["SDialog"];
   }
 
   interface ComponentCustomProperties {
     $message: typeof import("../packages/components")["SLoading"];
     $notification: typeof import("../packages/components")["SNotificationService"];
     $loading: typeof import("../packages/components")["SMessage"];
+    $dialog: typeof import("../packages/components")["SDialogService"];
   }
 }
 export {};

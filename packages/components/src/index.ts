@@ -8,3 +8,4 @@ export * from "./message";
 export * from "./notification";
 export * from "./pagination";
 export * from "./divider";
+export * from "./dialog";
