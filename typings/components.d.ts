@@ -15,9 +15,9 @@ declare module "@vue/runtime-core" {
   }
 
   interface ComponentCustomProperties {
-    $message: typeof import("../packages/components")["SLoading"];
-    $notification: typeof import("../packages/components")["SNotificationService"];
     $loading: typeof import("../packages/components")["SMessage"];
+    $notification: typeof import("../packages/components")["SNotificationService"];
+    $message: typeof import("../packages/components")["SMessageService"];
     $dialog: typeof import("../packages/components")["SDialogService"];
   }
 }
