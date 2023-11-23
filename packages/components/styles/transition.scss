@@ -1,7 +1,7 @@
 //* Fade
 .fade-enter-active,
 .fade-leave-active {
-  opacity: 1;
+  transition: opacity 0.25s ease;
 }
 
 .fade-enter-from,
