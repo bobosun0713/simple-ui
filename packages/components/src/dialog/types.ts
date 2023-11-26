@@ -8,15 +8,8 @@ export interface DialogProps {
   closeOnOverlay?: boolean;
 }
 
-export interface UseDialogProps extends Omit<DialogProps, "visible" | "appendToBody"> {}
-
-export interface UseDialogSlots {
-  header?: VNode | string | number;
-  body?: VNode | string | number;
-  footer?: VNode | string | number;
-}
-
-export interface UseDialogParameters {
-  props?: UseDialogProps;
-  slots?: UseDialogSlots;
+export interface DialogServiceProps extends Omit<DialogProps, "visible" | "appendToBody"> {
+  header?: string | number | VNode | (() => VNode | string | number);
+  body?: string | number | VNode | (() => VNode | string | number);
+  footer?: string | number | VNode | (() => VNode | string | number);
 }

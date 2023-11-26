@@ -1,30 +1,35 @@
 import { h, ref, onMounted, onUnmounted, createApp, type Ref } from "vue";
 import SDialog from "./Dialog.vue";
-import type { UseDialogParameters } from "./types";
+import type { DialogServiceProps } from "./types";
 
 const dialogStates: { isVisible: Ref }[] = [];
 
-function useDialog(data?: UseDialogParameters) {
-  let container: HTMLDivElement;
+function dialogService(props?: DialogServiceProps) {
+  const container: HTMLDivElement = document.createElement("div");
   const isVisible = ref(false);
+
+  const { header, body, footer, ...args } = props || {};
 
   const dialog = createApp(() =>
     h(
       SDialog,
       {
-        ...(data?.props && data.props),
+        ...(args && args),
         visible: isVisible.value,
         "onUpdate:visible": (val: boolean) => (isVisible.value = val),
         appendToBody: false
       },
-      { ...(data?.slots && data.slots) }
+      {
+        ...(header && { header }),
+        ...(body && { body }),
+        ...(footer && { footer })
+      }
     )
   );
 
   dialogStates.push({ isVisible });
 
   onMounted(() => {
-    container = document.createElement("div");
     container.setAttribute("id", `su-dynamic-dialog-${crypto.randomUUID()}`);
     document.body.appendChild(container);
     dialog.mount(container);
@@ -42,4 +47,4 @@ function useDialog(data?: UseDialogParameters) {
   return { open, close, closeAll };
 }
 
-export default useDialog;
+export default dialogService;
