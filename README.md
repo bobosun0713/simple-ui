@@ -1,6 +1,11 @@
-<h1 align="center">Simple UI</h1>
-
-<p align="center">A simple and user-friendly UI component library based on TypeScript for Vue 3.</p>
+<p align="center">
+<a href="https://github.com/bobosun0713/simple-ui">
+  <img src="https://raw.githubusercontent.com/bobosun0713/simple-ui/master/packages/public/logo.png" alt="Simple-UI" width="240">
+</a>
+<br>
+<br>
+A simple and user-friendly UI component library based on TypeScript for Vue 3
+</p>
 
 <p align="center">
   <a target="_blank" href="http://nodejs.org/download/" title="Node version">
