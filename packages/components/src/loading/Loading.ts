@@ -1,37 +1,43 @@
-import { dynamicCreate } from "@simple/utils";
-import { h, ref, onMounted, onUnmounted, createApp, type Ref } from "vue";
-
+import { h, ref, onMounted, onUnmounted, createApp } from "vue";
 import Loading from "./Loading.vue";
-import type { LoadingProps } from "./types";
+import type { LoadingServiceProps } from "./types";
 
-export default (options?: LoadingProps) => {
-  const a = ref(12);
-  const b = createApp(
-    h(Loading, {
-      spinner: a.value
-    })
+function loadingService(props?: LoadingServiceProps) {
+  const container: HTMLDivElement = document.createElement("div");
+  const isVisible = ref(false);
+
+  const { spinner, ...args } = props || {};
+
+  const loading = createApp(() =>
+    h(
+      Loading,
+      {
+        ...(args && args),
+        visible: isVisible.value,
+        "onUpdate:visible": (val: boolean) => (isVisible.value = val),
+        appendToBody: false
+      },
+      {
+        ...(spinner && { spinner })
+      }
+    )
   );
 
-  setTimeout(() => {
-    a.value = 11111;
-  }, 2000);
+  onMounted(() => {
+    container.setAttribute("id", `su-loading-wrap-${crypto.randomUUID()}`);
+    document.body.appendChild(container);
+    loading.mount(container);
+  });
 
-  const vNode = dynamicCreate(Loading, options);
-  const vm = vNode.component!;
-  document.body.appendChild(vNode.el as HTMLElement);
+  onUnmounted(() => {
+    loading.unmount();
+    document.body.removeChild(container);
+  });
 
-  console.log("b -> ", b);
+  const open = () => (isVisible.value = true);
+  const close = () => (isVisible.value = false);
 
-  function show() {
-    vm.exposed!.visible.value = true;
-  }
-  function close() {
-    vm.exposed!.visible.value = false;
-  }
+  return { open, close };
+}
 
-  return {
-    instance: vm,
-    show,
-    close
-  };
-};
+export default loadingService;
