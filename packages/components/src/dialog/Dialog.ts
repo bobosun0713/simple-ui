@@ -1,8 +1,6 @@
-import { h, ref, onMounted, onUnmounted, createApp, type Ref } from "vue";
+import { h, ref, onMounted, onUnmounted, createApp } from "vue";
 import SDialog from "./Dialog.vue";
 import type { DialogServiceProps } from "./types";
-
-const dialogStates: { isVisible: Ref }[] = [];
 
 function dialogService(props?: DialogServiceProps) {
   const container: HTMLDivElement = document.createElement("div");
@@ -27,8 +25,6 @@ function dialogService(props?: DialogServiceProps) {
     )
   );
 
-  dialogStates.push({ isVisible });
-
   onMounted(() => {
     container.setAttribute("id", `su-dynamic-dialog-${crypto.randomUUID()}`);
     document.body.appendChild(container);
@@ -42,9 +38,8 @@ function dialogService(props?: DialogServiceProps) {
 
   const open = () => (isVisible.value = true);
   const close = () => (isVisible.value = false);
-  const closeAll = () => dialogStates.forEach(state => (state.isVisible.value = false));
 
-  return { open, close, closeAll };
+  return { open, close };
 }
 
 export default dialogService;
