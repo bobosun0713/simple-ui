@@ -1,6 +1,8 @@
-import { h, ref, onMounted, onUnmounted, createApp } from "vue";
+import { h, ref, onMounted, onUnmounted, createApp, nextTick, type ComponentInternalInstance } from "vue";
 import SDialog from "./Dialog.vue";
 import type { DialogServiceProps } from "./types";
+
+export const dialogInstances: ComponentInternalInstance[] = [];
 
 function dialogService(props?: DialogServiceProps) {
   const container: HTMLDivElement = document.createElement("div");
@@ -29,6 +31,8 @@ function dialogService(props?: DialogServiceProps) {
     container.setAttribute("id", `su-dynamic-dialog-${crypto.randomUUID()}`);
     document.body.appendChild(container);
     dialog.mount(container);
+
+    dialogInstances.push(dialog._instance!);
   });
 
   onUnmounted(() => {
@@ -41,5 +45,21 @@ function dialogService(props?: DialogServiceProps) {
 
   return { open, close };
 }
+
+function toggleDialog(id: string, visible: boolean) {
+  nextTick(() => {
+    const instance = dialogInstances.find(item => item.props.id === id);
+    if (instance) instance!.exposed?.handleToggle(visible);
+  });
+}
+
+function closeAll() {
+  nextTick(() => {
+    dialogInstances.forEach(item => item.exposed?.handleToggle(false));
+  });
+}
+
+dialogService.toggleDialog = toggleDialog;
+dialogService.closeAll = closeAll;
 
 export default dialogService;

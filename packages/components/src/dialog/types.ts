@@ -2,6 +2,7 @@ import type { VNode } from "vue";
 
 export interface DialogProps {
   visible: boolean;
+  id?: string;
   size?: string;
   showClose?: boolean;
   appendToBody?: boolean;

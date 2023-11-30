@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, getCurrentInstance } from "vue";
+import { dialogInstances } from "./Dialog";
 import SIcon from "../icon/Icon.vue";
 import SButton from "../button/Button.vue";
 import type { DialogProps } from "./types";
@@ -7,6 +8,8 @@ import type { DialogProps } from "./types";
 defineOptions({
   name: "SDialog"
 });
+
+dialogInstances.push(getCurrentInstance()!);
 
 const props = withDefaults(defineProps<DialogProps>(), {
   size: "sm",
@@ -19,15 +22,17 @@ const emits = defineEmits(["update:visible"]);
 
 const contentClasses = computed(() => ["su-dialog__content", `su-dialog__content--${props.size}`]);
 
-function handleToggle(val: boolean) {
-  emits("update:visible", val);
+function handleToggle(visible: boolean) {
+  emits("update:visible", visible);
 }
+
+defineExpose({ handleToggle });
 </script>
 
 <template>
   <Teleport to="body" :disabled="!appendToBody">
     <Transition name="fade">
-      <div v-if="visible" class="su-dialog" @click.self="() => closeOnOverlay && handleToggle(false)">
+      <div v-if="visible" :id="id" class="su-dialog" @click.self="() => closeOnOverlay && handleToggle(false)">
         <div :class="contentClasses">
           <button v-if="showClose" class="su-dialog__cancel" type="button" @click="handleToggle(false)">
             <SIcon name="close" width="24" height="24"></SIcon>
