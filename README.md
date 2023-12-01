@@ -22,8 +22,8 @@ A simple and user-friendly UI component library based on TypeScript for Vue 3
 - 💪 **Components are very lightweight**
 - 💪 **Simple and User-Friendly UI Components**
 - 💡 **Support the Typescript**
-- 🔩 **Compatible with cjs, es, and life versions**
-- 🌎 **Documentation available：** [中文](./zh-tw/README.md) | English
+- 🔩 **Compatible with cjs, es versions**
+- 🌎 **[中文](./README_zh_TW.md) | [English](./README.md)**
 
 ## 📦 Installation
 
