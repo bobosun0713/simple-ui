@@ -95,7 +95,7 @@ $text-xl: var(--su-button-text-xl);
     @include focus(rgba($warning, 0.3));
   }
 
-  &-danger {
+  &-error {
     background-color: $danger;
     @include focus(rgba($danger, 0.3));
   }
