@@ -9,3 +9,5 @@ export * from "./notification";
 export * from "./pagination";
 export * from "./divider";
 export * from "./dialog";
+export * from "./grid";
+export * from "./grid-item";
