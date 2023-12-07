@@ -11,3 +11,5 @@ export * from "./divider";
 export * from "./dialog";
 export * from "./grid";
 export * from "./grid-item";
+export * from "./row";
+export * from "./col";

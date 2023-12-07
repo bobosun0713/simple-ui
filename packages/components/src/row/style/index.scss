@@ -1,0 +1,7 @@
+@use "../../../styles/reset";
+
+.su-row {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+}
