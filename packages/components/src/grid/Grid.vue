@@ -7,7 +7,8 @@ defineOptions({
 });
 
 const props = withDefaults(defineProps<GridProps>(), {
-  col: 3
+  col: 3,
+  gap: 0
 });
 
 const colCount = ref(props.col);
