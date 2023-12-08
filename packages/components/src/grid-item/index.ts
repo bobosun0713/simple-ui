@@ -1,5 +1,5 @@
 import { withInstall } from "@simple/utils";
-import GridItem from "../grid/GridItem.vue";
+import GridItem from ".//GridItem.vue";
 
 const SGridItem = withInstall(GridItem);
 
