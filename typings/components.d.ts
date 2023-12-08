@@ -15,6 +15,7 @@ declare module "@vue/runtime-core" {
     SGrid: typeof import("../packages/components")["SGrid"];
     SGridItem: typeof import("../packages/components")["SGridItem"];
     SRow: typeof import("../packages/components")["SRow"];
+    SCol: typeof import("../packages/components")["SCol"];
   }
 
   interface ComponentCustomProperties {
