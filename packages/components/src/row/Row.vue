@@ -1,52 +1,43 @@
 <script setup lang="ts">
-import { provide, ref, computed, watch, useSlots, onMounted } from "vue";
+import { provide, ref, computed, watch } from "vue";
+import type { RowProps } from "./types";
 
 defineOptions({
   name: "SRow"
 });
 
-const props = defineProps({
-  gap: {
-    type: [String, Number],
-    default: "start"
-  },
-  align: {
-    type: String,
-    default: "top"
-  }
+const props = withDefaults(defineProps<RowProps>(), {
+  gutter: 0
 });
 
-const slots = useSlots();
+const gutter = ref(props.gutter);
 
-const currentRowTotal = ref(0);
-const gap = ref(props.gap);
+const classes = computed(() => [
+  props.justify ? `su-row--justify-${props.justify}` : "",
+  props.align ? `su-row--align-${props.align}` : ""
+]);
 
 const styles = computed(() => ({
-  gap: `${props.gap}px`
+  marginLeft: `-${gutter.value}px`,
+  marginRight: `-${gutter.value}px`
 }));
 
 watch(
-  () => props.gap,
+  () => props.gutter,
   val => {
-    gap.value = val;
+    gutter.value = val;
   }
 );
 
-onMounted(() => {
-  currentRowTotal.value = slots.default
-    ? slots?.default().reduce((acc: number, crr: any) => Number(crr.props!.col) + acc, 0)
-    : 0;
-});
-
-provide("gap", gap);
+provide("gutter", gutter);
 </script>
 
 <template>
-  <div class="su-row" :style="styles">
-    <slot></slot>
+  <div class="su-row" :class="classes" :style="styles">
+    <slot name="default"></slot>
   </div>
 </template>
 
 <style lang="scss">
-@use "./styles";
+@use "./style";
 </style>
