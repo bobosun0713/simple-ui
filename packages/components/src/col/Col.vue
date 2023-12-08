@@ -5,7 +5,7 @@ defineOptions({
   name: "SCol"
 });
 
-const gap = inject("gap") as Ref<number>;
+const gutter = inject("gutter") as Ref<number>;
 
 const props = defineProps({
   col: {
@@ -16,20 +16,16 @@ const props = defineProps({
 
 const styles = computed(() => {
   const col = props.col as number;
-  return { width: col % 12 ? `calc(${col / 12} * (100% - ${gap.value}px))` : "100%" };
+  return {
+    paddingLeft: `${gutter.value}px`,
+    paddingRight: `${gutter.value}px`,
+    width: col % 12 ? `calc(${col / 12} * 100%)` : "100%"
+  };
 });
 </script>
 
 <template>
   <div class="su-col" :style="styles">
-    <slot></slot>
+    <slot name="default"> </slot>
   </div>
 </template>
-
-<style lang="scss">
-@use "../../styles/reset";
-
-.su-col {
-  outline: 1px solid red;
-}
-</style>
