@@ -1,20 +1,19 @@
 <script setup lang="ts">
 import { provide, ref, computed, watch } from "vue";
+import type { GridProps } from "./types";
 
 defineOptions({
   name: "SGrid"
 });
 
-const props = defineProps({
-  col: {
-    type: [String, Number],
-    default: 3
-  },
-  gap: {
-    type: [String, Number],
-    default: 0
-  }
+const props = withDefaults(defineProps<GridProps>(), {
+  col: 3
 });
+
+const colCount = ref(props.col);
+const colGap = ref(props.gap);
+
+const styles = computed(() => ({ gap: `${colGap.value}px` }));
 
 watch(
   () => [props.col, props.gap],
@@ -24,20 +23,15 @@ watch(
   }
 );
 
-const colCount = ref(props.col);
-const colGap = ref(props.gap);
-
-const styles = computed(() => ({ gap: `${colGap.value}px` }));
-
-provide("col", colCount);
+provide("gridProps", { col: colCount, gap: colGap });
 </script>
 
 <template>
   <div class="su-grid" :style="styles">
-    <slot></slot>
+    <slot name="default"></slot>
   </div>
 </template>
 
 <style lang="scss">
-@import "./style/index.scss";
+@import "./style";
 </style>
