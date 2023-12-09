@@ -1,28 +1,28 @@
-import { defineConfig } from 'vitepress'
+import { defineConfig } from "vitepress";
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: "Simple UI",
-  description: "Vue3 + Ts",
+  description: "A simple and user-friendly UI component library based on TypeScript for Vue 3",
   themeConfig: {
-    // https://vitepress.dev/reference/default-theme-config
+    logo: "/logo.png",
     nav: [
-      { text: 'Home', link: '/' },
-      { text: 'Examples', link: '/markdown-examples' }
+      { text: "Guide", link: "/guide/installation", activeMatch: "/guide/" },
+      { text: "Component", link: "", activeMatch: "/component/" }
     ],
 
-    sidebar: [
-      {
-        text: 'Examples',
-        items: [
-          { text: 'Markdown Examples', link: '/markdown-examples' },
-          { text: 'Runtime API Examples', link: '/api-examples' }
-        ]
-      }
-    ],
+    sidebar: {
+      "/guide/": [
+        {
+          text: "Guide",
+          items: [
+            { text: "Installation", link: "/guide/installation" },
+            { text: "Quick Start", link: "/guide/quickStart" }
+          ]
+        }
+      ]
+    },
 
-    socialLinks: [
-      { icon: 'github', link: 'https://github.com/vuejs/vitepress' }
-    ]
+    socialLinks: [{ icon: "github", link: "https://github.com/bobosun0713/simple-ui" }]
   }
-})
+});
