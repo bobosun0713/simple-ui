@@ -12,3 +12,4 @@ simple
 # local flies
 .eslintcache
 coverage
+docs/.vitepress/cache
