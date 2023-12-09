@@ -1,25 +1,35 @@
 ---
-# https://vitepress.dev/reference/default-theme-home-page
 layout: home
 
+title: Simple UI
+titleTemplate: Vue 3 based component library
+
 hero:
-  name: "Simple UI"
-  text: "Vue3 + Ts"
-  tagline: My great project tagline
+  name: Simple UI
+  text: Vue 3 based component library
+  tagline: A simple and user-friendly UI component library based on TypeScript for Vue 3
+  image:
+    src: /logo.png
+    alt: Simple UI
   actions:
     - theme: brand
-      text: Markdown Examples
+      text: Get Started
       link: /markdown-examples
     - theme: alt
-      text: API Examples
+      text: Components
       link: /api-examples
+    - theme: alt
+      text: View on GitHub
+      link: https://github.com/bobosun0713/simple-ui
 
 features:
-  - title: Feature A
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature B
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature C
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
+  - icon: 💡
+    title: Vue3 Component
+    details: Developed with Vite packaging and TypeScript
+  - icon: 📦
+    title: Very Lightweight
+    details: The component is very lightweight
+  - icon: 🛠️
+    title: Import on Demand
+    details: Directly supports import on demand without the need to configure any suite
 ---
-
