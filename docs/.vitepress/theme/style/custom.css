@@ -1,0 +1,12 @@
+:root {
+  --primary-color: #3e8ed0;
+  --secondary-color: #98c2ec;
+
+  --vp-home-hero-name-color: transparent;
+  --vp-home-hero-name-background: -webkit-linear-gradient(120deg, var(--secondary-color), var(--primary-color));
+
+  --vp-c-brand-1: var(--primary-color);
+
+  --vp-button-brand-bg: var(--primary-color);
+  --vp-button-brand-hover-bg: var(--secondary-color);
+}
