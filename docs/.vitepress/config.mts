@@ -2,9 +2,10 @@ import { defineConfig } from "vitepress";
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-  outDir: './dist',
-  base: '/simple-ui/',
+  outDir: "./dist",
+  base: "/simple-ui/",
   title: "Simple UI",
+  head: [["link", { rel: "icon", href: "/logo.png" }]],
   description: "A simple and user-friendly UI component library based on TypeScript for Vue 3",
   themeConfig: {
     logo: "/logo.png",
