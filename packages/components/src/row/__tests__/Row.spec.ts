@@ -19,27 +19,27 @@ describe("Row.vue", () => {
   it("should render default structure", () => {
     const wrapper = createComponent("<SRow></SRow>");
 
-    expect(wrapper.find(".su-row").attributes("style")).toMatch("margin-left");
-    expect(wrapper.find(".su-row").attributes("style")).toMatch("margin-right");
+    expect(wrapper.attributes("style")).toMatch("margin-left");
+    expect(wrapper.attributes("style")).toMatch("margin-right");
   });
 
   describe("when props are set", () => {
     it("should have gutter attribute", () => {
       const wrapper = createComponent("<SRow gutter='5'></SRow>");
 
-      expect(wrapper.find(".su-row").attributes("style")).toContain("margin-left: -5px; margin-right: -5px");
+      expect(wrapper.attributes("style")).toContain("margin-left: -5px; margin-right: -5px");
     });
 
     it("should have '.su-row--justify-center' class when justify prop is set", () => {
       const wrapper = createComponent("<SRow justify='center'></SRow>");
 
-      expect(wrapper.find(".su-row").classes()).toContain("su-row--justify-center");
+      expect(wrapper.classes()).toContain("su-row--justify-center");
     });
 
     it("should have '.su-row--align-center' class when align prop is set", () => {
       const wrapper = createComponent("<SRow align='center'></SRow>");
 
-      expect(wrapper.find(".su-row").classes()).toContain("su-row--align-center");
+      expect(wrapper.classes()).toContain("su-row--align-center");
     });
   });
 
