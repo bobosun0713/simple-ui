@@ -8,7 +8,7 @@ defineOptions({
 });
 
 const props = defineProps({
-  vertical: { type: Boolean, default: true },
+  vertical: { type: Boolean, default: false },
   thickness: { type: [String, Number], default: 1 },
   spacing: { type: [String, Number], default: 24 },
   borderStyle: { type: String as PropType<BorderStyle>, default: "solid" }
