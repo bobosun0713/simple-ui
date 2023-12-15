@@ -50,5 +50,3 @@ onUnmounted(() => {
     <component :is="props.slots" v-else></component>
   </div>
 </template>
-
-<style lang="scss"></style>

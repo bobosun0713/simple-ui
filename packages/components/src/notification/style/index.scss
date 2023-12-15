@@ -1,17 +1,28 @@
 @use "../../../styles/variables" as *;
 
+:root {
+  --su-notification-info: #{$primary};
+  --su-notification-success: #{$success};
+  --su-notification-warning: #{$warning};
+  --su-notification-error: #{$error};
+  --su-notification-bg-info: #b3e5fc;
+  --su-notification-bg-success: #c8e6c9;
+  --su-notification-bg-warning: #ffecb3b7;
+  --su-notification-bg-error: #ffcdd2;
+}
+
 $notification-colors: (
-  info: $primary,
-  success: $success,
-  warning: $warning,
-  danger: $danger
+  info: var(--su-notification-info),
+  success: var(--su-notification-success),
+  warning: var(--su-notification-warning),
+  danger: var(--su-notification-error)
 );
 
 $notification-bg-colors: (
-  info: #b3e5fc,
-  success: #c8e6c9,
-  warning: #ffecb3b7,
-  danger: #ffcdd2
+  info: var(--su-notification-bg-info),
+  success: var(--su-notification-bg-success),
+  warning: var(--su-notification-bg-warning),
+  danger: var(--su-notification-bg-error)
 );
 
 .su-notification {
@@ -33,7 +44,7 @@ $notification-bg-colors: (
 
   &__container {
     box-shadow: 0.1rem 0 1.2rem 0 rgb(218, 214, 214);
-    border-left: 0.4rem solid $primary;
+    border-left: 0.4rem solid map-get($notification-colors, "info");
     border-radius: 0.4rem;
 
     color: $dark;

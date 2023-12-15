@@ -1,4 +1,4 @@
-export type NotificationTypes = "success" | "warning" | "info" | "danger";
+export type NotificationTypes = "success" | "warning" | "info" | "error";
 
 export type NotificationProps = {
   id?: number | string;
