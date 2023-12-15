@@ -1,10 +1,17 @@
 @use "../../../styles/variables" as *;
 
+:root {
+  --su-message-info: #{$primary};
+  --su-message-success: #{$success};
+  --su-message-warning: #{$warning};
+  --su-message-error: #{$error};
+}
+
 $message-colors: (
-  info: $primary,
-  success: $success,
-  warning: $warning,
-  error: $danger
+  info: var(--su-message-info),
+  success: var(--su-message-success),
+  warning: var(--su-message-warning),
+  error: var(--su-message-error)
 );
 
 .su-message-wrap {
@@ -25,7 +32,6 @@ $message-colors: (
   color: $light;
   transition: $default-transition;
 
-  // Modifiers (background-color)
   @each $key, $value in $message-colors {
     &--#{$key} {
       background-color: $value;
