@@ -9,13 +9,24 @@
   --su-button-size-md: 6px 12px;
   --su-button-size-lg: 8px 16px;
   --su-button-size-xl: 10px 24px;
+  --su-button-info: #{$primary};
+  --su-button-success: #{$success};
+  --su-button-warning: #{$warning};
+  --su-button-error: #{$error};
 }
 
 $text-sm: var(--su-button-text-sm);
-$text-dft: var(--su-button-text-dft);
 $text-md: var(--su-button-text-md);
 $text-lg: var(--su-button-text-lg);
 $text-xl: var(--su-button-text-xl);
+$text-size-sm: var(--su-button-size-sm);
+$text-size-md: var(--su-button-size-md);
+$text-size-lg: var(--su-button-size-lg);
+$text-size-xl: var(--su-button-size-xl);
+$text-info: var(--su-button-info);
+$text-success: var(--su-button-success);
+$text-warning: var(--su-button-warning);
+$text-error: var(--su-button-error);
 
 @mixin hover($hover, $active) {
   &:hover {
@@ -73,47 +84,47 @@ $text-xl: var(--su-button-text-xl);
   align-items: center;
   border: 0;
   border-radius: 4px;
-  font-size: $text-dft;
+  font-size: $text-md;
   white-space: nowrap;
   color: $light;
 
   @include hover(0.8, 1);
 
   &-info {
-    background-color: $primary;
+    background-color: $text-info;
     @include focus(rgba($primary, 0.3));
   }
 
   &-success {
-    background-color: $success;
+    background-color: $text-success;
     @include focus(rgba($success, 0.3));
   }
 
   &-warning {
-    background-color: $warning;
+    background-color: $text-warning;
     @include focus(rgba($warning, 0.3));
   }
 
   &-error {
-    background-color: $danger;
-    @include focus(rgba($danger, 0.3));
+    background-color: $text-error;
+    @include focus(rgba($error, 0.3));
   }
 
   &-size {
     &-sm {
-      padding: var(--su-button-size-sm);
+      padding: $text-size-sm;
       font-size: $text-sm;
     }
     &-md {
-      padding: var(--su-button-size-md);
+      padding: $text-size-md;
       font-size: $text-md;
     }
     &-lg {
-      padding: var(--su-button-size-lg);
+      padding: $text-size-lg;
       font-size: $text-lg;
     }
     &-xl {
-      padding: var(--su-button-size-xl);
+      padding: $text-size-xl;
       font-size: $text-xl;
     }
   }
@@ -150,16 +161,16 @@ $text-xl: var(--su-button-text-xl);
 
   &--outlined {
     &.su-button-info {
-      @include outlined($primary);
+      @include outlined($text-info);
     }
     &.su-button-success {
-      @include outlined($success);
+      @include outlined($text-success);
     }
     &.su-button-warning {
-      @include outlined($warning);
+      @include outlined($text-warning);
     }
     &.su-button-danger {
-      @include outlined($danger);
+      @include outlined($text-error);
     }
   }
 
