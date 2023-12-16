@@ -1,5 +1,9 @@
-@use "../../../styles/transition";
 @use "../../../styles/variables" as *;
+
+:root {
+  --su-tooltip-text-color: #{$light};
+  --su-tooltip-bg-color: #{$dark};
+}
 
 .su-tooltip {
   display: inline-block;
@@ -12,8 +16,8 @@
     border-radius: 4px;
     font-size: 1.4rem;
     white-space: nowrap;
-    color: $light;
-    background-color: $dark;
+    color: var(--su-tooltip-text-color);
+    background-color: var(--su-tooltip-bg-color);
     transition: opacity 0.2s;
   }
 }
