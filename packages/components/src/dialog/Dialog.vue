@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, getCurrentInstance } from "vue";
+import { computed, getCurrentInstance, ref, watch, onMounted, isRef, type Ref } from "vue";
 import { dialogInstances } from "./Dialog";
 import SIcon from "../icon/Icon.vue";
 import SButton from "../button/Button.vue";
@@ -18,13 +18,37 @@ const props = withDefaults(defineProps<DialogProps>(), {
   closeOnOverlay: true
 });
 
-const emits = defineEmits(["update:visible"]);
+const emits = defineEmits(["update:visible", "on-cancel", "on-confirm"]);
 
+const isVisible = ref<boolean | Ref<boolean>>(false);
 const contentClasses = computed(() => ["su-dialog__content", `su-dialog__content--${props.size}`]);
 
 function handleToggle(visible: boolean) {
   emits("update:visible", visible);
 }
+
+function handleCancel() {
+  props.resolve?.(false);
+  emits("on-cancel");
+  handleToggle(false);
+}
+
+function handleConfirm() {
+  props.resolve?.(true);
+  emits("on-confirm");
+  handleToggle(false);
+}
+
+watch(
+  () => (isRef(props.visible) ? props.visible.value : props.visible),
+  val => {
+    isVisible.value = val;
+  }
+);
+
+onMounted(() => {
+  isVisible.value = isRef(props.visible) ? props.visible.value : props.visible;
+});
 
 defineExpose({ handleToggle });
 </script>
@@ -32,9 +56,9 @@ defineExpose({ handleToggle });
 <template>
   <Teleport to="body" :disabled="!appendToBody">
     <Transition name="fade">
-      <div v-if="visible" :id="id" class="su-dialog" @click.self="() => closeOnOverlay && handleToggle(false)">
+      <div v-show="isVisible" :id="id" class="su-dialog" @click.self="() => closeOnOverlay && handleCancel">
         <div :class="contentClasses">
-          <button v-if="showClose" class="su-dialog__cancel" type="button" @click="handleToggle(false)">
+          <button v-if="showClose" class="su-dialog__cancel" type="button" @click="handleCancel">
             <SIcon name="close" width="24" height="24"></SIcon>
           </button>
           <div class="su-dialog__header">
@@ -46,8 +70,8 @@ defineExpose({ handleToggle });
           <div class="su-dialog__footer">
             <slot name="footer">
               <div class="su-dialog__default-btn">
-                <SButton outlined @click="handleToggle(false)">No</SButton>
-                <SButton @click="handleToggle(false)">Yes</SButton>
+                <SButton outlined @click="handleCancel">No</SButton>
+                <SButton @click="handleConfirm">Yes</SButton>
               </div>
             </slot>
           </div>
