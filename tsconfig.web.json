@@ -16,13 +16,6 @@
     /* Linting */
     "strict": true
   },
-  "include": [
-    "examples/*.vue",
-    "examples/*.ts",
-    "packages/**/*.vue",
-    "packages/**/*.ts",
-    "typings/components.d.ts",
-    "typings/vite-env.d.ts"
-  ],
+  "include": ["packages/**/*.vue", "packages/**/*.ts", "typings/components.d.ts", "typings/vite-env.d.ts"],
   "exclude": ["node_modules", "dist", "**/__tests__/**/*"]
 }
