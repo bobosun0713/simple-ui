@@ -1,6 +1,15 @@
 @use "../../../styles/transition";
 @use "../../../styles/variables" as *;
 
+:root {
+  --su-dialog-header-padding: 16px 16px 0 16px;
+  --su-dialog-body-padding: 20px 16px;
+  --su-dialog-footer-padding: 0 16px 16px 16px;
+  --su-dialog-header-font-size: 18px;
+  --su-dialog-body-font-size: 14px;
+  --su-dialog-footer-font-size: 14px;
+}
+
 .su-dialog {
   position: fixed;
   height: 100%;
@@ -33,24 +42,26 @@
   }
 
   &__header {
-    padding: 16px 16px 0 16px;
+    display: flex;
+    align-items: center;
+    padding: var(--su-dialog-header-padding);
+    font-size: var(--su-dialog-header-font-size);
   }
   &__body {
-    padding: 20px 16px;
+    padding: var(--su-dialog-body-padding);
+    font-size: var(--su-dialog-body-font-size);
   }
   &__footer {
-    padding: 0 16px 16px 16px;
+    padding: var(--su-dialog-footer-padding);
+    font-size: var(--su-dialog-footer-font-size);
   }
 
   &__cancel {
+    display: block;
     width: 24px;
     height: 24px;
     border-radius: 50%;
-    position: absolute;
-    right: 16px;
-    top: 16px;
-    border: 0;
-    background-color: $light;
+    margin-left: auto;
     transition: $default-transition;
     cursor: pointer;
 

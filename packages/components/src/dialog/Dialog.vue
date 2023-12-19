@@ -69,13 +69,18 @@ defineExpose({
       <div v-show="isVisible" :id="id" class="su-dialog" @click.self="() => closeOnOverlay && handleCancel()">
         <div :class="contentClasses">
           <div class="su-dialog__header">
-            <slot name="header">Title</slot>
-            <button v-if="showClose" class="su-dialog__cancel" type="button" @click="handleCancel">
-              <SIcon name="close" width="24" height="24"></SIcon>
-            </button>
+            <slot name="header">Tips</slot>
+            <SIcon
+              v-if="showClose"
+              class="su-dialog__cancel"
+              name="close"
+              width="24"
+              height="24"
+              @click="handleCancel"
+            ></SIcon>
           </div>
           <div class="su-dialog__body">
-            <slot name="body">Dialog Content</slot>
+            <slot name="body">This is a message</slot>
           </div>
           <div class="su-dialog__footer">
             <slot name="footer">
