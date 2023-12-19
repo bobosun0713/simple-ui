@@ -1,5 +1,7 @@
 import type { VNode, Ref } from "vue";
 
+export type DialogId = string | number;
+
 export interface DialogProps {
   visible: boolean | Ref<boolean>;
   id?: string;
@@ -7,8 +9,8 @@ export interface DialogProps {
   showClose?: boolean;
   appendToBody?: boolean;
   closeOnOverlay?: boolean;
-  resolve?: (arg: boolean) => void;
-  reject?: (arg: boolean) => void;
+  promiseToResolve?: (arg: boolean) => void;
+  vanish?: () => void;
 }
 
 export interface DialogServiceProps extends Omit<DialogProps, "visible" | "appendToBody"> {
@@ -17,8 +19,8 @@ export interface DialogServiceProps extends Omit<DialogProps, "visible" | "appen
   footer?: string | number | VNode | (() => VNode | string | number);
 }
 
-export interface DialogService {
-  confirm: (prop: DialogServiceProps) => Promise<unknown>;
+export interface DialogServiceReturnType {
+  confirm: (prop: DialogServiceProps) => Promise<boolean>;
   showDialog: (id: string | number) => void;
   closeDialog: (id: string | number) => void;
   closeAll: () => void;

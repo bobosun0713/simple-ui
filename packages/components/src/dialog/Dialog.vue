@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed, getCurrentInstance, ref, watch, onMounted, isRef, type Ref } from "vue";
-import { dialogInstances } from "./Dialog";
+import { computed, getCurrentInstance, ref, watch, onMounted, onBeforeUnmount, isRef, type Ref } from "vue";
+import { dialogInstances } from "./instance";
 import SIcon from "../icon/Icon.vue";
 import SButton from "../button/Button.vue";
 import type { DialogProps } from "./types";
@@ -9,7 +9,8 @@ defineOptions({
   name: "SDialog"
 });
 
-dialogInstances.push(getCurrentInstance()!);
+const instance = getCurrentInstance()!;
+dialogInstances.push(instance);
 
 const props = withDefaults(defineProps<DialogProps>(), {
   size: "sm",
@@ -22,47 +23,56 @@ const emits = defineEmits(["update:visible", "on-cancel", "on-confirm"]);
 
 const isVisible = ref<boolean | Ref<boolean>>(false);
 const contentClasses = computed(() => ["su-dialog__content", `su-dialog__content--${props.size}`]);
+const getModelValue = computed(() => (isRef(props.visible) ? props.visible.value : props.visible));
 
 function handleToggle(visible: boolean) {
   emits("update:visible", visible);
 }
 
 function handleCancel() {
-  props.resolve?.(false);
+  props.promiseToResolve?.(false);
   emits("on-cancel");
   handleToggle(false);
 }
 
 function handleConfirm() {
-  props.resolve?.(true);
+  props.promiseToResolve?.(true);
   emits("on-confirm");
   handleToggle(false);
 }
 
 watch(
-  () => (isRef(props.visible) ? props.visible.value : props.visible),
+  () => getModelValue.value,
   val => {
     isVisible.value = val;
   }
 );
 
 onMounted(() => {
-  isVisible.value = isRef(props.visible) ? props.visible.value : props.visible;
+  isVisible.value = getModelValue.value;
 });
 
-defineExpose({ handleToggle });
+onBeforeUnmount(() => {
+  dialogInstances.splice(dialogInstances.indexOf(instance), 1);
+});
+
+defineExpose({
+  handleToggle,
+  handleCancel,
+  handleConfirm
+});
 </script>
 
 <template>
   <Teleport to="body" :disabled="!appendToBody">
-    <Transition name="fade">
-      <div v-show="isVisible" :id="id" class="su-dialog" @click.self="() => closeOnOverlay && handleCancel">
+    <Transition name="fade" @after-leave="props.vanish">
+      <div v-show="isVisible" :id="id" class="su-dialog" @click.self="() => closeOnOverlay && handleCancel()">
         <div :class="contentClasses">
-          <button v-if="showClose" class="su-dialog__cancel" type="button" @click="handleCancel">
-            <SIcon name="close" width="24" height="24"></SIcon>
-          </button>
           <div class="su-dialog__header">
-            <slot name="header"></slot>
+            <slot name="header">Title</slot>
+            <button v-if="showClose" class="su-dialog__cancel" type="button" @click="handleCancel">
+              <SIcon name="close" width="24" height="24"></SIcon>
+            </button>
           </div>
           <div class="su-dialog__body">
             <slot name="body">Dialog Content</slot>
