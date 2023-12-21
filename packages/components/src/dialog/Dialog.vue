@@ -19,7 +19,7 @@ const props = withDefaults(defineProps<DialogProps>(), {
   closeOnOverlay: true
 });
 
-const emits = defineEmits(["update:visible", "on-cancel", "on-confirm"]);
+const emits = defineEmits(["update:visible", "on-cancel", "on-confirm", "on-close"]);
 
 const isVisible = ref<boolean | Ref<boolean>>(false);
 const contentClasses = computed(() => ["su-dialog__content", `su-dialog__content--${props.size}`]);
@@ -29,14 +29,20 @@ function handleToggle(visible: boolean) {
   emits("update:visible", visible);
 }
 
+function handleClose() {
+  props.onClose?.();
+  emits("on-close");
+  handleToggle(false);
+}
+
 function handleCancel() {
-  props.promiseToResolve?.(false);
+  props.onCancel?.();
   emits("on-cancel");
   handleToggle(false);
 }
 
 function handleConfirm() {
-  props.promiseToResolve?.(true);
+  props.onConfirm?.();
   emits("on-confirm");
   handleToggle(false);
 }
@@ -59,14 +65,15 @@ onBeforeUnmount(() => {
 defineExpose({
   handleToggle,
   handleCancel,
-  handleConfirm
+  handleConfirm,
+  handleClose
 });
 </script>
 
 <template>
   <Teleport to="body" :disabled="!appendToBody">
     <Transition name="fade" @after-leave="props.vanish">
-      <div v-show="isVisible" :id="id" class="su-dialog" @click.self="() => closeOnOverlay && handleCancel()">
+      <div v-show="isVisible" :id="id" class="su-dialog" @click.self="() => closeOnOverlay && handleClose()">
         <div :class="contentClasses">
           <div class="su-dialog__header">
             <slot name="header">Tips</slot>

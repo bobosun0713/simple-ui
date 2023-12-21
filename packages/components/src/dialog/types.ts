@@ -9,18 +9,30 @@ export interface DialogProps {
   showClose?: boolean;
   appendToBody?: boolean;
   closeOnOverlay?: boolean;
-  promiseToResolve?: (arg: boolean) => void;
+  onConfirm?: () => void;
+  onClose?: () => void;
+  onCancel?: () => void;
   vanish?: () => void;
 }
 
-export interface DialogServiceProps extends Omit<DialogProps, "visible" | "appendToBody"> {
-  header?: string | number | VNode | (() => VNode | string | number);
-  body?: string | number | VNode | (() => VNode | string | number);
-  footer?: string | number | VNode | (() => VNode | string | number);
+export interface DialogExposeAction {
+  handleToggle?: (arg: boolean) => void;
+  handleCancel?: () => void;
+  handleConfirm?: () => void;
+  handleClose?: () => void;
 }
 
+export type DialogSlotScope = string | number | VNode | (() => string | number | VNode);
+export interface DialogServiceSlots {
+  header?: DialogSlotScope;
+  body?: DialogSlotScope;
+  footer?: DialogSlotScope | ((fn: DialogExposeAction) => string | number | VNode);
+}
+
+export interface DialogServiceProps extends Omit<DialogProps, "id" | "visible">, DialogServiceSlots {}
+
 export interface DialogServiceReturnType {
-  confirm: (prop: DialogServiceProps) => Promise<boolean>;
+  confirm: (props: DialogServiceProps) => Promise<string>;
   showDialog: (id: string | number) => void;
   closeDialog: (id: string | number) => void;
   closeAll: () => void;
