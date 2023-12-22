@@ -23,10 +23,18 @@ export interface DialogExposeAction {
 }
 
 export type DialogSlotScope = string | number | VNode | (() => string | number | VNode);
+
+export interface DialogSlotAction {
+  toggle?: (arg: boolean) => void;
+  close?: () => void;
+  cancel?: () => void;
+  confirm?: () => void;
+}
+
 export interface DialogServiceSlots {
   header?: DialogSlotScope;
   body?: DialogSlotScope;
-  footer?: DialogSlotScope | ((fn: DialogExposeAction) => string | number | VNode);
+  footer?: DialogSlotScope | ((fn: DialogSlotAction) => string | number | VNode);
 }
 
 export interface DialogServiceProps extends Omit<DialogProps, "id" | "visible">, DialogServiceSlots {}
