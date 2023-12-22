@@ -1,7 +1,13 @@
 import { h, render, nextTick, ref, type Component } from "vue";
 import { dialogInstances } from "./instance";
 import SDialog from "./Dialog.vue";
-import type { DialogServiceProps, DialogServiceReturnType, DialogExposeAction, DialogId } from "./types";
+import type {
+  DialogId,
+  DialogServiceProps,
+  DialogServiceReturnType,
+  DialogExposeAction,
+  DialogSlotAction
+} from "./types";
 
 function renderDialog(constructor: Component, props: Record<string, any>, slots?: Record<string, any>) {
   const container = document.createElement("div");
@@ -32,8 +38,8 @@ function dialogService(): DialogServiceReturnType {
     const { header, body, footer, ...args } = props || {};
 
     return new Promise(resolve => {
-      const createSlot = (slot: any) =>
-        typeof slot === "function" ? (fn?: DialogExposeAction) => slot(fn) : () => slot;
+      const createSlot = <T>(slot: T | (() => T) | ((fn: DialogSlotAction) => T)) =>
+        typeof slot === "function" ? slot : () => slot;
 
       renderDialog(
         SDialog,
@@ -64,7 +70,7 @@ function dialogService(): DialogServiceReturnType {
 
   const closeAll = () => {
     dialogInstances.forEach(item => {
-      item.exposed?.onToggle(false);
+      item.exposed?.handleToggle(false);
     });
   };
 
