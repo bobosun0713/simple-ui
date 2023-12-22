@@ -90,7 +90,13 @@ defineExpose({
             <slot name="body">This is a message</slot>
           </div>
           <div class="su-dialog__footer">
-            <slot name="footer">
+            <slot
+              name="footer"
+              :toggle="handleToggle"
+              :close="handleClose"
+              :confirm="handleConfirm"
+              :cancel="handleCancel"
+            >
               <div class="su-dialog__default-btn">
                 <SButton outlined @click="handleCancel">No</SButton>
                 <SButton @click="handleConfirm">Yes</SButton>
