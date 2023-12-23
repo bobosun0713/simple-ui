@@ -4,7 +4,7 @@
 </a>
 <br>
 <br>
-A simple and user-friendly UI component library based on TypeScript for Vue 3
+A simple and user-friendly UI component library for Vue 3 based on TypeScript
 </p>
 
 <p align="center">
