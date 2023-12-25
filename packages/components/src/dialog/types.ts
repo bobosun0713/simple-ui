@@ -5,7 +5,7 @@ export type DialogId = string | number;
 export type DialogSize = "sm" | "md" | "lg" | "xl";
 
 export interface DialogProps {
-  visible: boolean | Ref<boolean>;
+  visible?: boolean | Ref<boolean>;
   id?: string;
   size?: DialogSize;
   showClose?: boolean;

@@ -50,12 +50,12 @@ function handleConfirm() {
 watch(
   () => getModelValue.value,
   val => {
-    isVisible.value = val;
+    isVisible.value = !!val;
   }
 );
 
 onMounted(() => {
-  isVisible.value = getModelValue.value;
+  isVisible.value = !!getModelValue.value;
 });
 
 onBeforeUnmount(() => {
@@ -79,7 +79,7 @@ defineExpose({
             <slot name="header">Tips</slot>
             <SIcon
               v-if="showClose"
-              class="su-dialog__cancel"
+              class="su-dialog__close"
               name="close"
               width="24"
               height="24"
