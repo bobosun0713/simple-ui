@@ -2,10 +2,12 @@ import type { VNode, Ref } from "vue";
 
 export type DialogId = string | number;
 
+export type DialogSize = "sm" | "md" | "lg" | "xl";
+
 export interface DialogProps {
   visible: boolean | Ref<boolean>;
   id?: string;
-  size?: string;
+  size?: DialogSize;
   showClose?: boolean;
   appendToBody?: boolean;
   closeOnOverlay?: boolean;
