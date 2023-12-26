@@ -23,24 +23,21 @@ const emits = defineEmits(["update:visible", "on-cancel", "on-confirm", "on-clos
 
 const isVisible = ref<boolean | Ref<boolean>>(false);
 const contentClasses = computed(() => ["su-dialog__content", `su-dialog__content--${props.size}`]);
-const getModelValue = computed(() => (isRef(props.visible) ? props.visible.value : props.visible));
+const getModelValue = computed(() => (isRef(props.visible) ? Boolean(props.visible.value) : Boolean(props.visible)));
 
 function handleToggle(visible: boolean) {
   emits("update:visible", visible);
 }
-
 function handleClose() {
   props.onClose?.();
   emits("on-close");
   handleToggle(false);
 }
-
 function handleCancel() {
   props.onCancel?.();
   emits("on-cancel");
   handleToggle(false);
 }
-
 function handleConfirm() {
   props.onConfirm?.();
   emits("on-confirm");
@@ -50,12 +47,12 @@ function handleConfirm() {
 watch(
   () => getModelValue.value,
   val => {
-    isVisible.value = !!val;
+    isVisible.value = val;
   }
 );
 
 onMounted(() => {
-  isVisible.value = !!getModelValue.value;
+  isVisible.value = getModelValue.value;
 });
 
 onBeforeUnmount(() => {
@@ -83,7 +80,7 @@ defineExpose({
               name="close"
               width="24"
               height="24"
-              @click="handleCancel"
+              @click="handleClose"
             ></SIcon>
           </div>
           <div class="su-dialog__body">
