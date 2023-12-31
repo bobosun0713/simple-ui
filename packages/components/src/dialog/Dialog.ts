@@ -25,9 +25,8 @@ function renderDialog(constructor: Component, props: Record<string, any>, slots?
 function executeExposeAction(id: DialogId, action: (exposed: DialogExposeAction) => void) {
   nextTick(() => {
     const dialog = dialogInstances.find(item => item.props.id === id);
-    if (dialog && dialog.exposed) {
-      action(dialog.exposed);
-    }
+    if (dialog && dialog.exposed) action(dialog.exposed);
+    else console.warn(`[Dialog] dialog with id '${id}' not found`);
   });
 }
 
