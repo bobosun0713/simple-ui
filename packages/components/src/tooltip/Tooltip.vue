@@ -35,8 +35,11 @@ function calcPlacementPos(placement: TooltipPlacement) {
     height: tooltipHeight,
     y: tooltipY,
     x: tooltipX
-  } = useElementBounding(tooltipRef, boundingOptions);
-  const { width: contentWidth, height: contentHeight } = useElementBounding(tooltipContentRef, boundingOptions);
+  } = useElementBounding(tooltipRef as unknown as HTMLDivElement, boundingOptions);
+  const { width: contentWidth, height: contentHeight } = useElementBounding(
+    tooltipContentRef as unknown as HTMLDivElement,
+    boundingOptions
+  );
 
   tooltipContentWidth.value = contentWidth.value;
 
