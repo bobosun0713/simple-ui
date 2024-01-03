@@ -25,7 +25,7 @@ function renderDialog(constructor: Component, props: Record<string, any>, slots?
 function executeExposeAction(id: DialogId, action: (exposed: DialogExposeAction) => void) {
   nextTick(() => {
     const dialog = dialogInstances.find(item => item.props.id === id);
-    if (dialog && dialog.exposed) action(dialog.exposed);
+    if (dialog && dialog.exposed) action(dialog.exposed as DialogExposeAction);
     else console.warn(`[Dialog] dialog with id '${id}' not found`);
   });
 }
@@ -60,11 +60,11 @@ function dialogService(): DialogServiceReturnType {
   };
 
   const showDialog = (id: DialogId) => {
-    executeExposeAction(id, exposed => exposed.handleToggle?.(true));
+    executeExposeAction(id, exposed => exposed.handleToggle(true));
   };
 
   const closeDialog = (id: DialogId) => {
-    executeExposeAction(id, exposed => exposed.handleToggle?.(false));
+    executeExposeAction(id, exposed => exposed.handleToggle(false));
   };
 
   const closeAll = () => {

@@ -5,7 +5,7 @@ export type DialogId = string | number;
 export type DialogSize = "sm" | "md" | "lg" | "xl";
 
 export interface DialogProps {
-  visible?: boolean | Ref<boolean>;
+  visible: boolean | Ref<boolean>;
   id?: string;
   size?: DialogSize;
   showClose?: boolean;
@@ -18,19 +18,15 @@ export interface DialogProps {
 }
 
 export interface DialogExposeAction {
-  handleToggle?: (arg: boolean) => void;
-  handleCancel?: () => void;
-  handleConfirm?: () => void;
-  handleClose?: () => void;
+  handleToggle: (arg: boolean) => void;
 }
 
 export type DialogSlotScope = string | number | VNode | (() => string | number | VNode);
 
 export interface DialogSlotAction {
-  toggle?: (arg: boolean) => void;
-  close?: () => void;
-  cancel?: () => void;
-  confirm?: () => void;
+  close: () => void;
+  cancel: () => void;
+  confirm: () => void;
 }
 
 export interface DialogServiceSlots {

@@ -3,7 +3,7 @@ import { computed, getCurrentInstance, ref, watch, onMounted, onBeforeUnmount, i
 import { dialogInstances } from "./instance";
 import SIcon from "../icon/Icon.vue";
 import SButton from "../button/Button.vue";
-import type { DialogProps } from "./types";
+import type { DialogProps, DialogSlotAction, DialogExposeAction } from "./types";
 
 defineOptions({
   name: "SDialog"
@@ -20,6 +20,12 @@ const props = withDefaults(defineProps<DialogProps>(), {
 });
 
 const emits = defineEmits(["update:visible", "on-cancel", "on-confirm", "on-close"]);
+
+defineSlots<{
+  header?: () => any;
+  body?: () => any;
+  footer?: (props: DialogSlotAction) => any;
+}>();
 
 const isVisible = ref<boolean | Ref<boolean>>(false);
 const contentClasses = computed(() => ["su-dialog__content", `su-dialog__content--${props.size}`]);
@@ -59,11 +65,8 @@ onBeforeUnmount(() => {
   dialogInstances.splice(dialogInstances.indexOf(instance), 1);
 });
 
-defineExpose({
-  handleToggle,
-  handleCancel,
-  handleConfirm,
-  handleClose
+defineExpose<DialogExposeAction>({
+  handleToggle
 });
 </script>
 
@@ -87,13 +90,7 @@ defineExpose({
             <slot name="body">This is a message</slot>
           </div>
           <div class="su-dialog__footer">
-            <slot
-              name="footer"
-              :toggle="handleToggle"
-              :close="handleClose"
-              :confirm="handleConfirm"
-              :cancel="handleCancel"
-            >
+            <slot name="footer" :close="handleClose" :confirm="handleConfirm" :cancel="handleCancel">
               <div class="su-dialog__default-btn">
                 <SButton outlined @click="handleCancel">No</SButton>
                 <SButton @click="handleConfirm">Yes</SButton>
