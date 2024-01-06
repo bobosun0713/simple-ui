@@ -1,15 +1,12 @@
 <script lang="ts" setup>
 import { computed } from "vue";
-import type { ButtonProps } from "./types";
+import { buttonProps } from "./types";
 
 defineOptions({
   name: "SButton"
 });
 
-const props = withDefaults(defineProps<ButtonProps>(), {
-  type: "info",
-  size: "md"
-});
+const props = defineProps(buttonProps);
 
 const classes = computed(() => [
   "su-button",
