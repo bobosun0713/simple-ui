@@ -3,7 +3,8 @@ import { computed, getCurrentInstance, ref, watch, onMounted, onBeforeUnmount, i
 import { dialogInstances } from "./instance";
 import SIcon from "../icon/Icon.vue";
 import SButton from "../button/Button.vue";
-import type { DialogProps, DialogSlotAction, DialogExposeAction } from "./types";
+import { dialogProps } from "./types";
+import type { DialogSlotAction, DialogExposeAction } from "./types";
 
 defineOptions({
   name: "SDialog"
@@ -12,12 +13,7 @@ defineOptions({
 const instance = getCurrentInstance()!;
 dialogInstances.push(instance);
 
-const props = withDefaults(defineProps<DialogProps>(), {
-  size: "sm",
-  showClose: true,
-  appendToBody: false,
-  closeOnOverlay: true
-});
+const props = defineProps(dialogProps);
 
 const emits = defineEmits(["update:visible", "on-cancel", "on-confirm", "on-close"]);
 
@@ -31,20 +27,20 @@ const isVisible = ref<boolean | Ref<boolean>>(false);
 const contentClasses = computed(() => ["su-dialog__content", `su-dialog__content--${props.size}`]);
 const getModelValue = computed(() => (isRef(props.visible) ? Boolean(props.visible.value) : Boolean(props.visible)));
 
-function handleToggle(visible: boolean) {
+function handleToggle(visible: boolean): void {
   emits("update:visible", visible);
 }
-function handleClose() {
+function handleClose(): void {
   props.onClose?.();
   emits("on-close");
   handleToggle(false);
 }
-function handleCancel() {
+function handleCancel(): void {
   props.onCancel?.();
   emits("on-cancel");
   handleToggle(false);
 }
-function handleConfirm() {
+function handleConfirm(): void {
   props.onConfirm?.();
   emits("on-confirm");
   handleToggle(false);

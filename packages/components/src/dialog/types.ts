@@ -1,19 +1,49 @@
-import type { Ref, h } from "vue";
+import type { Ref, h, PropType } from "vue";
 
 export type DialogSize = "sm" | "md" | "lg" | "xl";
 
-export interface DialogProps {
-  visible: boolean | Ref<boolean>;
-  id?: string;
-  size?: DialogSize;
-  showClose?: boolean;
-  appendToBody?: boolean;
-  closeOnOverlay?: boolean;
-  onConfirm?: () => void;
-  onClose?: () => void;
-  onCancel?: () => void;
-  vanish?: () => void;
-}
+export const dialogProps = {
+  visible: {
+    type: [Boolean, Object as () => Ref<boolean>],
+    default: false
+  },
+  id: {
+    type: String,
+    default: ""
+  },
+  size: {
+    type: String as PropType<DialogSize>,
+    default: "md"
+  },
+  showClose: {
+    type: Boolean,
+    default: true
+  },
+  appendToBody: {
+    type: Boolean,
+    default: true
+  },
+  closeOnOverlay: {
+    type: Boolean,
+    default: true
+  },
+  onConfirm: {
+    type: Function,
+    default: () => {}
+  },
+  onClose: {
+    type: Function,
+    default: () => {}
+  },
+  onCancel: {
+    type: Function,
+    default: () => {}
+  },
+  vanish: {
+    type: Function,
+    default: () => {}
+  }
+};
 
 export interface DialogExposeAction {
   handleToggle: (arg: boolean) => void;
@@ -33,10 +63,19 @@ export interface DialogServiceSlots {
   footer?: DialogSlot;
 }
 
-export interface DialogServiceProps extends Omit<DialogProps, "id" | "visible">, DialogServiceSlots {}
+export interface DialogServiceProps {
+  size?: DialogSize;
+  showClose?: boolean;
+  appendToBody?: boolean;
+  closeOnOverlay?: boolean;
+  header?: DialogSlot;
+  body?: DialogSlot;
+  footer?: DialogSlot;
+  vanish?: () => void;
+}
 
 export interface DialogServiceReturnType {
-  confirm: (props: DialogServiceProps) => Promise<string>;
+  confirm: (props?: DialogServiceProps) => Promise<string>;
   showDialog: (id: string | number) => void;
   closeDialog: (id: string | number) => void;
   closeAll: () => void;
