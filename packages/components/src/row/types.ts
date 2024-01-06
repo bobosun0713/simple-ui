@@ -1,8 +1,19 @@
+import type { PropType } from "vue";
+
 export type RowJustify = "end" | "center" | "between" | "around";
 export type RowAlign = "center" | "bottom";
 
-export interface RowProps {
-  justify?: RowJustify;
-  align?: RowAlign;
-  gutter?: string | number;
-}
+export const rowProps = {
+  justify: {
+    type: String as PropType<RowJustify>,
+    default: ""
+  },
+  align: {
+    type: String as PropType<RowAlign>,
+    default: ""
+  },
+  gutter: {
+    type: [String, Number],
+    default: 0
+  }
+};

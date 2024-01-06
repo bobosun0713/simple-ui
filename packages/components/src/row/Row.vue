@@ -1,14 +1,12 @@
 <script setup lang="ts">
 import { provide, ref, computed, watch } from "vue";
-import type { RowProps } from "./types";
+import { rowProps } from "./types";
 
 defineOptions({
   name: "SRow"
 });
 
-const props = withDefaults(defineProps<RowProps>(), {
-  gutter: 0
-});
+const props = defineProps(rowProps);
 
 const gutter = ref(props.gutter);
 
