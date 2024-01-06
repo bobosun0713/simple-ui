@@ -1,6 +1,4 @@
-import type { VNode, Ref } from "vue";
-
-export type DialogId = string | number;
+import type { Ref, h } from "vue";
 
 export type DialogSize = "sm" | "md" | "lg" | "xl";
 
@@ -21,7 +19,7 @@ export interface DialogExposeAction {
   handleToggle: (arg: boolean) => void;
 }
 
-export type DialogSlotScope = string | number | VNode | (() => string | number | VNode);
+export type DialogSlot = Parameters<typeof h>[2];
 
 export interface DialogSlotAction {
   close: () => void;
@@ -30,9 +28,9 @@ export interface DialogSlotAction {
 }
 
 export interface DialogServiceSlots {
-  header?: DialogSlotScope;
-  body?: DialogSlotScope;
-  footer?: DialogSlotScope | ((fn: DialogSlotAction) => string | number | VNode);
+  header?: DialogSlot;
+  body?: DialogSlot;
+  footer?: DialogSlot;
 }
 
 export interface DialogServiceProps extends Omit<DialogProps, "id" | "visible">, DialogServiceSlots {}
