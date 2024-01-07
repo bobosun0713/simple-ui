@@ -1,18 +1,37 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import SIcon from "../icon/Icon.vue";
-import type { PaginationProps } from "./types";
 
 defineOptions({
   name: "SPagination"
 });
 
-const props = withDefaults(defineProps<PaginationProps>(), {
-  pager: 3
+const props = defineProps({
+  perPage: {
+    type: Number,
+    default: 3
+  },
+  total: {
+    type: Number,
+    default: 100
+  },
+  pager: {
+    type: Number,
+    default: 5
+  },
+  rounded: {
+    type: Boolean,
+    default: false
+  },
+  disabled: {
+    type: Boolean,
+    default: false
+  }
 });
+
 const current = defineModel<number>("current", { default: 1 });
 
-const totalPage = computed(() => Math.ceil(props.total / props.perPage));
+const totalPage = computed(() => Math.ceil(props.total / props.perPage) || 1);
 const pages = computed(() => {
   const pageButtons = [];
 
