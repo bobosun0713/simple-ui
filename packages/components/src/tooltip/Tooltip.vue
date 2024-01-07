@@ -1,19 +1,15 @@
 <script lang="ts" setup>
 import { ref, computed, useSlots, nextTick, watch } from "vue";
 import { useElementBounding, useWindowSize } from "@vueuse/core";
-import type { TooltipProps, TooltipPlacement, TooltipTrigger, TooltipEventName } from "./types";
+import { tooltipProps } from "./types";
+import type { TooltipPlacement, TooltipTrigger, TooltipEventName } from "./types";
 
 defineOptions({
   name: "STooltip"
 });
 
-const props = withDefaults(defineProps<TooltipProps>(), {
-  modelValue: false,
-  content: "Text",
-  offset: 8,
-  trigger: "hover",
-  placement: "bottom"
-});
+const props = defineProps(tooltipProps);
+
 const emits = defineEmits(["update:modelValue"]);
 const slots = useSlots();
 
@@ -27,6 +23,12 @@ const triedPlacements = new Set();
 const { width: windowWidth, height: windowHeight } = useWindowSize();
 
 const placementPos = computed(() => `top:${top.value}px;left:${left.value}px;`);
+const contentClasses = computed(() => [
+  "su-tooltip__content",
+  {
+    "su-tooltip__content--popover": props.popover
+  }
+]);
 
 function calcPlacementPos(placement: TooltipPlacement) {
   const boundingOptions = { windowResize: false, windowScroll: false };
@@ -160,7 +162,7 @@ watch(
     </div>
     <Teleport to="body">
       <Transition name="fade">
-        <div v-show="isVisible" ref="tooltipContentRef" :style="placementPos" class="su-tooltip__content">
+        <div v-show="isVisible" ref="tooltipContentRef" :style="placementPos" :class="contentClasses">
           <template v-if="slots.content">
             <slot name="content"></slot>
           </template>
