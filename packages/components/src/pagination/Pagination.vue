@@ -74,15 +74,15 @@ const pagerClasses = computed(() => ({
   "su-pagination__pager--disabled": props.disabled
 }));
 
-function handlePrev() {
+function handlePrev(): void {
   if (isFirstPage.value || props.disabled) return;
   current.value -= 1;
 }
-function handleNext() {
+function handleNext(): void {
   if (isLastPage.value || props.disabled) return;
   current.value += 1;
 }
-function handleClickPager(val: number) {
+function handleClickPager(val: number): void {
   current.value = val;
 }
 </script>
