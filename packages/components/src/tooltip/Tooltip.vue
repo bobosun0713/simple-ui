@@ -26,7 +26,7 @@ const { width: windowWidth, height: windowHeight } = useWindowSize();
 
 const placementPos = computed(() => `top:${top.value}px;left:${left.value}px;`);
 
-function calcPlacementPos(placement: TooltipPlacement) {
+function calcPlacementPos(placement: TooltipPlacement): void {
   const boundingOptions = { windowResize: false, windowScroll: false };
   const {
     width: tooltipWidth,
@@ -65,7 +65,7 @@ function calcPlacementPos(placement: TooltipPlacement) {
 
   placementMap[placement]?.();
 }
-function checkTouchEdge() {
+function checkTouchEdge(): void {
   const edges = [
     { name: "top", condition: () => top.value <= 0, opposite: "bottom" },
     { name: "left", condition: () => left.value <= 0, opposite: "right" },
@@ -96,32 +96,32 @@ function checkTouchEdge() {
     });
   }
 }
-function onMouseIn() {
+function onMouseIn(): void {
   isVisible.value = true;
   emits("update:modelValue", true);
 
   handlePlacement();
 }
-function onMouseOut() {
+function onMouseOut(): void {
   isVisible.value = false;
   emits("update:modelValue", false);
 
   handlePlacement();
 }
-function onToggle() {
+function onToggle(): void {
   isVisible.value = !isVisible.value;
   emits("update:modelValue", isVisible.value);
 
   handlePlacement();
 }
 
-function handlePlacement() {
+function handlePlacement(): void {
   nextTick(() => {
     calcPlacementPos(props.placement);
     checkTouchEdge();
   });
 }
-function handleTooltipEvent(event: TooltipTrigger, currentEvent: TooltipTrigger, eventName: TooltipEventName) {
+function handleTooltipEvent(event: TooltipTrigger, currentEvent: TooltipTrigger, eventName: TooltipEventName): void {
   if (event !== currentEvent) return;
 
   const events = {
