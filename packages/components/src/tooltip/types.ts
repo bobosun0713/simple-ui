@@ -15,7 +15,7 @@ export const tooltipProps = {
   },
   offset: {
     type: [String, Number],
-    default: 8
+    default: 5
   },
   trigger: {
     type: String as PropType<TooltipTrigger>,
@@ -25,8 +25,8 @@ export const tooltipProps = {
     type: String as PropType<TooltipPlacement>,
     default: "bottom"
   },
-  popover: {
-    type: String,
-    default: ""
+  arrow: {
+    type: Boolean,
+    default: false
   }
 };

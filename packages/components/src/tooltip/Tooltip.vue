@@ -20,15 +20,11 @@ const tooltipRef = ref<HTMLDivElement | null>(null);
 const tooltipContentRef = ref<HTMLDivElement | null>(null);
 const tooltipContentWidth = ref(0);
 const triedPlacements = new Set();
+const currentPlacement = ref("");
+
 const { width: windowWidth, height: windowHeight } = useWindowSize();
 
 const placementPos = computed(() => `top:${top.value}px;left:${left.value}px;`);
-const contentClasses = computed(() => [
-  "su-tooltip__content",
-  {
-    "su-tooltip__content--popover": props.popover
-  }
-]);
 
 function calcPlacementPos(placement: TooltipPlacement) {
   const boundingOptions = { windowResize: false, windowScroll: false };
@@ -84,6 +80,8 @@ function checkTouchEdge() {
   const touchEdge = edges.find(edge => edge.condition());
 
   if (touchEdge) {
+    currentPlacement.value = touchEdge.opposite;
+
     if (triedPlacements.size >= 2) {
       calcPlacementPos(touchEdge.opposite as TooltipPlacement);
       triedPlacements.clear();
@@ -138,6 +136,7 @@ function handleTooltipEvent(event: TooltipTrigger, currentEvent: TooltipTrigger,
 watch(
   () => props.modelValue,
   () => {
+    currentPlacement.value = props.placement;
     isVisible.value = props.modelValue;
     handlePlacement();
   },
@@ -162,13 +161,16 @@ watch(
     </div>
     <Teleport to="body">
       <Transition name="fade">
-        <div v-show="isVisible" ref="tooltipContentRef" :style="placementPos" :class="contentClasses">
-          <template v-if="slots.content">
-            <slot name="content"></slot>
-          </template>
-          <template v-else>
-            {{ content }}
-          </template>
+        <div v-show="isVisible" ref="tooltipContentRef" :style="placementPos" class="su-tooltip__content">
+          <div class="su-tooltip__inner">
+            <template v-if="slots.content">
+              <slot name="content"></slot>
+            </template>
+            <template v-else>
+              {{ content }}
+            </template>
+          </div>
+          <span v-if="arrow" class="su-tooltip__arrow" :data-placement="currentPlacement"></span>
         </div>
       </Transition>
     </Teleport>
