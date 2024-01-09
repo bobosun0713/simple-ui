@@ -1,0 +1,52 @@
+@use "../../../styles/variables" as *;
+
+:root {
+  --su-popover-text-color: #{$dark};
+  --su-popover-bg-color: #{$light};
+  --su-popover-arrow-size: 1rem;
+  --su-popover-shadow: 0 0 20px #{$light-grey};
+}
+
+.su-popover {
+  margin: -0.4rem -0.8rem;
+  border-radius: 0.4rem;
+  background-color: var(--su-popover-bg-color);
+  box-shadow: var(--su-popover-shadow);
+
+  &__inner {
+    padding: 1.4rem;
+    font-size: 1.4rem;
+    color: var(--su-popover-text-color);
+  }
+
+  &__arrow {
+    position: absolute;
+    width: var(--su-popover-arrow-size);
+    height: var(--su-popover-arrow-size);
+    background-color: var(--su-popover-bg-color);
+  }
+}
+
+.su-tooltip__content[data-placement^="top"] .su-popover__arrow {
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+}
+
+.su-tooltip__content[data-placement^="bottom"] .su-popover__arrow {
+  top: -5px;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+}
+
+.su-tooltip__content[data-placement^="left"] .su-popover__arrow {
+  top: 50%;
+  right: -5px;
+  transform: translateY(-50%) rotate(45deg);
+}
+
+.su-tooltip__content[data-placement^="right"] .su-popover__arrow {
+  top: 50%;
+  left: -5px;
+  transform: translateY(-50%) rotate(45deg);
+}
