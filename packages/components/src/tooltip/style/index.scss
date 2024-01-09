@@ -11,45 +11,13 @@
 
   &__content {
     position: absolute;
-
+    width: auto;
+    padding: 0.4rem 0.8rem;
     border-radius: 4px;
+    font-size: 1.4rem;
     white-space: nowrap;
-
+    color: var(--su-tooltip-text-color);
     background-color: var(--su-tooltip-bg-color);
     transition: opacity 0.2s;
-  }
-
-  &__inner {
-    padding: 0.4rem 0.8rem;
-    font-size: 1.4rem;
-    color: var(--su-tooltip-text-color);
-  }
-
-  &__arrow {
-    position: absolute;
-    width: 1rem;
-    height: 1rem;
-    background-color: var(--su-tooltip-bg-color);
-  }
-
-  &__arrow[data-placement^="top"] {
-    bottom: -5px;
-    left: 50%;
-    transform: translateX(-50%) rotate(45deg);
-  }
-  &__arrow[data-placement^="bottom"] {
-    top: -5px;
-    left: 50%;
-    transform: translateX(-50%) rotate(45deg);
-  }
-  &__arrow[data-placement^="left"] {
-    top: 50%;
-    right: -5px;
-    transform: translateY(-50%) rotate(45deg);
-  }
-  &__arrow[data-placement^="right"] {
-    top: 50%;
-    left: -5px;
-    transform: translateY(-50%) rotate(45deg);
   }
 }

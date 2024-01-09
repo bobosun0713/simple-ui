@@ -161,16 +161,19 @@ watch(
     </div>
     <Teleport to="body">
       <Transition name="fade">
-        <div v-show="isVisible" ref="tooltipContentRef" :style="placementPos" class="su-tooltip__content">
-          <div class="su-tooltip__inner">
-            <template v-if="slots.content">
-              <slot name="content"></slot>
-            </template>
-            <template v-else>
-              {{ content }}
-            </template>
-          </div>
-          <span v-if="arrow" class="su-tooltip__arrow" :data-placement="currentPlacement"></span>
+        <div
+          v-show="isVisible"
+          ref="tooltipContentRef"
+          :style="placementPos"
+          :data-placement="currentPlacement"
+          class="su-tooltip__content"
+        >
+          <template v-if="slots.content">
+            <slot name="content"></slot>
+          </template>
+          <template v-else>
+            {{ content }}
+          </template>
         </div>
       </Transition>
     </Teleport>

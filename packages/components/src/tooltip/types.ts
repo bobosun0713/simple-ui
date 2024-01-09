@@ -15,7 +15,7 @@ export const tooltipProps = {
   },
   offset: {
     type: [String, Number],
-    default: 5
+    default: 4
   },
   trigger: {
     type: String as PropType<TooltipTrigger>,
@@ -24,9 +24,5 @@ export const tooltipProps = {
   placement: {
     type: String as PropType<TooltipPlacement>,
     default: "bottom"
-  },
-  arrow: {
-    type: Boolean,
-    default: false
   }
 };
