@@ -1,14 +1,19 @@
 <script setup lang="ts">
 import { provide, ref, computed, watch } from "vue";
-import type { GridProps } from "./types";
 
 defineOptions({
   name: "SGrid"
 });
 
-const props = withDefaults(defineProps<GridProps>(), {
-  col: 3,
-  gap: 0
+const props = defineProps({
+  col: {
+    type: Number,
+    default: 3
+  },
+  gap: {
+    type: Number,
+    default: 0
+  }
 });
 
 const colCount = ref(props.col);

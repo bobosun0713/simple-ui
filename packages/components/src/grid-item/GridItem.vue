@@ -1,12 +1,11 @@
 <script setup lang="ts">
 import { inject, computed, isRef } from "vue";
-import type { GridProps } from "../grid/types";
 
 defineOptions({
   name: "SGridItem"
 });
 
-const { col, gap }: GridProps = inject("gridProps") || {};
+const { col, gap }: { col?: string | number; gap?: string | number } = inject("gridProps") || {};
 
 const styles = computed(() => {
   const currentCol = isRef(col) ? Number(col.value) : Number(col);
