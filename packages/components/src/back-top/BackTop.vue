@@ -1,18 +1,35 @@
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount, computed, nextTick } from "vue";
-import type { BackTopProps } from "./types";
+import { ref, onMounted, onBeforeUnmount, computed, nextTick, type PropType } from "vue";
 
 defineOptions({
   name: "SBackTop"
 });
 
-const props = withDefaults(defineProps<BackTopProps>(), {
-  target: "",
-  right: 50,
-  bottom: 50,
-  visibilityHeight: 100,
-  behavior: "smooth",
-  animation: "fade"
+const props = defineProps({
+  target: {
+    type: [String, HTMLElement],
+    default: ""
+  },
+  right: {
+    type: Number,
+    default: 50
+  },
+  bottom: {
+    type: Number,
+    default: 50
+  },
+  visibilityHeight: {
+    type: Number,
+    default: 100
+  },
+  behavior: {
+    type: String as PropType<ScrollBehavior>,
+    default: "smooth"
+  },
+  animation: {
+    type: String,
+    default: "fade"
+  }
 });
 const emits = defineEmits(["on-click"]);
 
@@ -23,7 +40,7 @@ const position = computed(() => ({
   bottom: `${props.bottom}px`
 }));
 
-function getTarget(target: string | HTMLElement) {
+function getTarget(target: string | HTMLElement): HTMLElement | null {
   if (typeof target === "string") {
     if (target === "") return null;
     return document.querySelector(target) as HTMLElement;
@@ -31,7 +48,7 @@ function getTarget(target: string | HTMLElement) {
   return target;
 }
 
-function handleBackTop() {
+function handleBackTop(): void {
   (currentEl.value || document.documentElement).scrollTo({
     top: 0,
     behavior: props.behavior
@@ -39,7 +56,7 @@ function handleBackTop() {
   emits("on-click");
 }
 
-function triggerScroll() {
+function triggerScroll(): void {
   const scrollTop = (currentEl.value || document.documentElement).scrollTop;
   visible.value = scrollTop > Number(props.visibilityHeight);
 }
