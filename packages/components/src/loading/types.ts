@@ -1,9 +1,7 @@
-import type { VNode } from "vue";
-export interface LoadingProps {
-  visible: boolean;
+import type { h } from "vue";
+
+// TODO: Define a global type for the h function
+export interface LoadingServiceProps {
+  spinner?: Parameters<typeof h>[2];
   duration?: number;
-  appendToBody?: boolean;
-}
-export interface LoadingServiceProps extends Omit<LoadingProps, "visible" | "appendToBody"> {
-  spinner?: string | number | VNode | (() => VNode | string | number);
 }
