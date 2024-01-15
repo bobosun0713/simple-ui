@@ -1,15 +1,28 @@
 <script lang="ts" setup>
-import { computed, defineAsyncComponent } from "vue";
-import type { IconProps } from "./types";
+import { computed, defineAsyncComponent, type PropType } from "vue";
+import type { IconNames } from "./types";
 
 defineOptions({
   name: "SIcon"
 });
 
-const props = withDefaults(defineProps<IconProps>(), {
-  name: "github",
-  width: 20,
-  height: 20
+const props = defineProps({
+  name: {
+    type: String as PropType<IconNames>,
+    default: "github"
+  },
+  width: {
+    type: [String, Number],
+    default: 20
+  },
+  height: {
+    type: [String, Number],
+    default: 20
+  },
+  fill: {
+    type: String,
+    default: ""
+  }
 });
 
 const iconModules = import.meta.glob("./svg/*.vue");

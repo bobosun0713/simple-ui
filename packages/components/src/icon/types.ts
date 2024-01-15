@@ -27,10 +27,3 @@ export type IconNames =
   | "notification"
   | "setting"
   | "heart";
-
-export interface IconProps {
-  name: IconNames;
-  fill?: string;
-  width?: string | number;
-  height?: string | number;
-}
