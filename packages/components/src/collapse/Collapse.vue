@@ -1,36 +1,43 @@
 <script lang="ts" setup>
 import { ref, onMounted, computed } from "vue";
-import type { CollapseProps } from "./types";
 import SIcon from "../icon/Icon.vue";
+
 defineOptions({
   name: "SCollapse"
 });
 
-const props = withDefaults(defineProps<CollapseProps>(), {
-  title: "Title",
-  content: "Lorem ipsum dolor"
+const props = defineProps({
+  title: {
+    type: String,
+    default: "Tips"
+  },
+  content: {
+    type: String,
+    default: "Collapse Content"
+  }
 });
 
-const emit = defineEmits(["active"]);
+const emit = defineEmits(["on-click"]);
 
 const isActive = ref(false);
 const contentRef = ref<HTMLDivElement | null>(null);
-const contentHeight = ref<number | undefined>(0);
+const contentHeight = ref(0);
 
 const getContentHeight = computed(() => (isActive.value ? `${contentHeight.value}px` : `0px`));
-const onClickHandler = () => {
+
+function handleClick(): void {
   isActive.value = !isActive.value;
-  emit("active", isActive);
-};
+  emit("on-click", isActive);
+}
 
 onMounted(() => {
-  contentHeight.value = contentRef.value?.getBoundingClientRect().height;
+  contentHeight.value = Number(contentRef.value?.getBoundingClientRect().height);
 });
 </script>
 
 <template>
   <div class="su-collapse">
-    <div class="su-collapse__header" :class="{ 'su-collapse__header--active': isActive }" @click="onClickHandler">
+    <div class="su-collapse__header" :class="{ 'su-collapse__header--active': isActive }" @click="handleClick">
       <slot name="header">
         {{ props.title }}
       </slot>

@@ -1,5 +1,7 @@
 import { withInstall } from "@simple/utils";
 import Collapse from "./Collapse.vue";
 
-export const SCollapse = withInstall(Collapse);
+const SCollapse = withInstall(Collapse);
+
+export { SCollapse };
 export default SCollapse;
