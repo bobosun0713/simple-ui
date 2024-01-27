@@ -2,7 +2,7 @@
 import { ref, computed, useSlots, nextTick, watch } from "vue";
 import { useElementBounding, useWindowSize } from "@vueuse/core";
 import { tooltipProps } from "./types";
-import type { TooltipPlacement, TooltipTrigger, TooltipEventName } from "./types";
+import type { TooltipPlacement } from "./types";
 
 defineOptions({
   name: "STooltip"
@@ -96,41 +96,25 @@ function checkTouchEdge(): void {
     });
   }
 }
-function onMouseIn(): void {
-  isVisible.value = true;
-  emits("update:modelValue", true);
 
-  handlePlacement();
-}
-function onMouseOut(): void {
-  isVisible.value = false;
-  emits("update:modelValue", false);
-
-  handlePlacement();
-}
-function onToggle(): void {
+function handleToggle(): void {
   isVisible.value = !isVisible.value;
   emits("update:modelValue", isVisible.value);
 
-  handlePlacement();
+  triggerPlacement();
+}
+function handleMouseover(visible: boolean): void {
+  isVisible.value = visible;
+  emits("update:modelValue", visible);
+
+  triggerPlacement();
 }
 
-function handlePlacement(): void {
+function triggerPlacement(): void {
   nextTick(() => {
     calcPlacementPos(props.placement);
     checkTouchEdge();
   });
-}
-function handleTooltipEvent(event: TooltipTrigger, currentEvent: TooltipTrigger, eventName: TooltipEventName): void {
-  if (event !== currentEvent) return;
-
-  const events = {
-    in: onMouseIn,
-    out: onMouseOut,
-    click: onToggle
-  };
-
-  events[eventName]?.();
 }
 
 watch(
@@ -138,14 +122,14 @@ watch(
   () => {
     currentPlacement.value = props.placement;
     isVisible.value = props.modelValue;
-    handlePlacement();
+    triggerPlacement();
   },
   { immediate: true }
 );
 
 watch(
   () => windowWidth.value,
-  () => handlePlacement()
+  () => triggerPlacement()
 );
 </script>
 
@@ -153,9 +137,9 @@ watch(
   <div ref="tooltipRef" class="su-tooltip">
     <div
       class="su-tooltip__trigger"
-      @click="handleTooltipEvent('click', trigger, 'click')"
-      @mouseenter="handleTooltipEvent('hover', trigger, 'in')"
-      @mouseleave="handleTooltipEvent('hover', trigger, 'out')"
+      @click="handleToggle"
+      @mouseenter="handleMouseover(true)"
+      @mouseleave="handleMouseover(false)"
     >
       <slot name="default"></slot>
     </div>
