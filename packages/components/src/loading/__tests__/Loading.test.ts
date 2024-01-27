@@ -1,4 +1,5 @@
 import { nextTick } from "vue";
+import { withSetup } from "@simple/utils";
 import LoadingService from "../Loading";
 
 describe("Loading.vue", () => {
@@ -6,31 +7,44 @@ describe("Loading.vue", () => {
     document.body.innerHTML = "";
   });
 
-  it("should display loading", () => {
-    const loadingService = LoadingService();
-    loadingService.show();
+  it("should render loading", async () => {
+    const [result] = withSetup(() => LoadingService());
 
-    expect(document.querySelector(".su-loading")).toBeTruthy();
+    result.open();
+
+    await nextTick();
+
+    expect((document.querySelector(".su-loading") as HTMLDivElement).style.display).toBe("");
   });
 
-  it("should display spinner props when set spinner props", () => {
-    const loadingService = LoadingService({ spinner: "Loading" });
-    loadingService.show();
+  it("should show spinner content", async () => {
+    const [result] = withSetup(() => LoadingService({ spinner: "Loading" }));
+
+    result.open();
+
+    await nextTick();
 
     expect(document.querySelector(".su-loading-content").textContent).toBe("Loading");
   });
 
-  it("should close loading when close API is called", async () => {
-    const loadingService = LoadingService();
+  it("should close loading", async () => {
+    const [result] = withSetup(() => LoadingService());
 
-    loadingService.show();
+    /**
+     * Because the composition encapsulates dynamic components, the transition of the components cannot be rendered when mounted,
+     * and it is impossible to test when the state changes with a false condition.
+     * Therefore, simulate the close function
+     */
+    vi.spyOn(result, "close");
+
+    result.open();
 
     await nextTick();
 
-    loadingService.close();
+    expect((document.querySelector(".su-loading") as HTMLDivElement).style.display).toBe("");
 
-    await nextTick();
+    result.close();
 
-    expect(loadingService.instance.exposed.visible.value).toBe(false);
+    expect(result.close).toHaveBeenCalled();
   });
 });

@@ -18,7 +18,7 @@ function loadingService(props?: LoadingServiceProps) {
         appendToBody: false
       },
       {
-        ...(spinner && { spinner })
+        spinner: () => spinner
       }
     )
   );
@@ -34,8 +34,16 @@ function loadingService(props?: LoadingServiceProps) {
     document.body.removeChild(container);
   });
 
-  const open = () => (isVisible.value = true);
-  const close = () => (isVisible.value = false);
+  const open = () => {
+    isVisible.value = true;
+
+    console.log("open");
+  };
+  const close = () => {
+    isVisible.value = false;
+
+    console.log("close");
+  };
 
   return { open, close };
 }

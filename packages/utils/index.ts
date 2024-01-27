@@ -4,3 +4,4 @@ export * from "./dynamicCreate";
 export * from "./merge";
 export * from "./eventBus";
 export * from "./deepClone";
+export * from "./test-utils";
