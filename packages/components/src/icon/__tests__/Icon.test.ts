@@ -1,7 +1,7 @@
 import Icon from "../Icon.vue";
 import { mount } from "@vue/test-utils";
 
-describe("Button.vue", () => {
+describe("Icon.vue", () => {
   it("should render default structure", async () => {
     const wrapper = mount(Icon);
 
@@ -10,11 +10,10 @@ describe("Button.vue", () => {
     expect(wrapper.attributes("height")).toBe("20");
   });
 
-  describe("when props are set", () => {
-    it("should render correctly structure", async () => {
+  describe("when set props", () => {
+    it("should render correctly width and height size", async () => {
       const wrapper = mount(Icon, {
         props: {
-          name: "add",
           width: 30,
           height: 30
         }
