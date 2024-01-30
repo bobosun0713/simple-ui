@@ -34,7 +34,7 @@ describe("Tooltip.vue", () => {
       });
     });
 
-    it("should show tooltip content when content props is set", async () => {
+    it("should show content when content props is set", async () => {
       await wrapper.find(".su-tooltip__trigger").trigger("mouseenter");
       await nextTick();
 
@@ -42,7 +42,7 @@ describe("Tooltip.vue", () => {
       expect(wrapper.find(".su-tooltip__content").text()).toBe("Tooltip content");
     });
 
-    it("should show tooltip content when modelValue set to true", async () => {
+    it("should show content when modelValue set to true", async () => {
       await wrapper.setProps({ modelValue: true });
       await nextTick();
 
@@ -52,7 +52,7 @@ describe("Tooltip.vue", () => {
   });
 
   describe("when set slots", () => {
-    it("should show tooltip content when set content slot", async () => {
+    it("should show content when content slot is set", async () => {
       const wrapper = mount(Tooltip, {
         slots: {
           default: `<div>Demo</div>`,
@@ -87,7 +87,7 @@ describe("Tooltip.vue", () => {
       expect(wrapper.emitted("update:modelValue")[0][0]).toBe(true);
     });
 
-    it("should emits update:modelValue event when mouse enters the tooltip trigger", async () => {
+    it("should emit update:modelValue event when mouse enters the tooltip trigger", async () => {
       const wrapper = mount(Tooltip, {
         props: {
           trigger: "hover"
@@ -99,7 +99,7 @@ describe("Tooltip.vue", () => {
       expect(wrapper.emitted("update:modelValue")[0][0]).toBe(true);
     });
 
-    it("should emits update:modelValue event when mouse leaves the tooltip trigger", async () => {
+    it("should emit update:modelValue event when mouse leaves the tooltip trigger", async () => {
       const wrapper = mount(Tooltip, {
         props: {
           trigger: "hover"
