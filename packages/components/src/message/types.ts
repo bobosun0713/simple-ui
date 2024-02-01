@@ -12,5 +12,3 @@ export interface MessageCommand {
 export interface MessageContentProps extends MessageCommand, Omit<MessageProps, "width"> {
   id?: string | number;
 }
-
-export interface MessageTypeCommand extends Omit<MessageCommand, "type"> {}

@@ -1,7 +1,7 @@
 import { dynamicCreate } from "@simple/utils";
 import Message from "./Message.vue";
 import type { VNode } from "vue";
-import type { MessageProps, MessageCommand, MessageTypeCommand } from "./types";
+import type { MessageProps, MessageCommand } from "./types";
 
 let instances: VNode;
 
@@ -12,12 +12,12 @@ function message(options?: MessageProps) {
 
   const vm = instances.component!;
 
-  const open = (data: MessageCommand) => vm!.exposed!.handleAdd(data);
-  const info = (data: MessageTypeCommand) => vm!.exposed!.handleAdd({ ...data, type: "info" });
-  const success = (data: MessageTypeCommand) => vm!.exposed!.handleAdd({ ...data, type: "success" });
-  const warning = (data: MessageTypeCommand) => vm!.exposed!.handleAdd({ ...data, type: "warning" });
-  const error = (data: MessageTypeCommand) => vm!.exposed!.handleAdd({ ...data, type: "error" });
-  const closeAll = () => vm!.exposed!.handleRemoveAll();
+  const open = (data: MessageCommand) => vm.exposed!.handleAdd(data);
+  const info = (message: string) => vm.exposed!.handleAdd({ message, type: "info" });
+  const success = (message: string) => vm.exposed!.handleAdd({ message, type: "success" });
+  const warning = (message: string) => vm.exposed!.handleAdd({ message, type: "warning" });
+  const error = (message: string) => vm.exposed!.handleAdd({ message, type: "error" });
+  const closeAll = () => vm.exposed!.handleRemoveAll();
 
   return {
     open,
