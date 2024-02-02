@@ -3,10 +3,9 @@ import Loading from "./Loading.vue";
 import type { LoadingServiceProps } from "./types";
 
 function loadingService(props?: LoadingServiceProps) {
+  const { spinner, ...args } = props || {};
   const container: HTMLDivElement = document.createElement("div");
   const isVisible = ref(false);
-
-  const { spinner, ...args } = props || {};
 
   const loading = createApp(() =>
     h(
@@ -34,16 +33,8 @@ function loadingService(props?: LoadingServiceProps) {
     document.body.removeChild(container);
   });
 
-  const open = () => {
-    isVisible.value = true;
-
-    console.log("open");
-  };
-  const close = () => {
-    isVisible.value = false;
-
-    console.log("close");
-  };
+  const open = () => (isVisible.value = true);
+  const close = () => (isVisible.value = false);
 
   return { open, close };
 }
