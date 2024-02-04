@@ -14,7 +14,7 @@ const props = defineProps({
   },
   loading: {
     type: Boolean,
-    default: false
+    default: true
   },
   animated: {
     type: Boolean,

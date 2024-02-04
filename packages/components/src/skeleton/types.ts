@@ -1,1 +1,1 @@
-export type Variant = "h" | "p" | "circle" | "image" | "button";
+export type Variant = "h" | "p" | "circle" | "image";
