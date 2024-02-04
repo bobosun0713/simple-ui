@@ -34,27 +34,24 @@ function calcPlacementPos(placement: TooltipPlacement): void {
   tooltipContentWidth.value = contentWidth || 0;
   tooltipContentHeight.value = contentHeight || 0;
 
-  const commonTopValue = Number(
-    window.scrollY + tooltipY.value + (tooltipHeight.value - tooltipContentHeight.value) / 2
-  );
-  const commonLeftValue = Number(tooltipX.value + (tooltipWidth.value - tooltipContentWidth.value) / 2);
+  const commonTopValue = window.scrollY + tooltipY.value + (tooltipHeight.value - tooltipContentHeight.value) / 2;
+  const commonLeftValue = tooltipX.value + (tooltipWidth.value - tooltipContentWidth.value) / 2;
 
   const placementMap = {
     top() {
       tooltipContentLeft.value = commonLeftValue;
-      tooltipContentTop.value =
-        Number(window.scrollY + tooltipY.value - tooltipContentHeight.value) - Number(props.offset);
+      tooltipContentTop.value = window.scrollY + tooltipY.value - tooltipContentHeight.value - Number(props.offset);
     },
     right() {
-      tooltipContentLeft.value = Number(tooltipX.value + tooltipWidth.value) + Number(props.offset);
+      tooltipContentLeft.value = tooltipX.value + tooltipWidth.value + Number(props.offset);
       tooltipContentTop.value = commonTopValue;
     },
     bottom() {
       tooltipContentLeft.value = commonLeftValue;
-      tooltipContentTop.value = Number(window.scrollY + tooltipY.value + tooltipHeight.value) + Number(props.offset);
+      tooltipContentTop.value = window.scrollY + tooltipY.value + tooltipHeight.value + Number(props.offset);
     },
     left() {
-      tooltipContentLeft.value = Number(tooltipX.value - tooltipContentWidth.value) - Number(props.offset);
+      tooltipContentLeft.value = tooltipX.value - tooltipContentWidth.value - Number(props.offset);
       tooltipContentTop.value = commonTopValue;
     }
   };
