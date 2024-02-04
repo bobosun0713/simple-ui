@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, type PropType } from "vue";
 import { Variant } from "./types";
+import SIcon from "../icon/Icon.vue";
 
 defineOptions({
   name: "SkeletonItem"
@@ -23,14 +24,16 @@ const classes = computed(() => [
 </script>
 
 <template>
-  <div :class="classes"><slot></slot></div>
+  <div :class="classes">
+    <SIcon v-if="variant === 'image'" fill="#4C4D4F" name="image" width="30%" height="30%"></SIcon>
+    <slot name="default"></slot>
+  </div>
 </template>
 
 <style lang="scss">
 .su-skeleton-item {
   display: inline-block;
   width: 100%;
-  height: 14px;
   background: #ededed;
   border-radius: 4px;
 
@@ -50,13 +53,22 @@ const classes = computed(() => [
   }
 
   &--h {
-    height: 18px;
+    height: 20px;
   }
 
   &--image {
+    width: 150px;
+    height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
   }
 
-  &--button {
+  &--circle {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
   }
 }
 </style>
