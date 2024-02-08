@@ -15,3 +15,4 @@ export * from "./col";
 export * from "./back-top";
 export * from "./popover";
 export * from "./skeleton";
+export * from "./breadcrumb";

@@ -1,0 +1,36 @@
+@use "../../../styles/variables" as *;
+
+.su-breadcrumb {
+  font-size: 1.4rem;
+  display: flex;
+  align-items: center;
+
+  &__prepend {
+    margin-right: 4px;
+  }
+
+  &__separator {
+    margin: auto 4px;
+  }
+}
+
+.su-breadcrumb-item {
+  display: inline-flex;
+  align-items: center;
+}
+
+.su-breadcrumb-link {
+  cursor: default;
+
+  &--href {
+    cursor: pointer;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  &--disabled {
+    cursor: inherit;
+    color: $dark-grey;
+  }
+}
