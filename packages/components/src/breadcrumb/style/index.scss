@@ -1,16 +1,26 @@
 @use "../../../styles/variables" as *;
 
+:root {
+  --breadcrumb-font-size: 1.4rem;
+  --breadcrumb-link-color: #{$dark};
+  --breadcrumb-link-href-cursor: pointer;
+  --breadcrumb-link-disabled-cursor: inherit;
+  --breadcrumb-link-disabled-color: #{$dark-grey};
+  --breadcrumb-prepend-margin-right: 4px;
+  --breadcrumb-separator-margin: auto 4px;
+}
+
 .su-breadcrumb {
-  font-size: 1.4rem;
   display: flex;
   align-items: center;
+  font-size: var(--breadcrumb-font-size);
 
   &__prepend {
-    margin-right: 4px;
+    margin-right: var(--breadcrumb-prepend-margin-right);
   }
 
   &__separator {
-    margin: auto 4px;
+    margin: var(--breadcrumb-separator-margin);
   }
 }
 
@@ -21,6 +31,7 @@
 
 .su-breadcrumb-link {
   cursor: default;
+  color: var(--breadcrumb-link-color);
 
   &--href {
     cursor: pointer;
@@ -31,6 +42,6 @@
 
   &--disabled {
     cursor: inherit;
-    color: $dark-grey;
+    color: var(--breadcrumb-link-disabled-color);
   }
 }
