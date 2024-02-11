@@ -2,6 +2,7 @@
 import { type PropType } from "vue";
 import type { BreadcrumbItem } from "./types";
 
+import SIcon from "../icon/Icon.vue";
 import SBreadcrumbItem from "./BreadcrumbItem.vue";
 
 defineOptions({
@@ -44,7 +45,8 @@ defineProps({
 
       <div v-if="idx < items.length - 1" class="su-breadcrumb__separator">
         <slot name="separator">
-          <SIcon name="arrowRight"></SIcon>
+          <template v-if="separator">{{ separator }}</template>
+          <SIcon v-else name="arrowRight"></SIcon>
         </slot>
       </div>
     </template>
