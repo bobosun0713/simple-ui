@@ -72,6 +72,12 @@ importers:
     dependencies:
       '@simple/utils': link:../utils
 
+  packages/composable:
+    specifiers:
+      '@simple/utils': workspace:^1.0.0
+    dependencies:
+      '@simple/utils': link:../utils
+
   packages/utils:
     specifiers: {}
 

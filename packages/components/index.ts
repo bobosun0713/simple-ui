@@ -1,8 +1,8 @@
 import type { App } from "vue";
-import * as components from "./src/index";
+import * as components from "./src";
 import "./styles/reset.scss";
 
-export * from "./src/index";
+export * from "./src";
 export default {
   install: (app: App) => {
     for (const cmp in components) {
