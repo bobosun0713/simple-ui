@@ -5,7 +5,7 @@ export function useReactive<T extends object>(target: T): UnwrapNestedRefs<T> & 
   const targetClone = deepClone(target);
   const initialState = reactive(target) as UnwrapNestedRefs<T> & { reset: () => void };
 
-  initialState.reset = () => Object.assign(initialState, targetClone);
+  initialState.reset = () => Object.assign(initialState, deepClone(targetClone));
 
   return initialState;
 }
