@@ -1,6 +1,16 @@
 import { useRef } from "../useRef";
 import { deepClone } from "@simple/utils";
-import { FormSchema, values, ValuesType, State, StateType, Validator, UseFormReturnType } from "./types";
+import {
+  FormSchema,
+  Values,
+  ValuesType,
+  Rules,
+  RulesType,
+  State,
+  StateType,
+  Validator,
+  UseFormReturnType
+} from "./types";
 
 const strategies: Record<string, (...args: any) => string | boolean> = {
   isNonEmpty: function (value, message) {
@@ -43,7 +53,7 @@ function initialFormState(schema: FormSchema): State[string] {
   }, {});
 }
 
-function checkRule(value: values, rules: FormSchema[string], state: State[string]) {
+function checkRule(value: Values, rules: Rules, state: State[string]) {
   state.status = undefined;
   state.message = undefined;
 
@@ -74,20 +84,20 @@ function checkRule(value: values, rules: FormSchema[string], state: State[string
   }
 }
 
-function initValidator(values: any, state: any, rules: any) {
-  return Object.keys(values).reduce((acc: any, key) => {
+function initValidator(values: Values, rules: Rules, state: State) {
+  return Object.keys(values).reduce((acc: Validator, key: string) => {
     acc[key] = () => {
-      checkRule(values[key], rules[key], state[key]);
+      checkRule(values[key] as Values, rules[key] as unknown as Rules, state[key]!);
     };
     return acc;
   }, {});
 }
 
 export function useForm(schema: FormSchema): UseFormReturnType {
-  const values: ValuesType = useRef(initialForm(schema, "values"));
-  const rules: FormSchema[string] = initialForm(schema, "rules");
+  const values: ValuesType = useRef(initialForm(schema, "initialValues"));
+  const rules: RulesType = initialForm(schema, "rules");
   const state: StateType = useRef(initialFormState(schema));
-  const validator: Validator = initValidator(values.value, state.value, rules);
+  const validator: Validator = initValidator(values.value, rules as Rules, state.value);
 
   const handleSubmit = (cb?: (param?: boolean) => void): void => {
     state.reset();

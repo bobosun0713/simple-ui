@@ -6,10 +6,17 @@ export interface FormSchema {
   };
 }
 
-export interface values {
-  [key: string]: null | string | number | boolean;
+export interface Values {
+  [key: string]: unknown;
 }
-export type ValuesType = Ref<State> & { reset: () => void };
+
+export type ValuesType = Ref<Values> & { reset: () => void };
+
+export interface Rules {
+  [key: string]: Array<{ [key: string]: unknown } & string>;
+}
+
+export type RulesType = FormSchema[string];
 
 export interface State {
   [key: string]: {
