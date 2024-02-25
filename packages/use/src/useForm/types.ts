@@ -1,9 +1,10 @@
 import { type Ref } from "vue";
 
-export interface FormSchema {
-  [key: string]: {
+export interface Schema {
+  initialValues: {
     [key: string]: unknown;
   };
+  rules: Rules;
 }
 
 export interface Values {
@@ -13,10 +14,12 @@ export interface Values {
 export type ValuesType = Ref<Values> & { reset: () => void };
 
 export interface Rules {
-  [key: string]: Array<{ [key: string]: unknown } & string>;
+  [key: string]: Array<{ name: string; message?: string; param?: unknown } | string>;
 }
 
-export type RulesType = FormSchema[string];
+export interface RulesType {
+  [key: string]: unknown;
+}
 
 export interface State {
   [key: string]: {

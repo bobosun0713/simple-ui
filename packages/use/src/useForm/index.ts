@@ -1,16 +1,6 @@
 import { useRef } from "../useRef";
 import { deepClone } from "@simple/utils";
-import {
-  FormSchema,
-  Values,
-  ValuesType,
-  Rules,
-  RulesType,
-  State,
-  StateType,
-  Validator,
-  UseFormReturnType
-} from "./types";
+import { Schema, Values, ValuesType, Rules, RulesType, State, StateType, Validator, UseFormReturnType } from "./types";
 
 const strategies: Record<string, (...args: any) => string | boolean> = {
   isNonEmpty: function (value, message) {
@@ -33,18 +23,18 @@ const strategies: Record<string, (...args: any) => string | boolean> = {
   }
 };
 
-function initialForm(schema: FormSchema = {}, type: string): FormSchema[string] {
-  if (!schema[type]) return {};
+function initialForm(schema: Schema, type: keyof Schema): { [key: string]: unknown } {
+  if (typeof schema === "object" && !schema[type]) return {};
   return Object.keys(schema[type]).reduce((acc: { [key: string]: unknown }, key) => {
     acc[key] = deepClone(schema[type][key]);
     return acc;
   }, {});
 }
 
-function initialFormState(schema: FormSchema): State[string] {
-  const values = schema["values"];
+function initialFormState(schema: Schema): State {
+  const values = schema["initialValues"];
   if (!values) return {};
-  return Object.keys(values).reduce((acc: { [key: string]: unknown }, key) => {
+  return Object.keys(values).reduce((acc: State, key) => {
     acc[key] = {
       status: undefined,
       message: undefined
@@ -53,7 +43,7 @@ function initialFormState(schema: FormSchema): State[string] {
   }, {});
 }
 
-function checkRule(value: Values, rules: Rules, state: State[string]) {
+function checkRule(value: unknown, rules: Rules, state: State[string], allValues: Values): void {
   state.status = undefined;
   state.message = undefined;
 
@@ -71,12 +61,10 @@ function checkRule(value: Values, rules: Rules, state: State[string]) {
       continue;
     }
 
-    const { name, message } = rule || {};
+    const { name, message, param } = rule || {};
 
-    const hasParam = name ? name.split?.(":") : rule.split?.(":");
-    const currentRule = hasParam?.shift() || name || rule;
-
-    const strategyParam = hasParam?.length ? [value, message, hasParam.pop()] : [value, message];
+    const currentRule = name || rule;
+    const strategyParam = [value, message, param, allValues];
     const strategy = strategies[currentRule].apply?.(null, strategyParam);
 
     state.status = verify(strategy);
@@ -84,16 +72,16 @@ function checkRule(value: Values, rules: Rules, state: State[string]) {
   }
 }
 
-function initValidator(values: Values, rules: Rules, state: State) {
+function initValidator(values: Values, rules: Rules, state: State): Validator {
   return Object.keys(values).reduce((acc: Validator, key: string) => {
     acc[key] = () => {
-      checkRule(values[key] as Values, rules[key] as unknown as Rules, state[key]!);
+      checkRule(values[key] as Values, rules[key] as unknown as Rules, state[key], values);
     };
     return acc;
   }, {});
 }
 
-export function useForm(schema: FormSchema): UseFormReturnType {
+export function useForm(schema: Schema): UseFormReturnType {
   const values: ValuesType = useRef(initialForm(schema, "initialValues"));
   const rules: RulesType = initialForm(schema, "rules");
   const state: StateType = useRef(initialFormState(schema));
