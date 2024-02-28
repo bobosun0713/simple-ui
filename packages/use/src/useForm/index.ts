@@ -1,27 +1,7 @@
 import { useRef } from "../useRef";
+import { rulesContainer, extend } from "./extend";
 import { deepClone } from "@simple/utils";
 import { Schema, Values, ValuesType, Rules, RulesType, State, StateType, Validator, UseFormReturnType } from "./types";
-
-const strategies: Record<string, (...args: any) => string | boolean> = {
-  isNonEmpty: function (value, message) {
-    if (!value) {
-      return message || false;
-    }
-    return true;
-  },
-  minLength: function (value, message, length) {
-    if (!value || value.length < length) {
-      return message || false;
-    }
-    return true;
-  },
-  isMobile: function (value, message) {
-    if (!/(^1[3|5|8][0-9]{9}$)/.test(value)) {
-      return message || false;
-    }
-    return true;
-  }
-};
 
 function initialForm(schema: Schema, type: keyof Schema): { [key: string]: unknown } {
   if (typeof schema === "object" && !schema[type]) return {};
@@ -67,10 +47,15 @@ function checkRule(value: unknown, rules: Rules, state: State[string], allValues
     const { name, message, param } = rule;
 
     const currentRule = name || rule;
-    if (!strategies[currentRule]) continue;
+    if (!rulesContainer[currentRule]) continue;
 
-    const strategyParam = [value, message, param, allValues];
-    const strategyResult = strategies[currentRule].apply?.(null, strategyParam);
+    const strategyResult = rulesContainer[currentRule].apply?.(null, [
+      value,
+      message,
+      // If param is passed, pass param, otherwise pass an empty array to filter parameters
+      ...(param ? [param] : []),
+      allValues
+    ]);
 
     state.status = isTruthyOrString(strategyResult);
     state.message = typeof strategyResult === "string" ? strategyResult : undefined;
@@ -110,3 +95,5 @@ export function useForm(schema: Schema): UseFormReturnType {
 
   return { values, state, validator, handleSubmit, handleReset };
 }
+
+export const useFormRuleExtend = extend;

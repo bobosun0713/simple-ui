@@ -29,6 +29,8 @@ export interface State {
 }
 export type StateType = Ref<State> & { reset: () => void };
 
+export type Validate = (value: any, message: string, ...args: any[]) => string | boolean;
+
 export interface Validator {
   [key: string]: () => void;
 }
