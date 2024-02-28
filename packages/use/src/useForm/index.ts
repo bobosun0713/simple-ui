@@ -47,28 +47,33 @@ function checkRule(value: unknown, rules: Rules, state: State[string], allValues
   state.status = undefined;
   state.message = undefined;
 
-  const verify = (rule: string | boolean) => {
-    if (typeof rule === "string") return false;
-    return !!rule;
+  const isTruthyOrString = (input: unknown) => {
+    if (typeof input === "string") return false;
+    return !!input;
   };
 
   if (!Array.isArray(rules)) return;
 
   for (const rule of rules) {
     if (typeof rule === "function") {
-      state.status = verify(rule(value));
-      state.message = typeof rule(value) === "string" ? rule(value) : undefined;
+      const result = rule(value);
+      state.status = isTruthyOrString(result);
+      state.message = typeof result === "string" ? result : undefined;
       continue;
     }
 
-    const { name, message, param } = rule || {};
+    if (typeof rule !== "object" || rule === null) continue;
+
+    const { name, message, param } = rule;
 
     const currentRule = name || rule;
-    const strategyParam = [value, message, param, allValues];
-    const strategy = strategies[currentRule].apply?.(null, strategyParam);
+    if (!strategies[currentRule]) continue;
 
-    state.status = verify(strategy);
-    state.message = typeof strategy === "string" ? strategy : undefined;
+    const strategyParam = [value, message, param, allValues];
+    const strategyResult = strategies[currentRule].apply?.(null, strategyParam);
+
+    state.status = isTruthyOrString(strategyResult);
+    state.message = typeof strategyResult === "string" ? strategyResult : undefined;
   }
 }
 
