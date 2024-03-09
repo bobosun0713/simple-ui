@@ -42,11 +42,9 @@ function checkRule(value: unknown, rules: Rules, state: State[string], allValues
       continue;
     }
 
-    if (typeof rule !== "object" || rule === null) continue;
-
     const { name, message, param } = rule;
-
     const currentRule = name || rule;
+
     if (!rulesContainer[currentRule]) continue;
 
     const strategyResult = rulesContainer[currentRule].apply?.(null, [
