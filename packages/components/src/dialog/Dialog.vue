@@ -58,6 +58,7 @@ onMounted(() => {
 });
 
 onBeforeUnmount(() => {
+  props.vanish?.();
   dialogInstances.splice(dialogInstances.indexOf(instance), 1);
 });
 
