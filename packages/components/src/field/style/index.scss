@@ -1,0 +1,105 @@
+@use "../../../styles/variables" as *;
+
+:root {
+  --su-field-label-font: 1.6rem;
+  --su-field-label-inside-font: 1.4rem;
+  --su-field-label-border-font: -1.6rem;
+  --su-field-message-font: 1.2rem;
+  --su-field-input-height: 44px;
+  --su-field-input-font: 1.6rem;
+  --su-field-normal: #{$dark-grey};
+  --su-field-success: #{$success};
+  --su-field-warning: #{$warning};
+  --su-field-error: #{$error};
+}
+
+@mixin focus($type, $alpha) {
+  border: 1px solid $type;
+  &:focus {
+    box-shadow: 0 0 0 0.25rem rgba($type, $alpha);
+  }
+}
+
+.su-field {
+  &-container {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+
+  &-label {
+    font-size: var(--su-field-label-font);
+    font-weight: 700;
+    margin-bottom: 8px;
+
+    &--inside {
+      margin-bottom: 0;
+      position: absolute;
+      font-size: var(--su-field-label-inside-font);
+      top: 2px;
+      left: 8px;
+    }
+
+    &--border {
+      margin-bottom: 0;
+      position: absolute;
+      padding: 0 2px;
+      background-color: #fff;
+      top: calc(var(--su-field-label-border-font) * 0.75);
+      left: 8px;
+    }
+  }
+  &-label--inside + &-content {
+    input {
+      padding: 18px 8px 0 8px;
+      font-size: 1.4rem;
+    }
+  }
+
+  &-content {
+    input {
+      width: 100%;
+      height: var(--su-field-input-height);
+      font-size: var(--su-field-input-font);
+      border-radius: 4px;
+      border: 1px solid var(--su-field-normal);
+      outline: none;
+
+      padding: 0px 8px;
+
+      &:focus {
+        box-shadow: 0 0 0 0.25rem rgba($dark-grey, 0.3);
+      }
+    }
+  }
+  &-content--error {
+    input {
+      @include focus($error, 0.3);
+    }
+  }
+  &-content--success {
+    input {
+      @include focus($success, 0.3);
+    }
+  }
+  &-content--warning {
+    input {
+      @include focus($success, 0.3);
+    }
+  }
+
+  &-message {
+    margin-top: 4px;
+    font-size: var(--su-field-message-font);
+
+    &--error {
+      color: var(--su-field-error);
+    }
+    &--warning {
+      color: var(--su-field-warning);
+    }
+    &-success {
+      color: var(--su-field-success);
+    }
+  }
+}

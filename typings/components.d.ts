@@ -18,6 +18,7 @@ declare module "@vue/runtime-core" {
     SCol: typeof import("../packages/components")["SCol"];
     SBackTop: typeof import("../packages/components")["SBackTop"];
     SBreadcrumb: typeof import("../packages/components")["SBreadcrumb"];
+    SField: typeof import("../packages/components")["SField"];
   }
 
   interface ComponentCustomProperties {
