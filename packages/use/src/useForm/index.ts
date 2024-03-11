@@ -23,7 +23,7 @@ function initialFormState(schema: Schema): State {
   }, {});
 }
 
-function checkRule(value: unknown, rules: Rules, state: State[string], allValues: Values): void {
+async function checkRule(value: unknown, rules: Rules, state: State[string], allValues: Values): Promise<void> {
   state.status = undefined;
   state.message = undefined;
 
@@ -36,7 +36,8 @@ function checkRule(value: unknown, rules: Rules, state: State[string], allValues
 
   for (const rule of rules) {
     if (typeof rule === "function") {
-      const result = rule(value);
+      // The async rule simply waits for asynchronous events, so there is no need to return a reject, just return the message.
+      const result = await rule(value);
       state.status = isTruthyOrString(result);
       state.message = typeof result === "string" ? result : undefined;
       continue;
@@ -62,9 +63,7 @@ function checkRule(value: unknown, rules: Rules, state: State[string], allValues
 
 function initValidator(values: Values, rules: Rules, state: State): Validator {
   return Object.keys(values).reduce((acc: Validator, key: string) => {
-    acc[key] = () => {
-      checkRule(values[key] as Values, rules[key] as unknown as Rules, state[key], values);
-    };
+    acc[key] = () => checkRule(values[key] as Values, rules[key] as unknown as Rules, state[key], values);
     return acc;
   }, {});
 }
@@ -75,15 +74,16 @@ export function useForm(schema: Schema): UseFormReturnType {
   const state: StateType = useRef(initialFormState(schema));
   const validator: Validator = initValidator(values.value, rules as Rules, state.value);
 
-  const handleSubmit = (cb?: (param?: boolean) => void): void => {
+  const handleSubmit = async (cb?: (param?: boolean) => void): Promise<void> => {
     state.reset();
 
     for (const name in validator) {
-      validator[name]();
+      // If `validator[name]` is a Promise, it will wait for the validator.
+      await validator[name]();
     }
 
     const isPass = Object.values(state.value)
-      .filter(val => val.status !== undefined)
+      .filter(val => val.status !== undefined) // Need to filter out values that have not been added to the rule.
       .every(state => state.status);
     if (typeof cb === "function") cb(isPass);
   };
