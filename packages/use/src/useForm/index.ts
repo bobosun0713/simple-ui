@@ -82,7 +82,9 @@ export function useForm(schema: Schema): UseFormReturnType {
       validator[name]();
     }
 
-    const isPass = Object.values(state.value).every(state => state.status);
+    const isPass = Object.values(state.value)
+      .filter(val => val.status !== undefined)
+      .every(state => state.status);
     if (typeof cb === "function") cb(isPass);
   };
 
