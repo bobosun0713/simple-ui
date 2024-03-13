@@ -63,8 +63,10 @@ importers:
   examples:
     specifiers:
       '@simple/components': workspace:^1.0.0
+      '@simple/use': workspace:^1.0.0
     dependencies:
       '@simple/components': link:../packages/components
+      '@simple/use': link:../packages/use
 
   packages/components:
     specifiers:
@@ -72,7 +74,7 @@ importers:
     dependencies:
       '@simple/utils': link:../utils
 
-  packages/composable:
+  packages/use:
     specifiers:
       '@simple/utils': workspace:^1.0.0
     dependencies:

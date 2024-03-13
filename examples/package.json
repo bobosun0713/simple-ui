@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@simple/components": "workspace:^1.0.0"
+    "@simple/components": "workspace:^1.0.0",
+    "@simple/use": "workspace:^1.0.0"
   }
 }
