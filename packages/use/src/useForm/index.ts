@@ -1,7 +1,19 @@
 import { useRef } from "../useRef";
 import { rulesContainer, extend } from "./extend";
 import { deepClone } from "@simple/utils";
-import { Schema, Values, ValuesType, Rules, RulesType, State, StateType, Validator, UseFormReturnType } from "./types";
+import {
+  Schema,
+  Values,
+  ValuesType,
+  Rules,
+  RulesType,
+  State,
+  StateType,
+  Validator,
+  RegisterRule,
+  SubmitCallback,
+  UseFormReturnType
+} from "./types";
 
 function initialForm(schema: Schema, type: keyof Schema): { [key: string]: unknown } {
   if (typeof schema === "object" && !schema[type]) return {};
@@ -63,20 +75,25 @@ async function checkRule(value: unknown, rules: Rules, state: State[string], all
   }
 }
 
-function initValidator(values: Values, rules: Rules, state: State): Validator {
+function initValidator(values: Values, rules: RulesType, state: State): Validator {
   return Object.keys(values).reduce((acc: Validator, key: string) => {
-    acc[key] = () => checkRule(values[key] as Values, rules[key] as unknown as Rules, state[key], values);
+    acc[key] = () => checkRule(values[key], rules[key] as Rules, state[key], values);
     return acc;
   }, {});
 }
 
 export function useForm(schema: Schema): UseFormReturnType {
   const values: ValuesType = useRef(initialForm(schema, "initialValues"));
-  const rules: RulesType = initialForm(schema, "rules");
   const state: StateType = useRef(initialFormState(schema));
-  const validator: Validator = initValidator(values.value, rules as Rules, state.value);
+  const rules: RulesType = initialForm(schema, "rules");
+  const validator: Validator = initValidator(values.value, rules, state.value);
 
-  const handleSubmit = async (cb?: (param?: boolean) => void): Promise<void> => {
+  const registerRule: RegisterRule = (name, rules, validate) => {
+    if (!rules[name]) return console.warn(`[useForm]: The rule ${name} does not exist.`);
+    rules[name].push(validate);
+  };
+
+  const handleSubmit: SubmitCallback = async cb => {
     state.reset();
 
     for (const name in validator) {
@@ -87,6 +104,7 @@ export function useForm(schema: Schema): UseFormReturnType {
     const isPass = Object.values(state.value)
       .filter(val => val.status !== undefined) // Need to filter out values that have not been added to the rule.
       .every(state => state.status);
+
     if (typeof cb === "function") cb(isPass);
   };
 
@@ -95,7 +113,7 @@ export function useForm(schema: Schema): UseFormReturnType {
     state.reset();
   };
 
-  return { values, state, validator, handleSubmit, handleReset };
+  return { values, state, validator, registerRule, handleSubmit, handleReset };
 }
 
 export const useFormRuleExtend = extend;

@@ -35,10 +35,19 @@ export interface Validator {
   [key: string]: () => void;
 }
 
+export type RegisterRule = (
+  name: string,
+  rules: Record<string, unknown[]>,
+  validate: string | (() => string | boolean)
+) => void;
+
+export type SubmitCallback = (cb?: (param?: boolean) => void) => Promise<void>;
+
 export interface UseFormReturnType {
   values: ValuesType;
   state: StateType;
   validator: Validator;
-  handleSubmit: (cb?: (param?: boolean) => void) => void;
+  registerRule: RegisterRule;
+  handleSubmit: SubmitCallback;
   handleReset: () => void;
 }
