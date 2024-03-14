@@ -40,24 +40,26 @@ async function checkRule(value: unknown, rules: Rules, state: State[string], all
       const result = await rule(value);
       state.status = isTruthyOrString(result);
       state.message = typeof result === "string" ? result : undefined;
-      continue;
+    } else {
+      const { name, message, param } = rule;
+      const currentRule = name || rule;
+
+      if (!rulesContainer[currentRule]) continue;
+
+      const strategyResult = rulesContainer[currentRule].apply?.(null, [
+        value,
+        message,
+        // If param is passed, pass param, otherwise pass an empty array to filter parameters
+        ...(param ? [param] : []),
+        allValues
+      ]);
+
+      state.status = isTruthyOrString(strategyResult);
+      state.message = typeof strategyResult === "string" ? strategyResult : undefined;
     }
 
-    const { name, message, param } = rule;
-    const currentRule = name || rule;
-
-    if (!rulesContainer[currentRule]) continue;
-
-    const strategyResult = rulesContainer[currentRule].apply?.(null, [
-      value,
-      message,
-      // If param is passed, pass param, otherwise pass an empty array to filter parameters
-      ...(param ? [param] : []),
-      allValues
-    ]);
-
-    state.status = isTruthyOrString(strategyResult);
-    state.message = typeof strategyResult === "string" ? strategyResult : undefined;
+    // If the status is false, it means that the validation has failed and the loop is terminated.
+    if (!state.status) break;
   }
 }
 
