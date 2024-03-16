@@ -5,7 +5,6 @@ import {
   Schema,
   Values,
   ValuesType,
-  Rules,
   RulesType,
   State,
   StateType,
@@ -15,16 +14,17 @@ import {
   UseFormReturnType
 } from "./types";
 
-function initialForm(schema: Schema, type: keyof Schema): { [key: string]: unknown } {
-  if (typeof schema === "object" && !schema[type]) return {};
-  return Object.keys(schema[type]).reduce((acc: { [key: string]: unknown }, key) => {
-    acc[key] = deepClone(schema[type][key]);
+function initialForm(schema: Schema, type: keyof Schema): Record<string, any> {
+  const target = schema[type];
+  if (!target || typeof target !== "object") return {};
+  return Object.keys(target).reduce((acc: Record<string, any>, key) => {
+    acc[key] = deepClone(target[key]);
     return acc;
   }, {});
 }
 
 function initialFormState(schema: Schema): State {
-  const values = schema["initialValues"];
+  const values = schema.initialValues;
   if (!values) return {};
   return Object.keys(values).reduce((acc: State, key) => {
     acc[key] = {
@@ -35,7 +35,12 @@ function initialFormState(schema: Schema): State {
   }, {});
 }
 
-async function checkRule(value: unknown, rules: Rules, state: State[string], allValues: Values): Promise<void> {
+async function checkRule(
+  value: unknown,
+  rules: RulesType[string],
+  state: State[string],
+  allValues: Values
+): Promise<void> {
   state.status = undefined;
   state.message = undefined;
 
@@ -47,28 +52,27 @@ async function checkRule(value: unknown, rules: Rules, state: State[string], all
   if (!Array.isArray(rules)) return;
 
   for (const rule of rules) {
-    if (typeof rule === "function") {
-      // The async rule simply waits for asynchronous events, so there is no need to return a reject, just return the message.
-      const result = await rule(value);
-      state.status = isTruthyOrString(result);
-      state.message = typeof result === "string" ? result : undefined;
-    } else {
+    let result: string | boolean | undefined = undefined;
+
+    if (typeof rule === "string") result = rulesContainer[rule].call?.(null, value);
+
+    // The async rule simply waits for asynchronous events, so there is no need to return a reject, just return the message.
+    if (typeof rule === "function") result = await rule(value, allValues);
+
+    if (typeof rule === "object") {
       const { name, message, param } = rule;
-      const currentRule = name || rule;
 
-      if (!rulesContainer[currentRule]) continue;
-
-      const strategyResult = rulesContainer[currentRule].apply?.(null, [
+      result = rulesContainer[name].apply?.(null, [
         value,
         message,
         // If param is passed, pass param, otherwise pass an empty array to filter parameters
         ...(param ? [param] : []),
         allValues
       ]);
-
-      state.status = isTruthyOrString(strategyResult);
-      state.message = typeof strategyResult === "string" ? strategyResult : undefined;
     }
+
+    state.status = isTruthyOrString(result);
+    state.message = typeof result === "string" ? result : undefined;
 
     // If the status is false, it means that the validation has failed and the loop is terminated.
     if (!state.status) break;
@@ -76,10 +80,10 @@ async function checkRule(value: unknown, rules: Rules, state: State[string], all
 }
 
 function initValidator(values: Values, rules: RulesType, state: State): Validator {
-  return Object.keys(values).reduce((acc: Validator, key: string) => {
-    acc[key] = () => checkRule(values[key], rules[key] as Rules, state[key], values);
+  return Object.keys(values).reduce((acc, key) => {
+    acc[key] = () => checkRule(values[key], rules[key], state[key], values);
     return acc;
-  }, {});
+  }, {} as Validator);
 }
 
 export function useForm(schema: Schema): UseFormReturnType {
@@ -88,9 +92,9 @@ export function useForm(schema: Schema): UseFormReturnType {
   const rules: RulesType = initialForm(schema, "rules");
   const validator: Validator = initValidator(values.value, rules, state.value);
 
-  const registerRule: RegisterRule = (name, rules, validate) => {
-    if (!rules[name]) return console.warn(`[useForm]: The rule ${name} does not exist.`);
-    rules[name].push(validate);
+  const registerRule: RegisterRule = (name, validate) => {
+    if (rules[name]) rules[name].push(validate);
+    else rules[name] = [validate];
   };
 
   const handleSubmit: SubmitCallback = async cb => {
