@@ -1,6 +1,5 @@
-import { useRef } from "../useRef";
+import { useRef } from "../";
 import { rulesContainer, extend } from "./extend";
-import { deepClone } from "@simple/utils";
 import {
   Schema,
   Values,
@@ -13,15 +12,6 @@ import {
   SubmitCallback,
   UseFormReturnType
 } from "./types";
-
-function initialForm(schema: Schema, type: keyof Schema): Record<string, any> {
-  const target = schema[type];
-  if (!target || typeof target !== "object") return {};
-  return Object.keys(target).reduce((acc: Record<string, any>, key) => {
-    acc[key] = deepClone(target[key]);
-    return acc;
-  }, {});
-}
 
 function initialFormState(schema: Schema): State {
   const values = schema.initialValues;
@@ -74,12 +64,12 @@ async function checkRule(
     state.status = isTruthyOrString(result);
     state.message = typeof result === "string" ? result : undefined;
 
-    // If the status is false, it means that the validation has failed and the loop is terminated.
+    // If the status is false skip next rule
     if (!state.status) break;
   }
 }
 
-function initValidator(values: Values, rules: RulesType, state: State): Validator {
+function initValidator(rules: RulesType, values: Values, state: State): Validator {
   return Object.keys(values).reduce((acc, key) => {
     acc[key] = () => checkRule(values[key], rules[key], state[key], values);
     return acc;
@@ -87,10 +77,10 @@ function initValidator(values: Values, rules: RulesType, state: State): Validato
 }
 
 export function useForm(schema: Schema): UseFormReturnType {
-  const values: ValuesType = useRef(initialForm(schema, "initialValues"));
+  const values: ValuesType = useRef(schema["initialValues"]);
   const state: StateType = useRef(initialFormState(schema));
-  const rules: RulesType = initialForm(schema, "rules");
-  const validator: Validator = initValidator(values.value, rules, state.value);
+  const rules: RulesType = schema["rules"] || {};
+  const validator: Validator = initValidator(rules, values.value, state.value);
 
   const registerRule: RegisterRule = (name, validate) => {
     if (rules[name]) rules[name].push(validate);
