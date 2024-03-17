@@ -1,11 +1,19 @@
-import { ref, type Ref } from "vue";
+import { ref, Ref } from "vue";
 import { deepClone } from "@simple/utils";
 
-export function useRef<T>(target: T): Ref & { reset: () => void } {
-  const targetClone = deepClone(target);
-  const initialState = ref(target) as Ref & { reset: () => void };
+type RefWithReset<T> = Ref<T> & { reset: () => void };
 
-  initialState.reset = () => Object.assign(initialState.value, deepClone(targetClone));
+export function useRef<T>(target: T): RefWithReset<T> {
+  const targetClone = deepClone(target);
+  const initialState = ref(target) as RefWithReset<T>;
+
+  initialState.reset = () => {
+    if (typeof initialState.value === "object" && initialState.value !== null) {
+      initialState.value = Object.assign(initialState.value, deepClone(targetClone));
+    } else {
+      initialState.value = deepClone(targetClone);
+    }
+  };
 
   return initialState;
 }
