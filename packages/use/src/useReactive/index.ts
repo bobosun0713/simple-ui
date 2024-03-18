@@ -1,9 +1,16 @@
 import { reactive, type UnwrapNestedRefs } from "vue";
 import { deepClone } from "@simple/utils";
 
-export function useReactive<T extends object>(target: T): UnwrapNestedRefs<T> & { reset: () => void } {
+type ReactiveWithReset<T> = UnwrapNestedRefs<T> & { reset: () => void };
+
+export function useReactive<T extends object>(target: T): ReactiveWithReset<T> | T {
+  if (typeof target !== "object" || target === null) {
+    console.warn("[useReactive] only accepts objects");
+    return target;
+  }
+
   const targetClone = deepClone(target);
-  const initialState = reactive(target) as UnwrapNestedRefs<T> & { reset: () => void };
+  const initialState = reactive(target) as ReactiveWithReset<T>;
 
   initialState.reset = () => Object.assign(initialState, deepClone(targetClone));
 
