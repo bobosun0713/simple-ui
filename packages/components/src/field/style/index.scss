@@ -84,7 +84,7 @@
   }
   &-content--warning {
     input {
-      @include focus($success, 0.3);
+      @include focus($warning, 0.3);
     }
   }
 
