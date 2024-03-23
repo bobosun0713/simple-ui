@@ -21,7 +21,7 @@ function handleClose(idx: string | number) {
 function handleAutoHide() {
   timer = window.setTimeout(() => {
     handleClose(props.id as number);
-  }, props.duration as number);
+  }, Number(props.duration));
 }
 
 onMounted(() => {
@@ -37,9 +37,13 @@ onUnmounted(() => {
 
 <template>
   <div :class="['su-message', `su-message--${type}`]">
-    {{ message }}
+    <slot name="content">
+      {{ message }}
+    </slot>
     <button v-if="showClose" type="button" class="su-message__cancel" @click="handleClose(id as number)">
-      <SIcon name="close" width="24" height="24"></SIcon>
+      <slot name="cancel">
+        <SIcon name="close" width="24" height="24"></SIcon>
+      </slot>
     </button>
   </div>
 </template>

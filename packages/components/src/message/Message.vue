@@ -50,7 +50,15 @@ defineExpose({ handleAdd, handleRemoveAll });
       :duration="duration"
       :style="noteIdx !== 0 && eleSpacing"
       @on-close="handleRemove"
-    ></MessageContent>
+    >
+      <template #content>
+        <slot name="content"></slot>
+      </template>
+
+      <template #cancel>
+        <slot name="cancel"></slot>
+      </template>
+    </MessageContent>
   </transition-group>
 </template>
 
