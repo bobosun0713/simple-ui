@@ -11,7 +11,7 @@ export function useRef<T>(target: T): RefWithReset<T> {
     if (typeof initialState.value === "object" && initialState.value !== null) {
       initialState.value = Object.assign(initialState.value, deepClone(targetClone));
     } else {
-      initialState.value = deepClone(targetClone);
+      initialState.value = targetClone;
     }
   };
 
