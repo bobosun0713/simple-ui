@@ -1,0 +1,80 @@
+@use "../../../styles/variables" as *;
+
+:root {
+  --su-link-font-size: 1.4rem;
+
+  --su-link-default: #{$dark};
+  --su-link-primary: #{$primary};
+  --su-link-success: #{$success};
+  --su-link-warning: #{$warning};
+  --su-link-danger: #{$error};
+
+  --su-link-disabled-default: #{$dark-dark};
+  --su-link-disabled-primary: #{$primary-dark};
+  --su-link-disabled-success: #{$success-dark};
+  --su-link-disabled-warning: #{$warning-dark};
+  --su-link-disabled-danger: #{$error-dark};
+}
+
+@mixin link-hover($color) {
+  &:hover::after {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border: 1px solid $color;
+  }
+}
+@mixin link-disabled($color) {
+  cursor: not-allowed;
+  color: $color;
+
+  &:hover::after {
+    content: unset;
+  }
+}
+
+.su-link {
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+  font-weight: 500;
+  font-size: var(--su-link-font-size);
+  cursor: pointer;
+
+  &--underline#{&}:hover::after {
+    content: "";
+  }
+
+  &--default {
+    @include link-hover(var(--su-link-default));
+    color: var(--su-link-default);
+  }
+  &--default#{&}--disabled {
+    @include link-disabled(var(--su-link-disabled-default));
+  }
+
+  &--success {
+    @include link-hover(var(--su-link-success));
+    color: var(--su-link-success);
+  }
+  &--success#{&}--disabled {
+    @include link-disabled(var(--su-link-disabled-success));
+  }
+
+  &--warning {
+    @include link-hover(var(--su-link-warning));
+    color: var(--su-link-warning);
+  }
+  &--warning#{&}--disabled {
+    @include link-disabled(var(--su-link-disabled-warning));
+  }
+
+  &--danger {
+    @include link-hover(var(--su-link-danger));
+    color: var(--su-link-danger);
+  }
+  &--danger#{&}--disabled {
+    @include link-disabled(var(--su-link-disabled-danger));
+  }
+}
