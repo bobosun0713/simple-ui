@@ -1,5 +1,5 @@
 import { withInstall } from "@simple/utils";
-import Link from "./link.vue";
+import Link from "./Link.vue";
 
 const SLink = withInstall(Link);
 
