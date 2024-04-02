@@ -96,7 +96,7 @@ export function useForm(schema: Schema): UseFormReturnType {
     }
 
     const isPass = Object.values(state.value)
-      .filter(val => val.status !== undefined) // Need to filter out values that have not been added to the rule.
+      .filter(Boolean) // Need to filter out values that have not been added to the rule.
       .every(state => state.status);
 
     if (typeof cb === "function") cb(isPass);
