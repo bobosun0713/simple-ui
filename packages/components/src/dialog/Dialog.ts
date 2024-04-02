@@ -63,19 +63,11 @@ function dialogService(): DialogServiceReturnType {
     });
   };
 
-  const showDialog = (id: string | number) => {
-    executeExposeAction(id, exposed => exposed.handleToggle(true));
-  };
+  const showDialog = (id: string | number) => executeExposeAction(id, exposed => exposed.handleToggle(true));
 
-  const closeDialog = (id: string | number) => {
-    executeExposeAction(id, exposed => exposed.handleToggle(false));
-  };
+  const closeDialog = (id: string | number) => executeExposeAction(id, exposed => exposed.handleToggle(false));
 
-  const closeAll = () => {
-    dialogInstances.forEach(item => {
-      item.exposed?.handleToggle(false);
-    });
-  };
+  const closeAll = () => dialogInstances.forEach(item => item.exposed?.handleToggle(false));
 
   return { confirm, showDialog, closeDialog, closeAll };
 }
