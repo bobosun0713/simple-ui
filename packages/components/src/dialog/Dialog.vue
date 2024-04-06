@@ -74,14 +74,9 @@ defineExpose<DialogExposeAction>({
         <div :class="contentClasses">
           <div class="su-dialog__header">
             <slot name="header">Tips</slot>
-            <SIcon
-              v-if="showClose"
-              class="su-dialog__close"
-              name="close"
-              width="24"
-              height="24"
-              @click="handleClose"
-            ></SIcon>
+            <button v-if="showClose" type="button" class="su-dialog__close" @click="handleClose">
+              <SIcon name="close" width="24" height="24"></SIcon>
+            </button>
           </div>
           <div class="su-dialog__body">
             <slot name="body">This is a message</slot>

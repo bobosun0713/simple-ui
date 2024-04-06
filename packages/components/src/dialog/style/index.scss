@@ -61,7 +61,9 @@
     width: 24px;
     height: 24px;
     border-radius: 50%;
+    border: 0;
     margin-left: auto;
+    background-color: transparent;
     transition: $default-transition;
     cursor: pointer;
 
