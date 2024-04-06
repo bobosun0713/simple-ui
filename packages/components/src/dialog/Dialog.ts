@@ -49,6 +49,7 @@ function dialogService(): DialogServiceReturnType {
         {
           ...args,
           visible: isVisible,
+          appendToBody: false,
           "onUpdate:visible": (val: boolean) => (isVisible.value = val),
           onConfirm: () => resolve("confirm"),
           onCancel: () => resolve("cancel"),
