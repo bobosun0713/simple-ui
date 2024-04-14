@@ -23,28 +23,28 @@ describe("Row.vue", () => {
     expect(wrapper.attributes("style")).toMatch("margin-right");
   });
 
-  describe("when props are set", () => {
-    it("should have gutter attribute", () => {
+  describe("when set props", () => {
+    it("should have `gutter` attribute", () => {
       const wrapper = createComponent("<SRow gutter='5'></SRow>");
 
       expect(wrapper.attributes("style")).toContain("margin-left: -5px; margin-right: -5px");
     });
 
-    it("should have '.su-row--justify-center' class when justify prop is set", () => {
+    it("should have 'su-row--justify-center' class", () => {
       const wrapper = createComponent("<SRow justify='center'></SRow>");
 
-      expect(wrapper.classes()).toContain("su-row--justify-center");
+      expect(wrapper.classes("su-row--justify-center")).toBeTruthy();
     });
 
-    it("should have '.su-row--align-center' class when align prop is set", () => {
+    it("should have 'su-row--align-center' class", () => {
       const wrapper = createComponent("<SRow align='center'></SRow>");
 
-      expect(wrapper.classes()).toContain("su-row--align-center");
+      expect(wrapper.classes("su-row--align-center")).toBeTruthy();
     });
   });
 
-  describe("when slot is set", () => {
-    it("should render slot content with col component", () => {
+  describe("when set slots", () => {
+    it("should render row with `default` slot", () => {
       const wrapper = createComponent(
         `
           <SRow>
