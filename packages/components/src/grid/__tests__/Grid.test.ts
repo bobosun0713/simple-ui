@@ -1,6 +1,6 @@
 import { mount } from "@vue/test-utils";
 import SGrid from "../Grid.vue";
-import SGridItem from "../../grid-item/GridItem.vue";
+import SGridItem from "..//GridItem.vue";
 
 function createComponent(components?: string) {
   const wrapper = mount({
