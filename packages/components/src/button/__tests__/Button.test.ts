@@ -1,5 +1,5 @@
-import Button from "../Button.vue";
 import { mount } from "@vue/test-utils";
+import Button from "../Button.vue";
 
 describe("Button.vue", () => {
   it("should render default structure", () => {
@@ -9,35 +9,35 @@ describe("Button.vue", () => {
     expect(wrapper.classes()).toContain("su-button-size-md");
   });
 
-  describe("when type props is set", () => {
-    it("should have success class", () => {
+  describe("when set props", () => {
+    it("should have `su-button-success` class", () => {
       const wrapper = mount(Button, {
         props: {
           type: "success"
         }
       });
 
-      expect(wrapper.classes()).toContain("su-button-success");
+      expect(wrapper.classes("su-button-success")).toBeTruthy();
     });
 
-    it("should have warning class", () => {
+    it("should have `su-button-warning` class", () => {
       const wrapper = mount(Button, {
         props: {
           type: "warning"
         }
       });
 
-      expect(wrapper.classes()).toContain("su-button-warning");
+      expect(wrapper.classes("su-button-warning")).toBeTruthy();
     });
 
-    it("should have danger class", () => {
+    it("should have `su-button-danger` class", () => {
       const wrapper = mount(Button, {
         props: {
-          type: "danger"
+          type: "error"
         }
       });
 
-      expect(wrapper.classes()).toContain("su-button-danger");
+      expect(wrapper.classes("su-button-danger")).toBeTruthy();
     });
   });
 
