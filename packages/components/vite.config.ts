@@ -1,39 +1,40 @@
 import { defineConfig } from "vite";
+import { resolve } from "path";
 import vue from "@vitejs/plugin-vue";
 import dts from "vite-plugin-dts";
 
+const mjsOutput = resolve(__dirname, "../../dist/es");
+const cjsOutput = resolve(__dirname, "../../dist/cjs");
+
 export default defineConfig({
   plugins: [
-    vue({
-      script: {
-        defineModel: true
-      }
-    }),
+    vue(),
     dts({
       entryRoot: "./src",
-      outDir: ["../simple/es/src", "../simple/lib/src"],
-      tsconfigPath: "../../tsconfig.json"
+      outDir: [mjsOutput, cjsOutput],
+      tsconfigPath: "./tsconfig.declaration.json"
     })
   ],
   build: {
     target: "modules",
     minify: true,
     rollupOptions: {
+      external: ["vue"],
       input: ["src/index.ts"],
       output: [
         {
           format: "es",
           entryFileNames: "[name].mjs",
           preserveModules: true,
-          dir: "../simple/es/src",
+          dir: mjsOutput,
           exports: "named",
           preserveModulesRoot: "src"
         },
         {
           format: "cjs",
-          entryFileNames: "[name].js",
+          entryFileNames: "[name].cjs",
           preserveModules: true,
-          dir: "../simple/lib/src",
+          dir: cjsOutput,
           exports: "named",
           preserveModulesRoot: "src"
         }
