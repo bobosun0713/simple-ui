@@ -11,15 +11,15 @@ describe("Divider.vue", () => {
     expect(wrapper.attributes("style")).toContain("border-style: solid");
   });
 
-  describe("when props are set", () => {
-    it("should show vertical divider", async () => {
+  describe("when set props", () => {
+    it("should have `su-divider--vertical` class", async () => {
       const wrapper = shallowMount(Divider, {
         props: {
           vertical: true
         }
       });
 
-      expect(wrapper.classes()).toContain("su-divider--vertical");
+      expect(wrapper.classes("su-divider--vertical")).toBeTruthy();
     });
 
     it("should show with custom thickness, spacing, and border style", async () => {
