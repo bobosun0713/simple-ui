@@ -21,13 +21,13 @@ describe("Breadcrumb.vue", () => {
   });
 
   describe("when set props", () => {
-    it("should show prepend content when prepend prop is set", () => {
+    it("should render prepend content", () => {
       const wrapper = mount(Breadcrumb, { props: { prepend: "test", items: ["Home", "Product"] } });
 
       expect(wrapper.find(".su-breadcrumb__prepend").text()).toBe("test");
     });
 
-    it("should show separator content when separator prop is set", () => {
+    it("should render separator content", () => {
       const wrapper = mount(Breadcrumb, { props: { separator: "-", items: ["Home", "Product"] } });
 
       expect(wrapper.find(".su-breadcrumb__separator").text()).toBe("-");
@@ -35,7 +35,7 @@ describe("Breadcrumb.vue", () => {
   });
 
   describe("when items prop is array of objects", () => {
-    it("should show disabled link", () => {
+    it("should render disabled link", () => {
       const wrapper = mount(Breadcrumb, {
         props: {
           items: [
@@ -52,7 +52,7 @@ describe("Breadcrumb.vue", () => {
   });
 
   describe("when set slots", () => {
-    it("should show prepend when prepend slot is set", () => {
+    it("should render breadcrumb with `prepend` slot", () => {
       const wrapper = mount(Breadcrumb, {
         slots: {
           prepend: "prepend slot"
@@ -62,7 +62,7 @@ describe("Breadcrumb.vue", () => {
       expect(wrapper.find(".su-breadcrumb__prepend").text()).toBe("prepend slot");
     });
 
-    it("should show separator when separator slot is set", () => {
+    it("should render breadcrumb with `separator` slot", () => {
       const wrapper = mount(Breadcrumb, {
         props: { items: ["Home", "Product"] },
         slots: {
@@ -74,12 +74,12 @@ describe("Breadcrumb.vue", () => {
     });
   });
 
-  describe("when set event", () => {
+  describe("when set events", () => {
     afterEach(() => {
       vi.resetAllMocks();
     });
 
-    it("should trigger router.push when click an href link", async () => {
+    it("should trigger `router.push`", async () => {
       const wrapper = mount(Breadcrumb, {
         props: {
           items: [
@@ -100,7 +100,7 @@ describe("Breadcrumb.vue", () => {
       expect(push).toHaveBeenCalledWith("/product");
     });
 
-    it("should not trigger router.push when click an href link if the link is disabled", async () => {
+    it("should not trigger `router.push` when link href is disabled", async () => {
       const wrapper = mount(Breadcrumb, {
         props: {
           items: [
