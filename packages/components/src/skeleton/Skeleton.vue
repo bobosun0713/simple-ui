@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed } from "vue";
-
 import SkeletonItem from "./SkeletonItem.vue";
 
 defineOptions({
@@ -51,24 +50,5 @@ const classes = computed(() => [
 </template>
 
 <style lang="scss">
-.su-skeleton {
-  &--loading &-item {
-    background: linear-gradient(
-        45deg,
-        rgba(255, 255, 255, 0) 40%,
-        rgba(255, 255, 255, 1) 50%,
-        rgba(255, 255, 255, 0) 60%
-      )
-      #ededed;
-    background-size: 200% 100%;
-    background-position-x: 180%;
-    animation: 1.4s skeleton-loading ease infinite;
-  }
-}
-
-@keyframes skeleton-loading {
-  to {
-    background-position-x: -5%;
-  }
-}
+@import "./style/index.scss";
 </style>

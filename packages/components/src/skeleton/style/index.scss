@@ -1,0 +1,61 @@
+.su-skeleton {
+  &--loading &-item {
+    background: linear-gradient(
+        45deg,
+        rgba(255, 255, 255, 0) 40%,
+        rgba(255, 255, 255, 1) 50%,
+        rgba(255, 255, 255, 0) 60%
+      )
+      #ededed;
+    background-size: 200% 100%;
+    background-position-x: 180%;
+    animation: 1.4s skeleton-loading ease infinite;
+  }
+
+  &-item {
+    display: inline-block;
+    width: 100%;
+    background: #ededed;
+    border-radius: 4px;
+
+    &--paragraph:not(:first-child) {
+      margin-top: 12px;
+    }
+
+    &--first {
+      width: 33%;
+    }
+    &--last {
+      width: 66%;
+    }
+
+    &--p {
+      height: 14px;
+    }
+
+    &--h {
+      height: 20px;
+    }
+
+    &--image {
+      width: 150px;
+      height: 150px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+    }
+
+    &--circle {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+    }
+  }
+}
+
+@keyframes skeleton-loading {
+  to {
+    background-position-x: -5%;
+  }
+}

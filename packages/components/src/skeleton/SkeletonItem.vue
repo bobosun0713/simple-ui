@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, type PropType } from "vue";
-import { Variant } from "./types";
 import SIcon from "../icon/Icon.vue";
+import type { Variant } from "./types";
 
 defineOptions({
   name: "SkeletonItem"
@@ -31,44 +31,5 @@ const classes = computed(() => [
 </template>
 
 <style lang="scss">
-.su-skeleton-item {
-  display: inline-block;
-  width: 100%;
-  background: #ededed;
-  border-radius: 4px;
-
-  &--paragraph:not(:first-child) {
-    margin-top: 12px;
-  }
-
-  &--first {
-    width: 33%;
-  }
-  &--last {
-    width: 66%;
-  }
-
-  &--p {
-    height: 14px;
-  }
-
-  &--h {
-    height: 20px;
-  }
-
-  &--image {
-    width: 150px;
-    height: 150px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex: 1;
-  }
-
-  &--circle {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-  }
-}
+@import "./style/index.scss";
 </style>
