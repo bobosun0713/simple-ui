@@ -1,60 +1,37 @@
-<script lang="ts" setup>
-import { ref, onMounted, computed } from "vue";
-import SIcon from "../icon/Icon.vue";
+<script setup lang="ts">
+import { ref, provide, type PropType } from "vue";
 
-defineOptions({
-  name: "SCollapse"
-});
+const modelValue = defineModel({ type: Array as PropType<Array<string> | string>, default: () => [] });
 
 const props = defineProps({
-  title: {
-    type: String,
-    default: "Tips"
-  },
-  content: {
-    type: String,
-    default: "Collapse Content"
+  accordion: {
+    type: Boolean,
+    default: false
   }
 });
 
-const emit = defineEmits(["on-click"]);
+const activeNames = ref(Array.isArray(modelValue.value) ? [...modelValue.value] : []);
 
-const isActive = ref(false);
-const contentRef = ref<HTMLDivElement | null>(null);
-const contentHeight = ref(0);
+function handleActive(name: string): void {
+  if (props.accordion) {
+    activeNames.value = activeNames.value.includes(name) ? [] : [name];
+  } else {
+    const getCurrentIndex = activeNames.value.indexOf(name);
+    if (getCurrentIndex > -1) activeNames.value.splice(getCurrentIndex, 1);
+    else activeNames.value.push(name);
+  }
 
-const getContentHeight = computed(() => (isActive.value ? `${contentHeight.value}px` : `0px`));
-
-function handleClick(): void {
-  isActive.value = !isActive.value;
-  emit("on-click", isActive);
+  modelValue.value = props.accordion ? activeNames.value[0] : activeNames.value;
 }
 
-onMounted(() => {
-  contentHeight.value = Number(contentRef.value?.getBoundingClientRect().height);
+provide("collapse", {
+  activeNames,
+  handleActive
 });
 </script>
 
 <template>
   <div class="su-collapse">
-    <div class="su-collapse__header" :class="{ 'su-collapse__header--active': isActive }" @click="handleClick">
-      <slot name="header">
-        {{ props.title }}
-      </slot>
-      <slot name="icon">
-        <SIcon class="su-collapse__icon" :class="{ 'su-collapse__icon--active': isActive }" name="arrowLeft"></SIcon>
-      </slot>
-    </div>
-    <div class="su-collapse__body" :style="`height:${getContentHeight}`">
-      <div ref="contentRef" class="su-collapse__content">
-        <slot name="content">
-          {{ props.content }}
-        </slot>
-      </div>
-    </div>
+    <slot name="default"></slot>
   </div>
 </template>
-
-<style lang="scss">
-@import "./style/index.scss";
-</style>
