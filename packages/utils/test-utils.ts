@@ -1,4 +1,5 @@
-import { createApp } from "vue";
+import { createApp, type Component } from "vue";
+import { mount } from "@vue/test-utils";
 
 export function withSetup(composable: any) {
   let result;
@@ -10,4 +11,9 @@ export function withSetup(composable: any) {
   });
   app.mount(document.createElement("div"));
   return [result, app];
+}
+
+export function createComponent(components: Component, options?: object) {
+  const wrapper = mount(components, { ...options });
+  return wrapper;
 }
