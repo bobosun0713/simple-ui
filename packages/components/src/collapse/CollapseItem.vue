@@ -34,13 +34,9 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="su-collapse-item">
-    <div
-      class="su-collapse-item__header"
-      :class="{ 'su-collapse-item__header--active': isActive }"
-      @click="handleClick"
-    >
-      <slot name="header">
+  <div class="su-collapse-item" @click="handleClick">
+    <div class="su-collapse-item__header" :class="{ 'su-collapse-item__header--active': isActive }">
+      <slot name="title">
         {{ props.title }}
       </slot>
       <slot name="icon">

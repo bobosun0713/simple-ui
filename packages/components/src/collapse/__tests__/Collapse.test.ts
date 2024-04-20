@@ -1,66 +1,142 @@
-import { mount } from "@vue/test-utils";
-import Collapse from "../Collapse.vue";
+import { createComponent } from "@simple/utils";
+import SCollapse from "../Collapse.vue";
+import SCollapseItem from "../CollapseItem.vue";
+
+function mountCollapse(template: string) {
+  return createComponent(
+    {
+      template,
+      components: { SCollapse, SCollapseItem }
+    },
+    {
+      global: {
+        stubs: {
+          SIcon: true
+        }
+      }
+    }
+  );
+}
 
 describe("Collapse.vue", () => {
   it("should render default structure", () => {
-    const wrapper = mount(Collapse);
+    const wrapper = mountCollapse(`
+    <SCollapse>
 
-    expect(wrapper.find(".su-collapse__header").text()).toBe("Title");
-    expect(wrapper.find(".su-collapse__content").text()).toBe("Lorem ipsum dolor");
+       <SCollapseItem></SCollapseItem>
+
+    </SCollapse>
+    `);
+
+    expect(wrapper.classes("su-collapse")).toBeTruthy();
+    expect(wrapper.find(".su-collapse-item__header").text()).toContain("Tips");
+    expect(wrapper.find(".su-collapse-item__content").text()).toContain("Collapse Content");
   });
 
-  describe("when `title` and `content` props are set", () => {
+  describe("when set props", () => {
     it("should show `title` prop content", () => {
-      const wrapper = mount(Collapse, {
-        props: {
-          title: "Vitest"
-        }
-      });
+      const wrapper = mountCollapse(`
+      <SCollapse>
 
-      expect(wrapper.find(".su-collapse__header").text()).toBe("Vitest");
+        <SCollapseItem title="Vitest"></SCollapseItem>
+        
+      </SCollapse>
+      `);
+      expect(wrapper.find(".su-collapse-item__header").text()).toContain("Vitest");
     });
 
     it("should show `content` prop content", () => {
-      const wrapper = mount(Collapse, {
-        props: {
-          content: "This is testing."
-        }
-      });
+      const wrapper = mountCollapse(`
+      <SCollapse>
 
-      expect(wrapper.find(".su-collapse__content").text()).toBe("This is testing.");
+        <SCollapseItem content="Vitest"></SCollapseItem>
+
+      </SCollapse>
+      `);
+      expect(wrapper.find(".su-collapse-item__content").text()).toContain("Vitest");
     });
   });
 
-  describe("when slots are set", () => {
-    it("should render `header` slot", () => {
-      const wrapper = mount(Collapse, {
-        slots: {
-          header: `<div class="header">Testing</div>`
-        }
-      });
+  describe("when set slot", () => {
+    it("should render `title` slot", () => {
+      const wrapper = mountCollapse(`
+      <SCollapse>
 
-      expect(wrapper.find(".header").exists()).toBeTruthy();
-      expect(wrapper.find(".header").text()).toBe("Testing");
+        <SCollapseItem>
+          <template #title>
+            Title
+          </template>
+        </SCollapseItem>
+
+      </SCollapse>
+      `);
+
+      expect(wrapper.find(".su-collapse-item__header").text()).toContain("Title");
     });
 
-    it("should render `content` slot", () => {
-      const wrapper = mount(Collapse, {
-        slots: {
-          content: `<div class="content">Testing Testing</div>`
-        }
-      });
+    it("should render `default` slot", () => {
+      const wrapper = mountCollapse(`
+      <SCollapse>
 
-      expect(wrapper.find(".content").text()).toBe("Testing Testing");
+        <SCollapseItem>
+          <template #default>
+            Content
+          </template>
+        </SCollapseItem>
+
+      </SCollapse>
+      `);
+
+      expect(wrapper.find(".su-collapse-item__content").text()).toContain("Content");
     });
   });
 
-  describe("when open event", () => {
-    it("should have `active` classes and trigger `active` emit event", async () => {
-      const wrapper = mount(Collapse);
+  describe("when click events", () => {
+    it("should toggle collapse item", async () => {
+      const wrapper = mountCollapse(`
+      <SCollapse>
 
-      await wrapper.find(".su-collapse__header").trigger("click");
-      expect(wrapper.find(".su-collapse__header").classes()).toContain("su-collapse__header--active");
-      expect(wrapper.emitted("active")).toBeTruthy();
+        <SCollapseItem></SCollapseItem>
+
+      </SCollapse>
+      `);
+
+      await wrapper.find(".su-collapse-item").trigger("click");
+
+      expect(wrapper.find(".su-collapse-item__header--active").exists()).toBeTruthy();
+      expect(wrapper.find(".su-collapse-item__icon--active").exists()).toBeTruthy();
+
+      await wrapper.find(".su-collapse-item").trigger("click");
+
+      expect(wrapper.find(".su-collapse-item__header--active").exists()).toBeFalsy();
+      expect(wrapper.find(".su-collapse-item__icon--active").exists()).toBeFalsy();
+    });
+
+    it("should toggle multiple collapse item in `accordion` mode", async () => {
+      const wrapper = mountCollapse(`
+      <SCollapse accordion>
+
+        <SCollapseItem name="v1"></SCollapseItem>
+        <SCollapseItem name="v2"></SCollapseItem>
+
+      </SCollapse>
+      `);
+
+      const collapseItemV1 = wrapper.findAll(".su-collapse-item")[0];
+      const collapseItemV2 = wrapper.findAll(".su-collapse-item")[1];
+
+      await collapseItemV1.trigger("click");
+
+      expect(collapseItemV1.find(".su-collapse-item__header--active").exists()).toBeTruthy();
+      expect(collapseItemV1.find(".su-collapse-item__icon--active").exists()).toBeTruthy();
+
+      await collapseItemV2.trigger("click");
+
+      expect(collapseItemV1.find(".su-collapse-item__header--active").exists()).toBeFalsy();
+      expect(collapseItemV1.find(".su-collapse-item__icon--active").exists()).toBeFalsy();
+
+      expect(collapseItemV2.find(".su-collapse-item__header--active").exists()).toBeTruthy();
+      expect(collapseItemV2.find(".su-collapse-item__icon--active").exists()).toBeTruthy();
     });
   });
 });
