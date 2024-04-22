@@ -12,7 +12,8 @@ export default mergeConfig(
       exclude: [...configDefaults.exclude, "e2e/*"],
       root: fileURLToPath(new URL("./", import.meta.url)),
       coverage: {
-        provider: "v8"
+        provider: "v8",
+        exclude: ["src/**/{index,types}.ts", "src/icon/svg/*.vue", "src/index.ts"]
       }
     }
   })
