@@ -37,7 +37,7 @@ describe("Button.vue", () => {
         }
       });
 
-      expect(wrapper.classes("su-button-danger")).toBeTruthy();
+      expect(wrapper.classes("su-button-error")).toBeTruthy();
     });
   });
 
