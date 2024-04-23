@@ -24,7 +24,7 @@ export function useStorage<T>(key: string, value: T, storage: Storage = localSto
   };
 
   const removeStorage = (): void => {
-    storage.removeAll(key);
+    storage.clear();
     state.value = null;
   };
 
