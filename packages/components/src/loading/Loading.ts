@@ -1,37 +1,28 @@
-import { h, ref, onMounted, onUnmounted, createApp } from "vue";
+import { ref } from "vue";
+import { dynamicCreate } from "@simple/utils";
 import Loading from "./Loading.vue";
+import type { VNode } from "vue";
 import type { LoadingServiceProps } from "./types";
+
+let _loadingInstances: VNode;
 
 function loadingService(props?: LoadingServiceProps) {
   const { spinner, ...args } = props || {};
-  const container: HTMLDivElement = document.createElement("div");
   const isVisible = ref(false);
 
-  const loading = createApp(() =>
-    h(
+  _loadingInstances =
+    _loadingInstances ||
+    dynamicCreate(
       Loading,
       {
-        ...(args && args),
-        visible: isVisible.value,
-        "onUpdate:visible": (val: boolean) => (isVisible.value = val),
-        appendToBody: false
+        ...args,
+        visible: isVisible,
+        "onUpdate:visible": (val: boolean) => (isVisible.value = val)
       },
-      {
-        spinner: () => spinner
-      }
-    )
-  );
+      { spinner }
+    );
 
-  onMounted(() => {
-    container.setAttribute("id", `su-loading-wrap-${crypto.randomUUID()}`);
-    document.body.appendChild(container);
-    loading.mount(container);
-  });
-
-  onUnmounted(() => {
-    loading.unmount();
-    document.body.removeChild(container);
-  });
+  document.body.appendChild(_loadingInstances.el as HTMLElement);
 
   const open = () => (isVisible.value = true);
   const close = () => (isVisible.value = false);
