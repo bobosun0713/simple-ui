@@ -1,50 +1,90 @@
 import { nextTick } from "vue";
-import { withSetup } from "@simple/utils";
+import { mount, type VueWrapper } from "@vue/test-utils";
+import Loading from "../Loading.vue";
 import LoadingService from "../Loading";
 
 describe("Loading.vue", () => {
-  afterEach(() => {
-    document.body.innerHTML = "";
+  it("should render default structure", () => {
+    const wrapper = mount(Loading, {
+      global: {
+        stubs: { SIcon: true }
+      }
+    });
+
+    expect(wrapper.find(".su-loading").exists()).toBeTruthy();
+    expect(wrapper.find(".su-loading-content")).toBeTruthy();
   });
 
-  it("should render loading", async () => {
-    const [result] = withSetup(() => LoadingService());
+  describe("when set props", () => {
+    let wrapper: VueWrapper;
 
-    result.open();
+    beforeEach(() => {
+      wrapper = mount(Loading, {
+        global: {
+          stubs: { SIcon: true }
+        },
+        attachTo: document.body
+      });
+    });
 
-    await nextTick();
+    afterEach(() => {
+      document.body.innerHTML = "";
+    });
 
-    expect((document.querySelector(".su-loading") as HTMLDivElement).style.display).toBe("");
+    it("should show loading", async () => {
+      await wrapper.setProps({ visible: true });
+
+      expect(wrapper.find(".su-loading").isVisible()).toBeTruthy();
+    });
+
+    it("should auto close loading", async () => {
+      vi.useFakeTimers();
+
+      await wrapper.setProps({ visible: true });
+
+      expect(wrapper.find(".su-loading").isVisible()).toBeTruthy();
+
+      vi.advanceTimersToNextTimer();
+
+      expect(wrapper.emitted("update:visible")[0][0]).toBe(false);
+
+      vi.useRealTimers();
+    });
   });
 
-  it("should show spinner content", async () => {
-    const [result] = withSetup(() => LoadingService({ spinner: "Loading" }));
+  describe("when set slots", () => {
+    it("should render `spinner` slot", () => {
+      const wrapper = mount(Loading, {
+        props: {
+          visible: true
+        },
+        slots: {
+          spinner: "Loading..."
+        },
+        global: {
+          stubs: { SIcon: true }
+        }
+      });
 
-    result.open();
-
-    await nextTick();
-
-    expect(document.querySelector(".su-loading-content").textContent).toBe("Loading");
+      expect(wrapper.find(".su-loading-content").text()).toBe("Loading...");
+    });
   });
 
-  it("should close loading", async () => {
-    const [result] = withSetup(() => LoadingService());
+  describe("when use service API", () => {
+    it("should show and close loading", async () => {
+      const { open, close } = LoadingService({ duration: 0 });
 
-    /**
-     * Because the composition encapsulates dynamic components, the transition of the components cannot be rendered when mounted,
-     * and it is impossible to test when the state changes with a false condition.
-     * Therefore, simulate the close function
-     */
-    vi.spyOn(result, "close");
+      open();
 
-    result.open();
+      await nextTick();
 
-    await nextTick();
+      expect(document.querySelector(".su-loading").getAttribute("style")).not.toBe("display: none;");
 
-    expect((document.querySelector(".su-loading") as HTMLDivElement).style.display).toBe("");
+      close();
 
-    result.close();
+      await nextTick();
 
-    expect(result.close).toHaveBeenCalled();
+      expect(document.querySelector(".su-loading").getAttribute("style")).toBe("display: none;");
+    });
   });
 });
