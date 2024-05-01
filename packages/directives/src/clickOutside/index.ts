@@ -1,3 +1,4 @@
+import { withInstallDirective } from "@simple/utils";
 import type { DirectiveBinding, ObjectDirective } from "vue";
 
 const _nodeList = new Map();
@@ -18,7 +19,7 @@ function createHandler(e: MouseEvent): void {
 
 window.addEventListener("click", createHandler);
 
-export const ClickOutSide: ObjectDirective = {
+const clickOutSide: ObjectDirective = {
   mounted(el, binding) {
     _nodeList.set(el, outsideHandler(el, binding));
   },
@@ -30,3 +31,6 @@ export const ClickOutSide: ObjectDirective = {
     window.removeEventListener("click", createHandler);
   }
 };
+
+const SClickOutSide = withInstallDirective(clickOutSide, "click-outside");
+export default SClickOutSide;
