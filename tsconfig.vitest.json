@@ -4,6 +4,6 @@
     "skipLibCheck": true,
     "types": ["node", "vitest/globals"]
   },
-  "include": ["packages/**/*.vue", "packages/**/*.ts", "**/__tests__/**/*"],
+  "include": ["**/vitest.config.*"],
   "exclude": ["node_modules", "dist"]
 }

@@ -1,12 +1,12 @@
 {
   "compilerOptions": {
     "composite": true,
-    "types": ["node"],
+    "types": ["node", "vite/client"],
     "skipLibCheck": true,
     "module": "ESNext",
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true
   },
-  "include": ["**/vite.config.*", "**/vitest.config.*", "typings/vite-env.d.ts"],
+  "include": ["**/vite.config.*", "typings/vite-env.d.ts"],
   "exclude": ["node_modules", "dist"]
 }
