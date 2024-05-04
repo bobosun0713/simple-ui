@@ -25,7 +25,13 @@
     "dist"
   ],
   "scripts": {
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "build": "node --loader ts-node/esm ./packages/build/vite.config.ts",
+    "test": "vitest",
+    "test:cm": "vitest ./packages/components/src/**/__tests__/*.test.ts",
+    "test:use": "vitest ./packages/use/src/**/__tests__/*.test.ts",
+    "test:dir": "vitest ./packages/directives/src/**/__tests__/*.test.ts",
+    "test:cg": "vitest --coverage"
   },
   "keywords": [],
   "author": "",
@@ -51,6 +57,7 @@
     "lint-staged": "^13.2.3",
     "prettier": "^3.0.0",
     "sass": "^1.64.1",
+    "ts-node": "^10.9.2",
     "typescript": "^5.1.6",
     "vite": "^4.4.6",
     "vite-plugin-dts": "^3.3.1",
