@@ -3,14 +3,14 @@
   "private": false,
   "version": "0.0.0",
   "description": "",
-  "main": "dist/cjs/index.cjs",
-  "module": "dist/es/index.mjs",
+  "main": "dist/cjs/components/index.cjs",
+  "module": "dist/es/components/index.mjs",
   "types": "types/components.d.ts",
   "exports": {
     ".": {
-      "require": "./dist/cjs/index.cjs",
-      "import": "./dist/es/index.mjs",
-      "types": "./dist/es/index.d.ts"
+      "require": "./dist/cjs/components/index.cjs",
+      "import": "./dist/es/components/index.mjs",
+      "types": "./dist/es/components/index.d.ts"
     },
     "./es/*": {
       "import": "./dist/es/*/index.mjs",
