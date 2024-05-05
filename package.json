@@ -5,7 +5,7 @@
   "description": "",
   "main": "dist/cjs/index.cjs",
   "module": "dist/es/index.mjs",
-  "types": "dist/es/index.d.ts",
+  "types": "types/components.d.ts",
   "exports": {
     ".": {
       "require": "./dist/cjs/index.cjs",
@@ -22,7 +22,8 @@
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "types"
   ],
   "scripts": {
     "prepare": "husky install",
