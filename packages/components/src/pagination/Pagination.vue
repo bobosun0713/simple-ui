@@ -6,6 +6,8 @@ defineOptions({
   name: "SPagination"
 });
 
+const current = defineModel("current", { type: Number, default: 1 });
+
 const props = defineProps({
   perPage: {
     type: Number,
@@ -13,7 +15,7 @@ const props = defineProps({
   },
   total: {
     type: Number,
-    default: 100
+    default: 0
   },
   pager: {
     type: Number,
@@ -21,7 +23,7 @@ const props = defineProps({
   },
   rounded: {
     type: Boolean,
-    default: false
+    default: true
   },
   disabled: {
     type: Boolean,
@@ -29,10 +31,9 @@ const props = defineProps({
   }
 });
 
-const current = defineModel<number>("current", { default: 1 });
-
 const totalPage = computed(() => Math.ceil(props.total / props.perPage) || 1);
-const pages = computed(() => {
+
+const pagerList = computed(() => {
   const pageButtons = [];
 
   const pagerFirstHalf = Math.ceil(props.pager / 2);
@@ -64,10 +65,20 @@ const pages = computed(() => {
 
 const isFirstPage = computed(() => current.value === 1);
 const isLastPage = computed(() => current.value === totalPage.value);
+
 const buttonClasses = computed(() => ({
-  "su-pagination__btn": true,
-  "su-pagination__btn--rounded": props.rounded
+  main: {
+    "su-pagination__btn": true,
+    "su-pagination__btn--rounded": props.rounded
+  },
+  left: {
+    "su-pagination__btn--disabled": props.disabled || isFirstPage.value
+  },
+  right: {
+    "su-pagination__btn--disabled": props.disabled || isLastPage.value
+  }
 }));
+
 const pagerClasses = computed(() => ({
   "su-pagination__pager": true,
   "su-pagination__pager--rounded": props.rounded,
@@ -89,35 +100,19 @@ function handleClickPager(val: number): void {
 
 <template>
   <div class="su-pagination">
-    <button
-      type="button"
-      :class="[
-        buttonClasses,
-        {
-          'su-pagination__btn--disabled': props.disabled || isFirstPage
-        }
-      ]"
-      @click="handlePrev"
-    >
+    <button type="button" :class="[buttonClasses.main, buttonClasses.left]" @click="handlePrev">
       <SIcon class="su-pagination__btn-icon" name="arrowLeft"></SIcon>
     </button>
+
     <ul class="su-pagination__pagers">
-      <li v-for="item in pages" :key="item" @click="handleClickPager(item)">
-        <button type="button" :class="[pagerClasses, { 'su-pagination__pager--active': current === item }]">
-          {{ item }}
+      <li v-for="page in pagerList" :key="page" @click="handleClickPager(page)">
+        <button type="button" :class="[pagerClasses, { 'su-pagination__pager--active': current === page }]">
+          {{ page }}
         </button>
       </li>
     </ul>
-    <button
-      type="button"
-      :class="[
-        buttonClasses,
-        {
-          'su-pagination__btn--disabled': props.disabled || isLastPage
-        }
-      ]"
-      @click="handleNext"
-    >
+
+    <button type="button" :class="[buttonClasses.main, buttonClasses.right]" @click="handleNext">
       <SIcon class="su-pagination__btn-icon" name="arrowRight"></SIcon>
     </button>
   </div>
