@@ -4,6 +4,11 @@
     "skipLibCheck": true,
     "types": ["node", "vitest/globals"]
   },
-  "include": ["**/vitest.config.*"],
+  "include": [
+    "packages/components/src/**/*.vue",
+    "packages/components/src/**/*,ts",
+    "**/vitest.config.ts",
+    "**/__tests__/*.test.ts"
+  ],
   "exclude": ["node_modules", "dist"]
 }
