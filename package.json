@@ -27,6 +27,7 @@
   ],
   "scripts": {
     "prepare": "husky install",
+    "dev": "pnpm --filter ./examples run dev",
     "build": "node --loader ts-node/esm ./packages/build/vite.config.ts",
     "test": "vitest",
     "test:cm": "vitest ./packages/components/src/**/__tests__/*.test.ts",
