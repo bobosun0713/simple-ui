@@ -1,0 +1,12 @@
+{
+  "extends": "../tsconfig.vite.json",
+  "include": [
+    "components/src/**/*.vue",
+    "components/src/**/*.ts",
+    "directives/src/**/*.ts",
+    "use/src/**/*.ts",
+    "utils/*.ts",
+    "typings/components.d.ts"
+  ],
+  "exclude": ["node_modules", "dist"]
+}
