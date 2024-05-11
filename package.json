@@ -30,9 +30,8 @@
     "dev": "pnpm --filter ./examples run dev",
     "build": "node --loader ts-node/esm ./packages/vite.config.ts",
     "test": "vitest",
-    "test:cm": "vitest ./packages/components/src/**/__tests__/*.test.ts",
-    "test:use": "vitest ./packages/use/src/**/__tests__/*.test.ts",
-    "test:dir": "vitest ./packages/directives/src/**/__tests__/*.test.ts",
+    "test:cm": "vitest ./packages/tests/components/*.test.ts",
+    "test:use": "vitest ./packages/tests/use/*.test.ts",
     "test:cg": "vitest --coverage"
   },
   "keywords": [],
