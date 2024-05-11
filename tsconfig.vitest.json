@@ -1,0 +1,17 @@
+{
+  "extends": "./tsconfig.vite.json",
+  "compilerOptions": {
+    "paths": {
+      "@components/*": ["./packages/components/src/*"],
+      "@use/*": ["./packages/use/src/*"],
+      "@utils/*": ["./packages/utils/*"]
+    }
+  },
+  "include": [
+    "packages/tests/**/*.ts",
+    "packages/components/src/**/*.vue",
+    "packages/components/src/**/*.ts",
+    "packages/use/src/**/*.ts",
+    "packages/utils/*.ts"
+  ]
+}

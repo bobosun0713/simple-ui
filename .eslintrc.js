@@ -20,7 +20,13 @@ module.exports = {
     sourceType: "module",
     tsconfigRootDir: __dirname,
     parser: "@typescript-eslint/parser",
-    project: ["./tsconfig.json", "./tsconfig.web.json", "./tsconfig.eslint.json", "./tsconfig.vite.json"],
+    project: [
+      "./tsconfig.json",
+      "./tsconfig.eslint.json",
+      "./tsconfig.web.json",
+      "./tsconfig.vite.json",
+      "./tsconfig.vitest.json"
+    ],
     extraFileExtensions: [".vue"]
   },
   rules: {
