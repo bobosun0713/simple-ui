@@ -25,7 +25,8 @@ module.exports = {
       "./tsconfig.eslint.json",
       "./tsconfig.web.json",
       "./tsconfig.vite.json",
-      "./tsconfig.vitest.json"
+      "./tsconfig.vitest.json",
+      "./tsconfig.examples.json"
     ],
     extraFileExtensions: [".vue"]
   },

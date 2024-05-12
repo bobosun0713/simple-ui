@@ -16,8 +16,6 @@
     "strict": true
   },
   "include": [
-    "examples/*.vue",
-    "examples/*.ts",
     "packages/components/*.ts",
     "packages/components/src/**/*.vue",
     "packages/components/src/**/*.ts",
