@@ -15,24 +15,29 @@ const props = withDefaults(defineProps<MessageProps>(), {
   showClose: true
 });
 
-const messages = ref<MessageContentProps[]>([]);
+const messageList = ref<MessageContentProps[]>([]);
 const messagesIdx = ref(0);
 
 const width = computed(() => `width:${props.width}px;`);
 const offsetTop = computed(() => `top:${props.offsetTop}px;`);
 const eleSpacing = computed(() => `margin-top:${props.eleSpacing}px;`);
 
-function handleAdd(data: MessageContentProps) {
+function handleAdd(data: MessageContentProps): void {
   const message = { id: messagesIdx.value, ...data };
+
+  if (messageList.value.length === 0) messagesIdx.value = 0;
+
   messagesIdx.value += 1;
-  messages.value.push(message);
+  messageList.value.push(message);
 }
-function handleRemove(idx: string | number) {
-  const findIdx = messages.value.findIndex(item => item.id === idx);
-  messages.value.splice(findIdx, 1);
+
+function handleRemove(idx: string | number): void {
+  const findIdx = messageList.value.findIndex(item => item.id === idx);
+  messageList.value.splice(findIdx, 1);
 }
-function handleRemoveAll() {
-  messages.value = [];
+
+function handleRemoveAll(): void {
+  messageList.value = [];
 }
 
 defineExpose({ handleAdd, handleRemoveAll });
@@ -41,18 +46,18 @@ defineExpose({ handleAdd, handleRemoveAll });
 <template>
   <transition-group tag="div" mode="out-in" name="message" class="su-message-wrap" :style="[width, offsetTop]">
     <MessageContent
-      v-for="(note, noteIdx) in messages"
-      :id="note.id"
-      :key="note.id"
-      :type="note.type"
-      :message="note.message"
+      v-for="(item, itemIdx) in messageList"
+      :id="item.id"
+      :key="item.id"
+      :type="item.type"
+      :message="item.message"
       :show-close="showClose"
       :duration="duration"
-      :style="noteIdx !== 0 && eleSpacing"
+      :style="itemIdx !== 0 && eleSpacing"
       @on-close="handleRemove"
     >
       <template #content>
-        <slot name="content"></slot>
+        <slot name="content" :message="item.message"></slot>
       </template>
 
       <template #cancel>

@@ -3,15 +3,16 @@ import Message from "./Message.vue";
 import type { VNode } from "vue";
 import type { MessageServiceOpen, MessageServiceProps } from "./types";
 
-let instances: VNode;
+let _loadingInstances: VNode;
 
 function message(props?: MessageServiceProps) {
   const { content, cancel, ...argProps } = props || {};
-  instances = instances || dynamicCreate(Message, argProps, { content, cancel });
 
-  document.body.appendChild(instances.el as HTMLElement);
+  _loadingInstances = _loadingInstances || dynamicCreate(Message, argProps, { content, cancel });
 
-  const vm = instances.component!;
+  document.body.appendChild(_loadingInstances.el as HTMLElement);
+
+  const vm = _loadingInstances.component!;
 
   const open = (data: MessageServiceOpen) => vm.exposed!.handleAdd(data);
   const info = (message: string) => vm.exposed!.handleAdd({ message, type: "info" });
