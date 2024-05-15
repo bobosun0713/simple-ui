@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true,
+    "lib": ["ESNext"],
+    "types": ["node", "vite/client"]
+  },
+  "include": ["vite.config.*", "vitest.config.*", "typings/vite-env.d.ts"]
+}

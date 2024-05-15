@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "module": "ESNext",
+    "target": "ESNext",
+    "useDefineForClassFields": true,
+
+    /* Bundler mode */
+    "moduleResolution": "Bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+
+    /* Linting */
+    "strict": true,
+    "skipLibCheck": true,
+
+    // Recommended
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+
+    "baseUrl": ".",
+    "paths": {
+      "@components/*": ["./packages/components/src/*"],
+      "@use/*": ["./packages/use/src/*"],
+      "@utils/*": ["./packages/utils/*"]
+    }
+  }
+}
