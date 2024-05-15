@@ -29,10 +29,14 @@
     "prepare": "husky install",
     "dev": "pnpm --filter ./examples run dev",
     "build": "node --loader ts-node/esm ./packages/vite.config.ts",
-    "test": "vitest",
-    "test:cm": "vitest ./packages/tests/components/*.test.ts",
-    "test:use": "vitest ./packages/tests/use/*.test.ts",
-    "test:cg": "vitest --coverage"
+    "build:cmp": "pnpm build cmp",
+    "build:use": "pnpm build use",
+    "build:dir": "pnpm build dir",
+    "build:all": "pnpm build cmp use dir",
+    "test": "vitest -c ./packages/vitest.config.ts",
+    "test:cmp": "pnpm test ./packages/tests/components/*.test.ts",
+    "test:use": "pnpm test ./packages/tests/use/*.test.ts",
+    "test:cg": "pnpm test --coverage"
   },
   "keywords": [],
   "author": "",
