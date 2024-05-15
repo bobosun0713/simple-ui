@@ -22,11 +22,10 @@ module.exports = {
     parser: "@typescript-eslint/parser",
     project: [
       "./tsconfig.json",
-      "./tsconfig.eslint.json",
       "./tsconfig.web.json",
-      "./tsconfig.vite.json",
-      "./tsconfig.vitest.json",
-      "./tsconfig.examples.json"
+      "./tsconfig.eslint.json",
+      "./packages/tests/tsconfig.json",
+      "./examples/tsconfig.json"
     ],
     extraFileExtensions: [".vue"]
   },
