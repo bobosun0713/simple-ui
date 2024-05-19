@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, getCurrentInstance, ref, watch, onMounted, onBeforeUnmount, isRef, type Ref } from "vue";
+import { computed, getCurrentInstance, ref, watch, onMounted, onUnmounted, isRef, type Ref } from "vue";
 import { dialogInstances } from "./instance";
 import SIcon from "../icon/Icon.vue";
 import SButton from "../button/Button.vue";
@@ -57,7 +57,7 @@ onMounted(() => {
   isVisible.value = getModelValue.value;
 });
 
-onBeforeUnmount(() => {
+onUnmounted(() => {
   props.vanish?.();
   dialogInstances.splice(dialogInstances.indexOf(instance), 1);
 });
