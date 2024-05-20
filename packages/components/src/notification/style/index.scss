@@ -5,29 +5,19 @@
   --su-notification-success: #{$success};
   --su-notification-warning: #{$warning};
   --su-notification-error: #{$error};
-  --su-notification-bg-info: #b3e5fc;
-  --su-notification-bg-success: #c8e6c9;
-  --su-notification-bg-warning: #ffecb3b7;
-  --su-notification-bg-error: #ffcdd2;
+  --su-notification-close: #{$dark-light};
+  --su-notification-text-color: #{$dark};
 }
 
 $notification-colors: (
   info: var(--su-notification-info),
   success: var(--su-notification-success),
   warning: var(--su-notification-warning),
-  danger: var(--su-notification-error)
+  error: var(--su-notification-error)
 );
 
-$notification-bg-colors: (
-  info: var(--su-notification-bg-info),
-  success: var(--su-notification-bg-success),
-  warning: var(--su-notification-bg-warning),
-  danger: var(--su-notification-bg-error)
-);
-
-.su-notification {
+.su-notification-wrap {
   position: fixed;
-  max-width: 600px;
 
   &--right {
     right: 1rem;
@@ -41,33 +31,28 @@ $notification-bg-colors: (
   &--bottom {
     bottom: 1rem;
   }
+}
 
-  &__container {
-    box-shadow: 0.1rem 0 1.2rem 0 rgb(218, 214, 214);
-    border-left: 0.4rem solid map-get($notification-colors, "info");
-    border-radius: 0.4rem;
+.su-notification {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 1.2rem;
+  
+  background-color: $light;
+  border-radius: 0.4rem;
+  border-left: 0.4rem solid map-get($notification-colors, "info");
+  box-shadow: 0.1rem 0 1.2rem 0 rgb(218, 214, 214);
+  color: var(--su-notification-text-color);
 
-    color: $dark;
-    background-color: $light;
-    transition: $default-transition;
-
-    display: flex;
-    align-items: top;
-    justify-content: space-between;
-    padding: 1.2rem;
-
-    > svg {
-      width: 2.8rem;
-      height: 2.8rem;
-    }
-  }
+  transition: $default-transition;
 
   &__content {
-    margin: 0 1.2rem;
-    min-width: 20rem;
+    display: flex;
+    flex-direction: column;
   }
 
-  &__summary {
+  &__title {
     font-size: 1.6rem;
     font-weight: 700;
   }
@@ -84,30 +69,18 @@ $notification-bg-colors: (
     border-radius: 50%;
     background: transparent;
 
-    svg {
+    > svg {
       width: 100%;
       height: 100%;
-      fill: $light;
+      fill: var(--su-notification-close);
     }
   }
 }
 
 // Modifiers
 @each $key, $value in $notification-colors {
-  .su-notification-container--#{$key} {
-    background-color: rgba(map-get($notification-bg-colors, $key), 0.8);
+  .su-notification--#{$key} {
     border-left: 4px solid $value;
-    color: $value;
-
-    > svg {
-      fill: $value;
-    }
-
-    & .su-notification-cancel {
-      > svg {
-        fill: $value;
-      }
-    }
   }
 }
 
