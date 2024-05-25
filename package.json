@@ -34,9 +34,9 @@
     "build:dir": "pnpm build dir",
     "build:all": "pnpm build cmp use dir",
     "test": "vitest -c ./packages/vitest.config.ts",
+    "test:cg": "vitest --coverage -c ./packages/vitest.config.ts",
     "test:cmp": "pnpm test ./packages/tests/components/*.test.ts",
-    "test:use": "pnpm test ./packages/tests/use/*.test.ts",
-    "test:cg": "pnpm test --coverage"
+    "test:use": "pnpm test ./packages/tests/use/*.test.ts"
   },
   "keywords": [],
   "author": "",
