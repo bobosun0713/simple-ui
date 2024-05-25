@@ -5,8 +5,8 @@ import type { NotificationContentProps } from "./types";
 
 const props = withDefaults(defineProps<NotificationContentProps>(), {
   type: "info",
-  title: "Notification Title",
-  message: "Notification Message"
+  title: "Tips",
+  message: "Content"
 });
 
 const emit = defineEmits(["on-close"]);

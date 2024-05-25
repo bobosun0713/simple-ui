@@ -5,7 +5,7 @@ export type NotificationTypes = "success" | "warning" | "info" | "error";
 export type NotificationPlacement = "top-right" | "top-left" | "bottom-right" | "bottom-left";
 
 export interface NotificationProps {
-  width: string | number;
+  width?: string | number;
   offsetTop?: string | number;
   eleSpacing?: string | number;
   duration?: string | number;
