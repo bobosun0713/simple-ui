@@ -13,6 +13,8 @@ interface BuildConfig {
   ourDir: string;
 }
 
+const argv = process.argv.slice(2);
+
 const filename = fileURLToPath(new URL("./", import.meta.url));
 
 function getBuildConfig(buildConfig: BuildConfig): InlineConfig {
@@ -59,70 +61,34 @@ function getBuildConfig(buildConfig: BuildConfig): InlineConfig {
   };
 }
 
-async function runBuild() {
+async function buildFolder(folder: string) {
+  for (const format of ["es", "cjs"]) {
+    await build(
+      getBuildConfig({
+        path: resolve(filename, `${folder}/index.ts`),
+        folder: folder,
+        format: format as Extract<BuildConfig, "format">,
+        minify: true,
+        ourDir: resolve(filename, `dist/${format}/${folder}`)
+      })
+    );
+  }
+}
+
+function runBuild() {
   try {
-    // Build the ES and CJS versions of the components
-    await build(
-      getBuildConfig({
-        path: resolve(filename, "components/index.ts"),
-        folder: "components",
-        format: "es",
-        minify: true,
-        ourDir: resolve(filename, "dist/es/components")
-      })
-    );
+    const buildType = {
+      cmp: () => buildFolder("components"),
+      use: () => buildFolder("use"),
+      dir: () => buildFolder("directives"),
+      all: async () => {
+        await buildType.cmp();
+        await buildType.use();
+        await buildType.dir();
+      }
+    };
 
-    await build(
-      getBuildConfig({
-        path: resolve(filename, "components/index.ts"),
-        folder: "components",
-        format: "cjs",
-        minify: true,
-        ourDir: resolve(filename, "dist/cjs/components")
-      })
-    );
-
-    // Build the ES and CJS versions of the directives
-    await build(
-      getBuildConfig({
-        path: resolve(filename, "directives/index.ts"),
-        folder: "directives",
-        format: "es",
-        minify: true,
-        ourDir: resolve(filename, "dist/es/directives")
-      })
-    );
-
-    await build(
-      getBuildConfig({
-        path: resolve(filename, "directives/index.ts"),
-        folder: "directives",
-        format: "cjs",
-        minify: true,
-        ourDir: resolve(filename, "dist/cjs/directives")
-      })
-    );
-
-    // Build the ES and CJS versions of the use
-    await build(
-      getBuildConfig({
-        path: resolve(filename, "use/index.ts"),
-        folder: "use",
-        format: "es",
-        minify: true,
-        ourDir: resolve(filename, "dist/es/use")
-      })
-    );
-
-    await build(
-      getBuildConfig({
-        path: resolve(filename, "use/index.ts"),
-        folder: "use",
-        format: "cjs",
-        minify: true,
-        ourDir: resolve(filename, "dist/cjs/use")
-      })
-    );
+    buildType[argv[0]]?.() || buildType.all();
   } catch (error) {
     throw new Error(`🔴 Error while building library - ${error}`);
   }
