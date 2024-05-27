@@ -5,5 +5,9 @@
     "lib": ["ESNext"],
     "types": ["node", "vite/client"]
   },
+  "ts-node": {
+    "esm": true,
+    "experimentalSpecifierResolution": "node"
+  },
   "include": ["vite.config.*", "vitest.config.*", "typings/vite-env.d.ts"]
 }

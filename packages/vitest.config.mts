@@ -1,5 +1,4 @@
 import { fileURLToPath } from "node:url";
-import { resolve } from "path";
 import { configDefaults, defineConfig } from "vitest/config";
 import vue from "@vitejs/plugin-vue";
 
@@ -28,9 +27,9 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      "@use": resolve(__dirname, "./use/src"),
-      "@components": resolve(__dirname, "./components/src"),
-      "@utils": resolve(__dirname, "./utils")
+      "@use": "./use/src",
+      "@components": "./components/src",
+      "@utils": "./utils"
     }
   }
 });
