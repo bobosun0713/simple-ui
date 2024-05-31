@@ -2,7 +2,7 @@ import { fileURLToPath } from "node:url";
 import { configDefaults, defineConfig } from "vitest/config";
 import vue from "@vitejs/plugin-vue";
 
-const getCurrentPath = (path: string) => fileURLToPath(new URL(path, import.meta.url));
+const getCurrentPath = (path: string): string => fileURLToPath(new URL(path, import.meta.url));
 
 export default defineConfig({
   plugins: [vue()],
@@ -12,6 +12,7 @@ export default defineConfig({
     exclude: [...configDefaults.exclude],
     root: getCurrentPath("./"),
     coverage: {
+      enabled: true,
       provider: "v8",
       exclude: [
         "**/{index,types}.ts",

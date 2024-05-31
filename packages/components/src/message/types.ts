@@ -16,7 +16,7 @@ export interface MessageContentProps extends Omit<MessageProps, "width"> {
   message?: string | number;
 }
 
-export interface MessageServiceOpen extends Pick<MessageContentProps, "type" | "message"> {}
+export type MessageServiceOpen = Pick<MessageContentProps, "type" | "message">;
 
 export interface MessageServiceSlot {
   content?: MessageSlot;
@@ -24,3 +24,12 @@ export interface MessageServiceSlot {
 }
 
 export interface MessageServiceProps extends MessageProps, MessageServiceSlot {}
+
+export interface MessageServiceReturnType {
+  open: (data: MessageServiceOpen) => void;
+  info: (message: string) => void;
+  success: (message: string) => void;
+  warning: (message: string) => void;
+  error: (message: string) => void;
+  closeAll: () => void;
+}

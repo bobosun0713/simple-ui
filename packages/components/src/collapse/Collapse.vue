@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, provide, type PropType } from "vue";
 
-const modelValue = defineModel({ type: Array as PropType<Array<string> | string>, default: () => [] });
+const modelValue = defineModel({ type: Array as PropType<string[] | string>, default: () => [] });
 
 const props = defineProps({
   accordion: {

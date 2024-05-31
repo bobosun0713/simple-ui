@@ -20,11 +20,11 @@ export interface NotificationContentProps extends Pick<NotificationProps, "durat
   cancel?: MessageHRender;
 }
 
-export interface NotificationServiceProps extends NotificationProps {}
+export type NotificationServiceProps = NotificationProps;
 
-export interface NotificationServiceOpen extends Omit<NotificationContentProps, "id"> {}
+export type NotificationServiceOpen = Omit<NotificationContentProps, "id">;
 
-export interface NotificationServiceCall extends Omit<NotificationContentProps, "type"> {}
+export type NotificationServiceCall = Omit<NotificationContentProps, "type">;
 
 export interface NotificationReturnType {
   open: (data: NotificationServiceOpen) => void;
@@ -32,5 +32,4 @@ export interface NotificationReturnType {
   success: (data: NotificationServiceCall) => void;
   warning: (data: NotificationServiceCall) => void;
   error: (data: NotificationServiceCall) => void;
-  closeAll: () => void;
 }

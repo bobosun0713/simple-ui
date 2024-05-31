@@ -43,13 +43,13 @@ const position = computed(() => ({
 function getTarget(target: string | HTMLElement): HTMLElement | null {
   if (typeof target === "string") {
     if (target === "") return null;
-    return document.querySelector(target) as HTMLElement;
+    return document.querySelector(target)!;
   }
   return target;
 }
 
 function handleBackTop(): void {
-  (currentEl.value || document.documentElement).scrollTo({
+  (currentEl.value ?? document.documentElement).scrollTo({
     top: 0,
     behavior: props.behavior
   });
@@ -57,19 +57,18 @@ function handleBackTop(): void {
 }
 
 function triggerScroll(): void {
-  const scrollTop = (currentEl.value || document.documentElement).scrollTop;
+  const scrollTop = (currentEl.value ?? document.documentElement).scrollTop;
   visible.value = scrollTop > Number(props.visibilityHeight);
 }
 
-onMounted(() => {
-  nextTick(() => {
-    currentEl.value = getTarget(props.target) as HTMLElement;
-    (currentEl.value || document).addEventListener("scroll", triggerScroll);
-  });
+onMounted(async () => {
+  await nextTick();
+  currentEl.value = getTarget(props.target)!;
+  (currentEl.value || document).addEventListener("scroll", triggerScroll);
 });
 
 onBeforeUnmount(() => {
-  (currentEl.value || document).removeEventListener("scroll", triggerScroll);
+  (currentEl.value ?? document).removeEventListener("scroll", triggerScroll);
 });
 </script>
 

@@ -5,8 +5,8 @@ type SFCInstallWithContext<T> = SFCWithInstall<T> & {
   _context: AppContext | null;
 };
 
-export const withInstall = <T>(component: T & Component) => {
-  (component as SFCWithInstall<T>).install = (app: App) => {
+export const withInstall = <T>(component: T & Component): SFCWithInstall<T> => {
+  (component as SFCWithInstall<T>).install = (app: App): void => {
     const { name } = component;
     if (name) {
       app.component(name, component as SFCWithInstall<T>);
@@ -16,8 +16,8 @@ export const withInstall = <T>(component: T & Component) => {
   return component as SFCWithInstall<T>;
 };
 
-export const withInstallFunction = <T>(fn: T, name: string) => {
-  (fn as SFCWithInstall<T>).install = (app: App) => {
+export const withInstallFunction = <T>(fn: T, name: string): SFCInstallWithContext<T> => {
+  (fn as SFCWithInstall<T>).install = (app: App): void => {
     (fn as SFCInstallWithContext<T>)._context = app._context;
     app.config.globalProperties[name] = fn;
   };
@@ -25,7 +25,7 @@ export const withInstallFunction = <T>(fn: T, name: string) => {
   return fn as SFCInstallWithContext<T>;
 };
 
-export const withInstallDirective = <T extends Directive>(directive: T, name: string) => {
+export const withInstallDirective = <T extends Directive>(directive: T, name: string): SFCWithInstall<T> => {
   (directive as SFCWithInstall<T>).install = (app: App): void => {
     app.directive(name, directive);
   };

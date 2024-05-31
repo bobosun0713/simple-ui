@@ -25,7 +25,8 @@ const props = defineProps({
 function handleClick(path: string | object, $event: Event): void {
   $event.preventDefault();
   if (!path || props.disabled) return;
-  router.push(path);
+
+  void router.push(path);
 }
 </script>
 

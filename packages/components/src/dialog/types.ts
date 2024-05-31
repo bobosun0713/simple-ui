@@ -28,20 +28,16 @@ export const dialogProps = {
     default: true
   },
   onConfirm: {
-    type: Function,
-    default: () => {}
+    type: Function
   },
   onClose: {
-    type: Function,
-    default: () => {}
+    type: Function
   },
   onCancel: {
-    type: Function,
-    default: () => {}
+    type: Function
   },
   vanish: {
-    type: Function,
-    default: () => {}
+    type: Function
   }
 };
 

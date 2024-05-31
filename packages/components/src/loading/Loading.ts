@@ -2,12 +2,12 @@ import { ref } from "vue";
 import { dynamicCreate } from "@simple/utils";
 import Loading from "./Loading.vue";
 import type { VNode } from "vue";
-import type { LoadingServiceProps } from "./types";
+import type { LoadingServiceProps, LoadingServiceReturnType } from "./types";
 
 let _loadingInstances: VNode;
 
-function loadingService(props?: LoadingServiceProps) {
-  const { spinner, ...args } = props || {};
+function loadingService(props?: LoadingServiceProps): LoadingServiceReturnType {
+  const { spinner, ...args } = props ?? {};
   const isVisible = ref(false);
 
   _loadingInstances =
@@ -24,8 +24,13 @@ function loadingService(props?: LoadingServiceProps) {
 
   document.body.appendChild(_loadingInstances.el as HTMLElement);
 
-  const open = () => (isVisible.value = true);
-  const close = () => (isVisible.value = false);
+  function open(): void {
+    isVisible.value = true;
+  }
+
+  function close(): void {
+    isVisible.value = false;
+  }
 
   return { open, close };
 }

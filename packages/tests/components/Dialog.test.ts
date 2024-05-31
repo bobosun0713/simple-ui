@@ -1,8 +1,8 @@
 import { mount, flushPromises, type VueWrapper } from "@vue/test-utils";
 import { withSetup } from "@utils/index";
-
 import Dialog from "@components/dialog/Dialog.vue";
 import DialogService from "@components/dialog/Dialog";
+import type { defineComponent } from "vue";
 import type { DialogServiceReturnType, DialogSize } from "@components/dialog/types";
 
 describe("Dialog.vue", () => {
@@ -59,10 +59,10 @@ describe("Dialog.vue", () => {
       ["md", "su-dialog__content--md"],
       ["lg", "su-dialog__content--lg"],
       ["xl", "su-dialog__content--xl"]
-    ])("should have `su-dialog__content--%s` class", async (size: DialogSize, expected) => {
+    ])("should have `su-dialog__content--%s` class", (size, expected) => {
       const wrapper = mount(Dialog, {
         props: {
-          size
+          size: size as DialogSize
         },
         global: {
           stubs: {
@@ -146,7 +146,7 @@ describe("Dialog.vue", () => {
       });
 
       await vi.dynamicImportSettled();
-      await wrapper.findAll(".su-dialog__default-btn .su-button").at(0).trigger("click");
+      await wrapper.findAll(".su-dialog__default-btn .su-button").at(0)?.trigger("click");
 
       expect(wrapper.emitted("on-cancel")).toBeTruthy();
     });
@@ -161,7 +161,7 @@ describe("Dialog.vue", () => {
       });
 
       await vi.dynamicImportSettled();
-      await wrapper.findAll(".su-dialog__default-btn .su-button").at(1).trigger("click");
+      await wrapper.findAll(".su-dialog__default-btn .su-button").at(1)?.trigger("click");
 
       expect(wrapper.emitted("on-confirm")).toBeTruthy();
     });
@@ -173,62 +173,44 @@ describe("Dialog.vue", () => {
 
     afterEach(() => {
       document.body.innerHTML = "";
-      app.unmount();
+      app!.unmount();
     });
 
-    it("should confirm dialog", async () => {
-      confirm({
+    it("should show dialog", () => {
+      void confirm({
         header: "API-Title",
         body: "API-Content"
       });
 
-      await flushPromises();
+      // await flushPromises();
 
-      expect(document.querySelector(".su-dialog")).toBeTruthy();
+      // expect(result).toHaveBeenCalledTimes(1)
       expect(document.querySelector(".su-dialog__header")?.innerHTML).toContain("API-Title");
       expect(document.querySelector(".su-dialog__content")?.innerHTML).toContain("API-Content");
     });
 
     it("should return `close` when close button is clicked", async () => {
-      let resolve: string = "";
+      const result = confirm();
 
-      confirm().then(res => {
-        resolve = res;
-      });
+      (document.querySelector(".su-dialog__close") as HTMLElement).click();
 
-      (document.querySelector(".su-dialog__close") as HTMLElement)?.click();
-
-      await flushPromises();
-
-      expect(resolve).toBe("close");
+      await expect(result).resolves.toBe("close");
     });
 
     it("should return `cancel` when cancel button is clicked", async () => {
-      let resolve: string = "";
+      const result = confirm();
 
-      confirm().then(res => {
-        resolve = res;
-      });
+      (document.querySelectorAll(".su-dialog__footer .su-button")[0] as HTMLElement).click();
 
-      (document.querySelectorAll(".su-dialog__footer .su-button")[0] as HTMLElement)?.click();
-
-      await flushPromises();
-
-      expect(resolve).toBe("cancel");
+      await expect(result).resolves.toBe("cancel");
     });
 
     it("should return `confirm` when confirm button is clicked", async () => {
-      let resolve: string = "";
-
-      confirm().then(res => {
-        resolve = res;
-      });
+      const result = confirm();
 
       (document.querySelectorAll(".su-dialog__footer .su-button")[1] as HTMLElement)?.click();
 
-      await flushPromises();
-
-      expect(resolve).toBe("confirm");
+      await expect(result).resolves.toBe("confirm");
     });
 
     it("should log a warning when dialog with the given ID is not found", async () => {
@@ -242,14 +224,12 @@ describe("Dialog.vue", () => {
     });
 
     describe("when dialog is used with the API", () => {
-      let wrapper: VueWrapper<any>;
-
-      const createComponent = () =>
+      const createComponent = (): VueWrapper =>
         mount({
           template: `
-            <Dialog id='dialog1' v-model:visible='isVisible1'></Dialog>
-            <Dialog id='dialog2' v-model:visible='isVisible2'></Dialog>
-            `,
+        <Dialog id='dialog1' v-model:visible='isVisible1'></Dialog>
+        <Dialog id='dialog2' v-model:visible='isVisible2'></Dialog>
+        `,
           components: {
             Dialog
           },
@@ -260,6 +240,8 @@ describe("Dialog.vue", () => {
             };
           }
         });
+
+      let wrapper: VueWrapper<InstanceType<ReturnType<typeof defineComponent>>>;
 
       beforeEach(() => {
         wrapper = createComponent();
@@ -275,6 +257,8 @@ describe("Dialog.vue", () => {
         showDialog("dialog1");
 
         await flushPromises();
+
+        console.log(wrapper.vm.isVisible1);
 
         expect(wrapper.vm.isVisible1).toBe(true);
       });

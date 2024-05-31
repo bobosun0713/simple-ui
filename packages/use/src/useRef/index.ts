@@ -7,7 +7,7 @@ export function useRef<T>(target: T): RefWithReset<T> {
   const targetClone = deepClone(target);
   const initialState = ref(target) as RefWithReset<T>;
 
-  initialState.reset = () => {
+  initialState.reset = (): void => {
     if (typeof initialState.value === "object" && initialState.value !== null) {
       initialState.value = Object.assign(initialState.value, deepClone(targetClone));
     } else {

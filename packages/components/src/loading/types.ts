@@ -5,3 +5,8 @@ export interface LoadingServiceProps {
   spinner?: Parameters<typeof h>[2];
   duration?: number;
 }
+
+export interface LoadingServiceReturnType {
+  open: () => void;
+  close: () => void;
+}

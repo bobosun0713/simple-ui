@@ -1,19 +1,19 @@
-import { customRef } from "vue";
+import { customRef, type Ref } from "vue";
 
-export function useDebounceValue<T>(value: T, delay = 300) {
+export function useDebounceValue<T>(value: T, delay = 300): Ref<T> {
   let timer: number | null = null;
 
-  const clearTimer = () => {
+  function clearTimer(): void {
     if (timer) clearTimeout(timer);
-  };
+  }
 
   return customRef((track, trigger) => {
     return {
-      get() {
+      get(): T {
         track();
         return value;
       },
-      set(newValue: T) {
+      set(newValue: T): void {
         clearTimer();
         timer = window.setTimeout(() => {
           value = newValue;

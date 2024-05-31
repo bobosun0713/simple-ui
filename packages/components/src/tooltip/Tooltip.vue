@@ -30,27 +30,27 @@ const {
 } = useElementBounding(tooltipRef as unknown as HTMLElement);
 
 function calcPlacementPos(placement: TooltipPlacement): void {
-  const { width: contentWidth, height: contentHeight } = tooltipContentRef.value?.getBoundingClientRect() || {};
-  tooltipContentWidth.value = contentWidth || 0;
-  tooltipContentHeight.value = contentHeight || 0;
+  const { width: contentWidth, height: contentHeight } = tooltipContentRef.value?.getBoundingClientRect() ?? {};
+  tooltipContentWidth.value = contentWidth ?? 0;
+  tooltipContentHeight.value = contentHeight ?? 0;
 
   const commonTopValue = window.scrollY + tooltipY.value + (tooltipHeight.value - tooltipContentHeight.value) / 2;
   const commonLeftValue = tooltipX.value + (tooltipWidth.value - tooltipContentWidth.value) / 2;
 
   const placementMap = {
-    top() {
+    top(): void {
       tooltipContentLeft.value = commonLeftValue;
       tooltipContentTop.value = window.scrollY + tooltipY.value - tooltipContentHeight.value - Number(props.offset);
     },
-    right() {
+    right(): void {
       tooltipContentLeft.value = tooltipX.value + tooltipWidth.value + Number(props.offset);
       tooltipContentTop.value = commonTopValue;
     },
-    bottom() {
+    bottom(): void {
       tooltipContentLeft.value = commonLeftValue;
       tooltipContentTop.value = window.scrollY + tooltipY.value + tooltipHeight.value + Number(props.offset);
     },
-    left() {
+    left(): void {
       tooltipContentLeft.value = tooltipX.value - tooltipContentWidth.value - Number(props.offset);
       tooltipContentTop.value = commonTopValue;
     }
@@ -121,7 +121,7 @@ function handleMouseover(visible: boolean): void {
 
 function triggerPlacement(): void {
   if (!isVisible.value) return;
-  nextTick(() => {
+  void nextTick(() => {
     calcPlacementPos(props.placement);
     checkTouchEdge();
   });
@@ -142,12 +142,12 @@ watch(
 );
 
 onMounted(() => {
-  [window, ...collectScroll(tooltipRef.value as HTMLElement)].forEach(ele => {
+  [window, ...collectScroll(tooltipRef.value!)].forEach(ele => {
     ele.addEventListener("scroll", triggerPlacement);
   });
 });
 onUnmounted(() => {
-  [window, ...collectScroll(tooltipRef.value as HTMLElement)].forEach(ele => {
+  [window, ...collectScroll(tooltipRef.value!)].forEach(ele => {
     ele.removeEventListener("scroll", triggerPlacement);
   });
 });

@@ -12,7 +12,9 @@ export function useReactive<T extends object>(target: T): ReactiveWithReset<T> |
   const targetClone = deepClone(target);
   const initialState = reactive(target) as ReactiveWithReset<T>;
 
-  initialState.reset = () => Object.assign(initialState, deepClone(targetClone));
+  initialState.reset = (): void => {
+    Object.assign(initialState, deepClone(targetClone));
+  };
 
   return initialState;
 }

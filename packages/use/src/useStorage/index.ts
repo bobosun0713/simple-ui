@@ -6,7 +6,7 @@ function getDefaultStorage<T>(key: string, value: T, storage: Storage): T {
   const getStorage = storage.getItem(key);
   if (getStorage) {
     try {
-      return JSON.parse(getStorage);
+      return JSON.parse(getStorage) as T;
     } catch {
       return value;
     }

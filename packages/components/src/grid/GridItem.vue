@@ -5,7 +5,7 @@ defineOptions({
   name: "SGridItem"
 });
 
-const { col, gap }: { col?: string | number; gap?: string | number } = inject("gridProps") || {};
+const { col, gap }: { col?: string | number; gap?: string | number } = inject("gridProps") ?? {};
 
 const styles = computed(() => {
   const currentCol = isRef(col) ? Number(col.value) : Number(col);

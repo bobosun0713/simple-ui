@@ -10,13 +10,12 @@ import type {
 } from "./types";
 
 // TODO: Does it need to be a global type?
-// eslint-disable-next-line @typescript-eslint/ban-types
-type NonFunction<T> = T extends Function ? never : T;
+type NonFunction<T> = T extends () => void ? never : T;
 
 function renderDialog(constructor: Component, props: Record<string, any>, slots?: Record<string, any>): void {
   const container = document.createElement("div");
 
-  props.vanish = () => {
+  props.vanish = (): void => {
     render(null, container);
   };
 
@@ -27,9 +26,9 @@ function renderDialog(constructor: Component, props: Record<string, any>, slots?
 }
 
 function executeExposeAction(id: string | number, action: (exposed: DialogExposeAction) => void): void {
-  nextTick(() => {
+  void nextTick(() => {
     const dialog = dialogInstances.find(item => item.props.id === id);
-    if (dialog && dialog.exposed) action(dialog.exposed as DialogExposeAction);
+    if (dialog?.exposed) action(dialog.exposed as DialogExposeAction);
     else console.warn(`[Dialog] dialog with id '${id}' not found`);
   });
 }
@@ -38,14 +37,14 @@ function dialogService(): DialogServiceReturnType {
   const confirm = (props?: DialogServiceProps): Promise<string> => {
     const isVisible = ref(true);
 
-    const { header, body, footer, ...args } = props || {};
+    const { header, body, footer, ...args } = props ?? {};
 
     return new Promise(resolve => {
       const createSlot = (slot: DialogSlot): ((fn?: DialogSlotAction) => NonFunction<typeof slot>) =>
-        typeof slot === "function" ? slot : () => slot;
+        typeof slot === "function" ? slot : (): unknown => slot;
 
       renderDialog(
-        SDialog,
+        SDialog as Component, // Specify the type of SDialog as Component
         {
           ...args,
           visible: isVisible,
@@ -64,11 +63,12 @@ function dialogService(): DialogServiceReturnType {
     });
   };
 
-  const showDialog = (id: string | number) => executeExposeAction(id, exposed => exposed.handleToggle(true));
+  const showDialog = (id: string | number): void => executeExposeAction(id, exposed => exposed.handleToggle(true));
 
-  const closeDialog = (id: string | number) => executeExposeAction(id, exposed => exposed.handleToggle(false));
+  const closeDialog = (id: string | number): void => executeExposeAction(id, exposed => exposed.handleToggle(false));
 
-  const closeAll = () => dialogInstances.forEach(item => item.exposed?.handleToggle(false));
+  const closeAll = (): void =>
+    dialogInstances.forEach(item => (item.exposed as DialogExposeAction).handleToggle(false));
 
   return { confirm, showDialog, closeDialog, closeAll };
 }
