@@ -1,13 +1,11 @@
 <script setup lang="ts">
 import { ref, provide, type PropType } from "vue";
+import { CollapseProps } from "./types";
 
 const modelValue = defineModel({ type: Array as PropType<string[] | string>, default: () => [] });
 
-const props = defineProps({
-  accordion: {
-    type: Boolean,
-    default: false
-  }
+const props = withDefaults(defineProps<CollapseProps>(), {
+  accordion: false
 });
 
 const activeNames = ref(Array.isArray(modelValue.value) ? [...modelValue.value] : []);

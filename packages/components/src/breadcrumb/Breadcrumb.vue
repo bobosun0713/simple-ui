@@ -1,27 +1,15 @@
 <script setup lang="ts">
-import { type PropType } from "vue";
-import type { BreadcrumbItem } from "./types";
-
 import SIcon from "../icon/Icon.vue";
 import SBreadcrumbItem from "./BreadcrumbItem.vue";
+import type { BreadcrumbProps } from "./types";
 
 defineOptions({
   name: "SBreadcrumb"
 });
 
-defineProps({
-  prepend: {
-    type: [String, Number],
-    default: ""
-  },
-  separator: {
-    type: [String, Number],
-    default: ""
-  },
-  items: {
-    type: Array as PropType<(BreadcrumbItem | string | number)[]>,
-    default: () => []
-  }
+withDefaults(defineProps<BreadcrumbProps>(), {
+  prepend: "",
+  separator: ""
 });
 </script>
 

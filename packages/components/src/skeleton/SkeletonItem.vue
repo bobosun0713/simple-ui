@@ -1,17 +1,14 @@
 <script setup lang="ts">
-import { computed, type PropType } from "vue";
+import { computed } from "vue";
 import SIcon from "../icon/Icon.vue";
-import type { Variant } from "./types";
+import type { SkeletonItemProps } from "./types";
 
 defineOptions({
   name: "SkeletonItem"
 });
 
-const props = defineProps({
-  variant: {
-    type: String as PropType<Variant>,
-    default: "p"
-  }
+const props = withDefaults(defineProps<SkeletonItemProps>(), {
+  variant: "p"
 });
 
 const classes = computed(() => [

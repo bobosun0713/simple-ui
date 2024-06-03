@@ -1,21 +1,13 @@
 <script lang="ts" setup>
 import { ref, onMounted, computed, inject, type Ref } from "vue";
+import { CollapseItemProps } from "./types";
 
 const collapse = inject<{ activeNames: Ref<[string, number]>; handleActive: (name: string) => void }>("collapse");
 
-const props = defineProps({
-  name: {
-    type: String,
-    default: () => crypto.randomUUID()
-  },
-  title: {
-    type: String,
-    default: "Tips"
-  },
-  content: {
-    type: String,
-    default: "Collapse Content"
-  }
+const props = withDefaults(defineProps<CollapseItemProps>(), {
+  name: "",
+  title: "Tips",
+  content: "Collapse Content"
 });
 
 const contentRef = ref<HTMLDivElement | null>(null);

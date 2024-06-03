@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import { computed, PropType } from "vue";
-import type { LinkType, LinkTarget } from "./types";
+import { computed } from "vue";
+import type { LinkProps } from "./types";
 
 defineOptions({
   name: "SLink"
 });
 
-const props = defineProps({
-  type: { type: String as PropType<LinkType>, default: "default" },
-  href: { type: String, default: "" },
-  underline: { type: Boolean, default: true },
-  disabled: { type: Boolean, default: false },
-  target: { type: String as PropType<LinkTarget>, default: "_self" }
+const props = withDefaults(defineProps<LinkProps>(), {
+  type: "default",
+  href: "",
+  underline: true,
+  disabled: false,
+  target: "_self"
 });
 
 const classes = computed(() => {

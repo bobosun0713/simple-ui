@@ -1,13 +1,20 @@
 <script lang="ts" setup>
 import { ref, computed, nextTick, watch, onMounted, onUnmounted } from "vue";
 import { useElementBounding, useWindowSize } from "@vueuse/core";
-import { tooltipProps, type TooltipPlacement } from "./types";
+import type { TooltipProps, TooltipPlacement } from "./types";
 
 defineOptions({
   name: "STooltip"
 });
 
-const props = defineProps(tooltipProps);
+const props = withDefaults(defineProps<TooltipProps>(), {
+  modelValue: false,
+  content: "Tooltip!",
+  offset: 4,
+  trigger: "hover",
+  placement: "top"
+});
+
 const emits = defineEmits(["update:modelValue"]);
 
 const isVisible = ref(false);

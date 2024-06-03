@@ -1,45 +1,19 @@
-import type { Ref, h, PropType } from "vue";
+import type { Ref, h } from "vue";
 
 export type DialogSize = "sm" | "md" | "lg" | "xl";
 
-export const dialogProps = {
-  visible: {
-    type: [Boolean, Object as () => Ref<boolean>],
-    default: false
-  },
-  id: {
-    type: String,
-    default: ""
-  },
-  size: {
-    type: String as PropType<DialogSize>,
-    default: "md"
-  },
-  showClose: {
-    type: Boolean,
-    default: true
-  },
-  appendToBody: {
-    type: Boolean,
-    default: true
-  },
-  closeOnOverlay: {
-    type: Boolean,
-    default: true
-  },
-  onConfirm: {
-    type: Function
-  },
-  onClose: {
-    type: Function
-  },
-  onCancel: {
-    type: Function
-  },
-  vanish: {
-    type: Function
-  }
-};
+export interface DialogProps {
+  visible?: boolean | Ref<boolean>;
+  id?: string;
+  size?: DialogSize;
+  showClose?: boolean;
+  appendToBody?: boolean;
+  closeOnOverlay?: boolean;
+  onConfirm?: () => void;
+  onClose?: () => void;
+  onCancel?: () => void;
+  vanish?: () => void;
+}
 
 export interface DialogExposeAction {
   handleToggle: (arg: boolean) => void;

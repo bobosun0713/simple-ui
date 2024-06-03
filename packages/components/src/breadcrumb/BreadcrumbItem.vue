@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router";
+import type { BreadcrumbItem } from "./types";
 
 const router = useRouter();
 
@@ -7,19 +8,10 @@ defineOptions({
   name: "SBreadcrumbItem"
 });
 
-const props = defineProps({
-  title: {
-    type: [String, Number],
-    default: ""
-  },
-  href: {
-    type: String,
-    default: ""
-  },
-  disabled: {
-    type: Boolean,
-    default: false
-  }
+const props = withDefaults(defineProps<BreadcrumbItem>(), {
+  title: "",
+  href: "",
+  disabled: false
 });
 
 function handleClick(path: string | object, $event: Event): void {

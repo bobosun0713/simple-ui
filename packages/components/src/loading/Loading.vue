@@ -1,20 +1,16 @@
 <script lang="ts" setup>
-import { onUnmounted, watch, computed, isRef, ref, type Ref } from "vue";
+import { onUnmounted, watch, computed, isRef, ref } from "vue";
 import SIcon from "../icon/Icon.vue";
+
+import { LoadingProps } from "./types";
 
 defineOptions({
   name: "SLoading"
 });
 
-const props = defineProps({
-  visible: {
-    type: [Boolean, Object as () => Ref<boolean>],
-    default: false
-  },
-  duration: {
-    type: Number,
-    default: 2000
-  }
+const props = withDefaults(defineProps<LoadingProps>(), {
+  visible: false,
+  duration: 2000
 });
 
 const emits = defineEmits(["update:visible"]);

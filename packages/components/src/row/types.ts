@@ -1,2 +1,5 @@
-export type RowJustify = "end" | "center" | "between" | "around";
-export type RowAlign = "center" | "bottom";
+export interface RowProps {
+  justify?: "end" | "center" | "between" | "around";
+  align?: "center" | "bottom";
+  gutter?: number;
+}

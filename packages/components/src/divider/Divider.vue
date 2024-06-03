@@ -1,17 +1,16 @@
 <script setup lang="ts">
-import { computed, type PropType } from "vue";
-
-import type { BorderStyle } from "./types";
+import { computed } from "vue";
+import type { DividerProps } from "./types";
 
 defineOptions({
   name: "SDivider"
 });
 
-const props = defineProps({
-  vertical: { type: Boolean, default: false },
-  thickness: { type: [String, Number], default: 1 },
-  spacing: { type: [String, Number], default: 24 },
-  borderStyle: { type: String as PropType<BorderStyle>, default: "solid" }
+const props = withDefaults(defineProps<DividerProps>(), {
+  vertical: false,
+  thickness: 1,
+  spacing: 24,
+  borderStyle: "solid"
 });
 
 const directionClasses = computed(() => ({

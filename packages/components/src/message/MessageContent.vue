@@ -15,10 +15,11 @@ const emit = defineEmits(["on-close"]);
 
 let timer: number | null = null;
 
-function handleClose(idx: string | number) {
+function handleClose(idx: string | number): void {
   emit("on-close", idx);
 }
-function handleAutoHide() {
+
+function handleAutoHide(): void {
   timer = window.setTimeout(() => {
     handleClose(props.id as number);
   }, Number(props.duration));

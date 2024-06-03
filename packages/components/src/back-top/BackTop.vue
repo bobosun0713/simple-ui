@@ -1,36 +1,20 @@
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount, computed, nextTick, type PropType } from "vue";
+import { ref, onMounted, onBeforeUnmount, computed, nextTick } from "vue";
+import type { BackTopProps } from "./types";
 
 defineOptions({
   name: "SBackTop"
 });
 
-const props = defineProps({
-  target: {
-    type: [String, HTMLElement],
-    default: ""
-  },
-  right: {
-    type: Number,
-    default: 50
-  },
-  bottom: {
-    type: Number,
-    default: 50
-  },
-  visibilityHeight: {
-    type: Number,
-    default: 100
-  },
-  behavior: {
-    type: String as PropType<ScrollBehavior>,
-    default: "smooth"
-  },
-  animation: {
-    type: String,
-    default: "fade"
-  }
+const props = withDefaults(defineProps<BackTopProps>(), {
+  target: "",
+  right: 50,
+  bottom: 50,
+  visibilityHeight: 100,
+  behavior: "smooth",
+  animation: "fade"
 });
+
 const emits = defineEmits(["on-click"]);
 
 const visible = ref(false);

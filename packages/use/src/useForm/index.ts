@@ -34,7 +34,7 @@ async function checkRule(
   state.status = undefined;
   state.message = undefined;
 
-  const isTruthyOrString = (input: unknown) => {
+  const isTruthyOrString = (input: unknown): boolean => {
     if (typeof input === "string") return false;
     return !!input;
   };
@@ -47,6 +47,7 @@ async function checkRule(
     if (typeof rule === "string") result = rulesContainer[rule].call?.(null, value);
 
     // The async rule simply waits for asynchronous events, so there is no need to return a reject, just return the message.
+    // eslint-disable-next-line @typescript-eslint/await-thenable
     if (typeof rule === "function") result = await rule(value, allValues);
 
     if (typeof rule === "object") {
@@ -71,15 +72,16 @@ async function checkRule(
 
 function initValidator(rules: RulesType, values: Values, state: State): Validator {
   return Object.keys(values).reduce((acc, key) => {
-    acc[key] = () => checkRule(values[key], rules[key], state[key], values);
+    // @ts-ignore
+    acc[key] = checkRule(values[key], rules[key], state[key], values);
     return acc;
   }, {} as Validator);
 }
 
 export function useForm(schema: Schema): UseFormReturnType {
-  const values: ValuesType = useRef(schema["initialValues"]);
+  const values: ValuesType = useRef(schema.initialValues);
   const state: StateType = useRef(initialFormState(schema));
-  const rules: RulesType = schema["rules"] || {};
+  const rules: RulesType = schema.rules ?? {};
   const validator: Validator = initValidator(rules, values.value, state.value);
 
   const registerRule: RegisterRule = (name, validate) => {
@@ -92,6 +94,7 @@ export function useForm(schema: Schema): UseFormReturnType {
 
     for (const name in validator) {
       // If `validator[name]` is a Promise, it will wait for the validator.
+      // eslint-disable-next-line @typescript-eslint/await-thenable
       await validator[name]();
     }
 

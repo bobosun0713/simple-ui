@@ -1,24 +1,16 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import SkeletonItem from "./SkeletonItem.vue";
+import type { SkeletonProps } from "./types";
 
 defineOptions({
   name: "SSkeleton"
 });
 
-const props = defineProps({
-  rows: {
-    type: Number,
-    default: 2
-  },
-  loading: {
-    type: Boolean,
-    default: true
-  },
-  animated: {
-    type: Boolean,
-    default: true
-  }
+const props = withDefaults(defineProps<SkeletonProps>(), {
+  rows: 2,
+  loading: true,
+  animated: true
 });
 
 const classes = computed(() => [

@@ -1,8 +1,5 @@
-import { tooltipProps } from "../tooltip/types";
+import type { TooltipProps } from "../tooltip/types";
 
-export const popoverProps = Object.assign({}, tooltipProps, {
-  offset: {
-    type: [String, Number],
-    default: 0
-  }
-});
+export interface PopoverProps extends TooltipProps {
+  offset?: number;
+}

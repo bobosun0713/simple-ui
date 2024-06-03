@@ -1,16 +1,17 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import type { FieldProps } from "./types";
 
 defineOptions({
   name: "SField"
 });
 
-const props = defineProps({
-  type: { type: String, default: "" },
-  label: { type: String, default: "" },
-  message: { type: String, default: "" },
-  labelPosition: { type: String, default: "border" },
-  showMessages: { type: Boolean, default: true }
+const props = withDefaults(defineProps<FieldProps>(), {
+  type: "",
+  label: "",
+  message: "",
+  labelPosition: "border",
+  showMessages: true
 });
 
 const hasMessage = computed(() => !!props.message);

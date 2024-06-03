@@ -1,9 +1,9 @@
-export type RowProvider = {
+export interface RowProvider {
   prop: string;
   sort: string | boolean;
   sortBy: string;
   sortActive: boolean;
-};
+}
 
 export interface TableProps {
   data: any[];

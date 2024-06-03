@@ -1,9 +1,13 @@
 import type { h } from "vue";
 
-// TODO: Define a global type for the h function
-export interface LoadingServiceProps {
-  spinner?: Parameters<typeof h>[2];
+export interface LoadingProps {
+  visible?: boolean;
   duration?: number;
+}
+
+export interface LoadingServiceProps extends Pick<LoadingProps, "duration"> {
+  // TODO: Define a global type for the h function
+  spinner?: Parameters<typeof h>[2];
 }
 
 export interface LoadingServiceReturnType {

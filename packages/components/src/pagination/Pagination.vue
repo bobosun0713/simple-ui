@@ -2,33 +2,20 @@
 import { computed } from "vue";
 import SIcon from "../icon/Icon.vue";
 
+import type { PaginationProps } from "./types";
+
 defineOptions({
   name: "SPagination"
 });
 
 const current = defineModel("current", { type: Number, default: 1 });
 
-const props = defineProps({
-  perPage: {
-    type: Number,
-    default: 3
-  },
-  total: {
-    type: Number,
-    default: 0
-  },
-  pager: {
-    type: Number,
-    default: 5
-  },
-  rounded: {
-    type: Boolean,
-    default: true
-  },
-  disabled: {
-    type: Boolean,
-    default: false
-  }
+const props = withDefaults(defineProps<PaginationProps>(), {
+  perPage: 3,
+  total: 0,
+  pager: 5,
+  rounded: true,
+  disabled: false
 });
 
 const totalPage = computed(() => Math.ceil(props.total / props.perPage) || 1);
@@ -40,7 +27,7 @@ const pagerList = computed(() => {
   const pagerLastHalf = Math.floor(props.pager / 2);
 
   let startPage = 1;
-  let endPage = current.value + props.pager - 1;
+  let endPage = current.value + Number(props.pager) - 1;
 
   if (totalPage.value <= props.pager) {
     startPage = 1;

@@ -1,2 +1,8 @@
-export type ButtonTypes = "success" | "warning" | "info" | "error";
-export type ButtonSizes = "sm" | "md" | "lg" | "xl";
+export interface ButtonProps {
+  type: "success" | "warning" | "info" | "error";
+  size: "sm" | "md" | "lg" | "xl";
+  outlined: boolean;
+  loading: boolean;
+  rounded: boolean;
+  disabled: boolean;
+}

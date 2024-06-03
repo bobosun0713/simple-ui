@@ -2,13 +2,16 @@
 import { computed } from "vue";
 import STooltip from "../tooltip/Tooltip.vue";
 
-import { popoverProps } from "./types";
+import type { PopoverProps } from "./types";
 
 defineOptions({
   name: "SPopover"
 });
 
-const props = defineProps(popoverProps);
+const props = withDefaults(defineProps<PopoverProps>(), {
+  offset: 0
+});
+
 const emits = defineEmits(["update:modelValue"]);
 
 const calcOffset = computed(() => 6.5 + Number(props.offset));

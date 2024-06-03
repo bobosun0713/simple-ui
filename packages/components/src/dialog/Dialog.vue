@@ -3,8 +3,7 @@ import { computed, getCurrentInstance, ref, watch, onMounted, onUnmounted, isRef
 import { dialogInstances } from "./instance";
 import SIcon from "../icon/Icon.vue";
 import SButton from "../button/Button.vue";
-import { dialogProps } from "./types";
-import type { DialogSlotAction, DialogExposeAction } from "./types";
+import type { DialogProps, DialogSlotAction, DialogExposeAction } from "./types";
 
 defineOptions({
   name: "SDialog"
@@ -13,7 +12,13 @@ defineOptions({
 const instance = getCurrentInstance()!;
 dialogInstances.push(instance);
 
-const props = defineProps(dialogProps);
+const props = withDefaults(defineProps<DialogProps>(), {
+  visible: false,
+  size: "md",
+  closeOnOverlay: true,
+  showClose: true,
+  appendToBody: true
+});
 
 const emits = defineEmits(["update:visible", "on-cancel", "on-confirm", "on-close"]);
 
@@ -75,7 +80,7 @@ defineExpose<DialogExposeAction>({
           <div class="su-dialog__header">
             <slot name="header">Tips</slot>
             <button v-if="showClose" type="button" class="su-dialog__close" @click="handleClose">
-              <SIcon name="close" width="24" height="24"></SIcon>
+              <SIcon name="close" :width="24" :height="24"></SIcon>
             </button>
           </div>
           <div class="su-dialog__body">
