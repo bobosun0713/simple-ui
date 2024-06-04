@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { provide, ref, computed, watch } from "vue";
-import type { RowProps } from "./types";
+import { provide, computed, watch, ref } from "vue";
+import { rowGutterKey, type RowProps } from "./types";
 
 defineOptions({
   name: "SRow"
@@ -28,7 +28,7 @@ watch(
   }
 );
 
-provide("gutter", gutter);
+provide(rowGutterKey, gutter);
 </script>
 
 <template>
