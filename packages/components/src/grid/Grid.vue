@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { provide, ref, computed, watch } from "vue";
-import { GridProps } from "./types";
+import { gridPropsKey, type GridProps } from "./types";
 
 defineOptions({
   name: "SGrid"
@@ -11,20 +11,20 @@ const props = withDefaults(defineProps<GridProps>(), {
   gap: 0
 });
 
-const colCount = ref(props.col);
-const colGap = ref(props.gap);
+const col = ref(props.col);
+const gap = ref(props.gap);
 
-const styles = computed(() => ({ gap: `${colGap.value}px` }));
+const styles = computed(() => ({ gap: `${gap.value}px` }));
 
 watch(
   () => [props.col, props.gap],
   () => {
-    colCount.value = props.col;
-    colGap.value = props.gap;
+    col.value = props.col;
+    gap.value = props.gap;
   }
 );
 
-provide("gridProps", { col: colCount, gap: colGap });
+provide(gridPropsKey, { col, gap });
 </script>
 
 <template>
