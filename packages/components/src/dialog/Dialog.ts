@@ -1,4 +1,5 @@
-import { h, render, nextTick, ref, type Component } from "vue";
+import { h, nextTick, ref } from "vue";
+import { mountInstance } from "@simple/utils";
 import { dialogInstances } from "./instance";
 import SDialog from "./Dialog.vue";
 import type {
@@ -11,19 +12,6 @@ import type {
 
 // TODO: Does it need to be a global type?
 type NonFunction<T> = T extends () => void ? never : T;
-
-function renderDialog(constructor: Component, props: Record<string, any>, slots?: Record<string, any>): void {
-  const container = document.createElement("div");
-
-  props.vanish = (): void => {
-    render(null, container);
-  };
-
-  const VNode = h(constructor, props, slots);
-  render(VNode, container);
-
-  document.body.appendChild(container.firstElementChild!);
-}
 
 function executeExposeAction(id: string | number, action: (exposed: DialogExposeAction) => void): void {
   void nextTick(() => {
@@ -43,22 +31,25 @@ function dialogService(): DialogServiceReturnType {
       const createSlot = (slot: DialogSlot): ((fn?: DialogSlotAction) => NonFunction<typeof slot>) =>
         typeof slot === "function" ? slot : (): unknown => slot;
 
-      renderDialog(
-        SDialog as Component, // Specify the type of SDialog as Component
-        {
-          ...args,
-          visible: isVisible,
-          appendToBody: false,
-          "onUpdate:visible": (val: boolean) => (isVisible.value = val),
-          onConfirm: () => resolve("confirm"),
-          onCancel: () => resolve("cancel"),
-          onClose: () => resolve("close")
-        },
-        {
-          header: createSlot(header),
-          body: createSlot(body),
-          footer: createSlot(footer)
-        }
+      const { unmount } = mountInstance(() =>
+        h(
+          SDialog,
+          {
+            ...args,
+            visible: isVisible,
+            appendToBody: false,
+            "onUpdate:visible": (val: boolean) => (isVisible.value = val),
+            onConfirm: () => resolve("confirm"),
+            onCancel: () => resolve("cancel"),
+            onClose: () => resolve("close"),
+            vanish: () => unmount()
+          },
+          {
+            header: createSlot(header),
+            body: createSlot(body),
+            footer: createSlot(footer)
+          }
+        )
       );
     });
   };

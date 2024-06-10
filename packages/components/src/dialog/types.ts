@@ -12,6 +12,7 @@ export interface DialogProps {
   onConfirm?: () => void;
   onClose?: () => void;
   onCancel?: () => void;
+  beforeClose?: (done: () => void) => void;
   vanish?: () => void;
 }
 
@@ -41,7 +42,7 @@ export interface DialogServiceProps {
   header?: DialogSlot;
   body?: DialogSlot;
   footer?: DialogSlot;
-  vanish?: () => void;
+  beforeClose?: (done: () => void) => void;
 }
 
 export interface DialogServiceReturnType {

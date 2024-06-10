@@ -19,8 +19,14 @@ const props = withDefaults(defineProps<DialogProps>(), {
   showClose: true,
   appendToBody: true
 });
+const { onConfirm, onCancel, onClose, beforeClose } = props;
 
-const emits = defineEmits(["update:visible", "on-cancel", "on-confirm", "on-close"]);
+const emits = defineEmits<{
+  "update:visible": [value: boolean];
+  "on-confirm": [done: () => void];
+  "on-close": [done: () => void];
+  "on-cancel": [done: () => void];
+}>();
 
 defineSlots<{
   header?: () => any;
@@ -32,38 +38,49 @@ const isVisible = ref<boolean | Ref<boolean>>(false);
 const contentClasses = computed(() => ["su-dialog__content", `su-dialog__content--${props.size}`]);
 const getModelValue = computed(() => (isRef(props.visible) ? Boolean(props.visible.value) : Boolean(props.visible)));
 
-function handleToggle(visible: boolean): void {
+function handleToggle(visible = false): void {
   emits("update:visible", visible);
 }
+
 function handleClose(): void {
-  props.onClose?.();
-  emits("on-close");
-  handleToggle(false);
-}
-function handleCancel(): void {
-  props.onCancel?.();
-  emits("on-cancel");
-  handleToggle(false);
-}
-function handleConfirm(): void {
-  props.onConfirm?.();
-  emits("on-confirm");
-  handleToggle(false);
+  onClose?.();
+  emits("on-close", handleToggle);
+
+  if (typeof beforeClose === "function") {
+    beforeClose(handleToggle);
+    return;
+  }
 }
 
-watch(
-  () => getModelValue.value,
-  val => {
-    isVisible.value = val;
+function handleCancel(): void {
+  onCancel?.();
+  emits("on-cancel", handleToggle);
+
+  if (typeof beforeClose === "function") {
+    beforeClose(handleToggle);
+    return;
   }
-);
+}
+
+function handleConfirm(): void {
+  onConfirm?.();
+  emits("on-confirm", handleToggle);
+
+  if (typeof beforeClose === "function") {
+    beforeClose(handleToggle);
+    return;
+  }
+}
+
+watch(getModelValue, val => {
+  isVisible.value = val;
+});
 
 onMounted(() => {
   isVisible.value = getModelValue.value;
 });
 
 onUnmounted(() => {
-  props.vanish?.();
   dialogInstances.splice(dialogInstances.indexOf(instance), 1);
 });
 
