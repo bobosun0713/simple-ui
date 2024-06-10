@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { provide, ref, computed, watch } from "vue";
+import { provide, ref, computed, watch, isRef } from "vue";
 import { gridPropsKey, type GridProps } from "./types";
 
 defineOptions({
@@ -19,8 +19,8 @@ const styles = computed(() => ({ gap: `${gap.value}px` }));
 watch(
   () => [props.col, props.gap],
   () => {
-    col.value = props.col;
-    gap.value = props.gap;
+    col.value = isRef(props.col) ? props.col.value : props.col;
+    gap.value = isRef(props.gap) ? props.gap.value : props.gap;
   }
 );
 
