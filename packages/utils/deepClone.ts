@@ -1,4 +1,4 @@
-export function deepClone<T>(obj: T) {
+export function deepClone<T>(obj: T): T {
   if (typeof obj !== "object" || obj === null) return obj;
 
   const cloneObj = Array.isArray(obj) ? ([] as T) : ({} as T);
