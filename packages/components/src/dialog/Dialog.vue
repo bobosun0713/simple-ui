@@ -46,30 +46,21 @@ function handleClose(): void {
   onClose?.();
   emits("on-close", handleToggle);
 
-  if (typeof beforeClose === "function") {
-    beforeClose(handleToggle);
-    return;
-  }
+  if (typeof beforeClose === "function") beforeClose(handleToggle);
 }
 
 function handleCancel(): void {
   onCancel?.();
   emits("on-cancel", handleToggle);
 
-  if (typeof beforeClose === "function") {
-    beforeClose(handleToggle);
-    return;
-  }
+  if (typeof beforeClose === "function") beforeClose(handleToggle);
 }
 
 function handleConfirm(): void {
   onConfirm?.();
   emits("on-confirm", handleToggle);
 
-  if (typeof beforeClose === "function") {
-    beforeClose(handleToggle);
-    return;
-  }
+  if (typeof beforeClose === "function") beforeClose(handleToggle);
 }
 
 watch(getModelValue, val => {
