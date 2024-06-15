@@ -1,12 +1,20 @@
-export interface RowProvider {
-  prop: string;
-  sort: string | boolean;
-  sortBy: string;
-  sortActive: boolean;
+export interface ColumnProvider {
+  children?: any;
+  sort?: string | boolean;
+  sortBy?: string;
+  sortActive?: boolean;
+  prop?: string;
+  label?: string;
+  width?: number | string;
+  align?: "left" | "center" | "right";
+}
+
+export interface RowProvider extends Pick<ColumnProvider, "sort" | "sortBy" | "sortActive"> {
+  prop?: string;
 }
 
 export interface TableProps {
-  data: any[];
+  data?: Record<string, unknown>[];
   defaultSort?: {
     orderBy: string;
     sortBy: string;
@@ -14,10 +22,4 @@ export interface TableProps {
   stickyHeader?: boolean | string;
 }
 
-export interface TableColumnProps {
-  prop?: string;
-  label?: string;
-  align?: string;
-  width?: number | string;
-  sort?: boolean;
-}
+export type TableColumnProps = Omit<ColumnProvider, "sortActive" | "sortBy">;

@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { ref, useSlots, onMounted, watch } from "vue";
+import { ref, useSlots, onMounted, watch, type Component } from "vue";
 import { deepClone } from "@simple/utils";
 import SIcon from "../icon/Icon.vue";
-import type { TableProps, RowProvider } from "./types";
+import type { TableProps, RowProvider, ColumnProvider } from "./types";
 
 defineOptions({
   name: "STable"
@@ -17,7 +17,7 @@ const props = withDefaults(defineProps<TableProps>(), {
 const emit = defineEmits(["on-sort"]);
 const slots = useSlots();
 
-const columns = ref<any>([]);
+const columns = ref<ColumnProvider[]>([]);
 const rows = ref([]);
 const orderBy = ref("");
 
@@ -33,27 +33,21 @@ watch(
   { immediate: true, deep: true }
 );
 
-onMounted(() => {
-  transformColumns();
-});
-
-function transformColumns() {
+function transformColumns(): void {
   if (!slots.default) return;
 
   for (const slot of slots.default()) {
-    if ((slot.type as any).name === "STableColumn") {
+    if ((slot.type as Component).name === "STableColumn") {
       if (slot.props) {
         const sortState =
           "sort" in slot.props && "prop" in slot.props ? props.defaultSort.orderBy === slot.props.prop : "none";
 
         columns.value.push({
-          children: slot.children,
           ...slot.props,
-          ...(Object.keys(props.defaultSort).length && {
-            sort: sortState,
-            sortBy: props.defaultSort.sortBy,
-            sortActive: false
-          })
+          children: slot.children,
+          sort: sortState,
+          sortActive: false,
+          sortBy: props.defaultSort.sortBy
         });
       } else {
         columns.value.push({ children: slot.children, sort: "none" });
@@ -70,15 +64,13 @@ function transformColumns() {
     }
   }
 }
-
-function isSortState(col: RowProvider) {
-  return col.prop === orderBy.value && col.sort && col.prop && col.sortActive;
+function isSortState(col: RowProvider): boolean {
+  return col.prop === orderBy.value && !!col.sort && !!col.prop && !!col.sortActive;
 }
-
-function handleSort(col: RowProvider) {
+function handleSort(col: RowProvider): void {
   if (col.sort === "none") return;
 
-  columns.value.forEach((col: RowProvider) => {
+  columns.value.forEach(col => {
     if (col.sort !== "none") {
       col.sort = false;
       col.sortActive = false;
@@ -92,10 +84,14 @@ function handleSort(col: RowProvider) {
     else col.sortBy = "asc";
   }
 
-  orderBy.value = col.prop;
+  orderBy.value = col.prop ?? "";
 
   emit("on-sort", { orderBy: orderBy.value, sortBy: col.sortBy });
 }
+
+onMounted(() => {
+  transformColumns();
+});
 </script>
 
 <template>
@@ -125,7 +121,7 @@ function handleSort(col: RowProvider) {
             @click="handleSort(col)"
           >
             <template v-if="col.children?.th">
-              <component :is="col.children.th"></component>
+              <component :is="col.children?.th"></component>
             </template>
 
             <template v-else>
@@ -142,28 +138,27 @@ function handleSort(col: RowProvider) {
           </th>
         </tr>
       </thead>
+
       <tbody>
         <template v-if="rows.length">
           <tr v-for="(row, rowIdx) in rows" :key="rowIdx" class="su-table__tr">
             <td v-for="(col, colIdx) in columns" :key="colIdx" class="su-table__td">
-              <template v-if="col.children?.td">
-                <component :is="col.children.td" :row="rows[rowIdx]" :index="colIdx"></component>
+              <template v-if="typeof col.children === 'object' && col.children?.td">
+                <component :is="col.children?.td" :row="rows[rowIdx]" :index="colIdx"></component>
               </template>
 
               <template v-else>
-                {{ row[col.prop] }}
+                {{ col.prop ? row[col.prop] : "" }}
               </template>
             </td>
           </tr>
         </template>
 
-        <template v-else>
-          <tr>
-            <td class="su-table__td su-table__td--empty" :colspan="columns.length">
-              <slot name="no-result">No Data</slot>
-            </td>
-          </tr>
-        </template>
+        <tr v-else>
+          <td class="su-table__td su-table__td--empty" :colspan="columns.length">
+            <slot name="no-result">No Data</slot>
+          </td>
+        </tr>
       </tbody>
     </table>
   </div>
