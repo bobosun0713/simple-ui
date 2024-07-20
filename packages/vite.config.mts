@@ -61,7 +61,7 @@ function getBuildConfig(buildConfig: BuildConfig): InlineConfig {
   };
 }
 
-async function buildFolder(folder: string) {
+async function buildFolder(folder: string): Promise<void> {
   for (const format of ["es", "cjs"]) {
     await build(
       getBuildConfig({
@@ -75,22 +75,25 @@ async function buildFolder(folder: string) {
   }
 }
 
-function runBuild() {
+function runBuild(): void {
   try {
-    const buildType = {
+    const buildType: {
+      cmp: () => Promise<void>;
+      use: () => Promise<void>;
+      dir: () => Promise<void>;
+      all: () => Promise<void>;
+    } = {
       cmp: () => buildFolder("components"),
       use: () => buildFolder("use"),
       dir: () => buildFolder("directives"),
       all: async () => {
-        await buildType.cmp();
-        await buildType.use();
-        await buildType.dir();
+        await Promise.all([buildType.cmp(), buildType.use(), buildType.dir()]);
       }
     };
 
     buildType[argv[0]]?.() || buildType.all();
   } catch (error) {
-    throw new Error(`🔴 Error while building library - ${error}`);
+    throw new Error(`🔴 Error while building library`);
   }
 }
 
