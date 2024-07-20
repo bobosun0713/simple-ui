@@ -1,3 +1,5 @@
+import { InjectionKey, Ref } from "vue";
+
 export interface CollapseProps {
   accordion: boolean;
 }
@@ -7,3 +9,8 @@ export interface CollapseItemProps {
   title: string;
   content: string;
 }
+
+export const collapsePropsKey: InjectionKey<{
+  activeNames: Ref<string[]>;
+  handleActive: (name: string) => void;
+}> = Symbol("collapseProps");

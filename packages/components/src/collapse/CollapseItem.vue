@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import { ref, onMounted, computed, inject, type Ref } from "vue";
-import { CollapseItemProps } from "./types";
+import { ref, onMounted, computed, inject } from "vue";
+import { type CollapseItemProps, collapsePropsKey } from "./types";
 
-const collapse = inject<{ activeNames: Ref<[string, number]>; handleActive: (name: string) => void }>("collapse");
+const collapse = inject(collapsePropsKey);
 
 const props = withDefaults(defineProps<CollapseItemProps>(), {
   name: "",

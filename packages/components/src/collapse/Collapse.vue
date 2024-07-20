@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, provide, type PropType } from "vue";
-import { CollapseProps } from "./types";
+import { type CollapseProps, collapsePropsKey } from "./types";
 
 const modelValue = defineModel({ type: Array as PropType<string[] | string>, default: () => [] });
 
@@ -22,10 +22,7 @@ function handleActive(name: string): void {
   modelValue.value = props.accordion ? activeNames.value[0] : activeNames.value;
 }
 
-provide("collapse", {
-  activeNames,
-  handleActive
-});
+provide(collapsePropsKey, { activeNames, handleActive });
 </script>
 
 <template>
