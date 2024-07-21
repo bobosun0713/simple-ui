@@ -8,7 +8,9 @@ function mapFiles(filenames, { lint = true, ts = false } = {}) {
     if (ts) commands.unshift(typeCheck);
   }
 
-  return commands.map(cmd => (/^vue-tsc/.test(cmd) || /^eslint/.test(cmd) ? cmd : `${cmd} ${filenames.join(" ")}`));
+  return commands.map(cmd =>
+    cmd.startsWith("vue-tsc") || cmd.startsWith("eslint") ? cmd : `${cmd} ${filenames.join(" ")}`
+  );
 }
 
 export default {
