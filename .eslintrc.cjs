@@ -6,11 +6,11 @@ module.exports = {
     node: true
   },
   extends: [
+    "eslint:recommended",
     "plugin:vue/vue3-strongly-recommended",
     "plugin:@typescript-eslint/recommended-type-checked",
     "plugin:@typescript-eslint/stylistic-type-checked",
-    "prettier",
-    "prettier/prettier"
+    "prettier"
   ],
   plugins: ["vue", "@typescript-eslint"],
 
@@ -25,7 +25,6 @@ module.exports = {
   },
   rules: {
     "vue/multi-word-component-names": "off",
-    "vue/multi-word-component-names": "off",
     "vue/no-reserved-component-names": "off",
     "vue/mustache-interpolation-spacing": ["error", "always"],
     "vue/prop-name-casing": "error",
@@ -36,7 +35,6 @@ module.exports = {
     "no-console": "off",
     "no-debugger": "off",
 
-    "@typescript-eslint/explicit-function-return-type": "error",
     "@typescript-eslint/ban-ts-comment": "off",
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/no-unsafe-argument": "off",
@@ -44,5 +42,14 @@ module.exports = {
     "@typescript-eslint/no-unsafe-member-access": "off",
     "@typescript-eslint/no-unsafe-call": "off",
     "@typescript-eslint/non-nullable-type-assertion-style": "off"
-  }
+  },
+  overrides: [
+    {
+      // enable the rule specifically for TypeScript files
+      files: ["*.ts", "*.mts", "*.cts", "*.tsx", "*.vue"],
+      rules: {
+        "@typescript-eslint/explicit-function-return-type": "error"
+      }
+    }
+  ]
 };
