@@ -1,20 +1,16 @@
 function mapFiles(filenames, { lint = true, ts = false } = {}) {
-  const eslint = "eslint --fix --cache";
-  const typeCheck = "vue-tsc --noEmit -p tsconfig.web.json --composite false";
-  const commands = ["prettier --write"];
+  const commands = ["pnpm format"];
+  const lintCheck = "pnpm lint";
+  const typeCheck = "pnpm type-check";
 
-  if (filenames.length) {
-    if (lint) commands.unshift(`${eslint} ${filenames.join(" ")}`);
-    if (ts) commands.unshift(typeCheck);
-  }
+  if (lint) commands.unshift(`${lintCheck} ${filenames.join(" ")}`);
+  if (ts && filenames.length) commands.unshift(typeCheck);
 
-  return commands.map(cmd =>
-    cmd.startsWith("vue-tsc") || cmd.startsWith("eslint") ? cmd : `${cmd} ${filenames.join(" ")}`
-  );
+  return commands.map(cmd => ([lintCheck, typeCheck].includes(cmd) ? cmd : `${cmd} ${filenames.join(" ")}`));
 }
 
 export default {
-  "*.js": filenames => mapFiles(filenames),
+  "*.{js,mjs,cjs}": filenames => mapFiles(filenames),
   "*.{ts,mts,vue}": filenames => mapFiles(filenames, { ts: true }),
   "*.{json,md}": filenames => mapFiles(filenames, { lint: false })
 };

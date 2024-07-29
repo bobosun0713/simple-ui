@@ -3,7 +3,7 @@
   "compilerOptions": {
     "composite": true,
     "lib": ["ESNext"],
-    "types": ["node", "vite/client"]
+    "types": ["node"]
   },
   "include": ["vite.config.*", "vitest.config.*", "typings/vite-env.d.ts"]
 }
