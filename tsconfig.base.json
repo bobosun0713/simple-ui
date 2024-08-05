@@ -19,9 +19,9 @@
 
     "baseUrl": ".",
     "paths": {
-      "@components/*": ["./packages/components/src/*"],
-      "@use/*": ["./packages/use/src/*"],
-      "@utils/*": ["./packages/utils/*"]
+      "@components/*": ["packages/components/src/*"],
+      "@use/*": ["packages/use/src/*"],
+      "@utils/*": ["packages/utils/*"]
     }
   }
 }
