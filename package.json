@@ -6,7 +6,7 @@
   "description": "",
   "main": "dist/cjs/components/index.cjs",
   "module": "dist/es/components/index.mjs",
-  "types": "types/components.d.ts",
+  "types": "dist/es/components/index.d.ts",
   "exports": {
     ".": {
       "require": "./dist/cjs/components/index.cjs",
@@ -24,7 +24,7 @@
   },
   "files": [
     "dist",
-    "types"
+    "typings"
   ],
   "scripts": {
     "dev": "pnpm -C examples run dev",
@@ -38,7 +38,7 @@
     "test:use": "pnpm test ./packages/tests/use/*.test.ts",
     "lint": "eslint --fix --cache  --cache-location .cache/.eslintcache",
     "lint:all": "pnpm lint .",
-    "type-check": "vue-tsc --noEmit --build",
+    "type-check": "vue-tsc --noEmit",
     "type-check:force": "pnpm type-check --force ",
     "format": "prettier --write --ignore-unknown",
     "format:all": "pnpm format .",
