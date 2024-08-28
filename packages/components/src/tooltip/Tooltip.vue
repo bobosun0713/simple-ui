@@ -68,31 +68,25 @@ function calcPlacementPos(placement: TooltipPlacement): void {
 function checkTouchEdge(): void {
   currentPlacement.value = props.placement;
 
-  // Touch the top edge
-  if (tooltipContentTop.value - window.scrollY <= 0) {
-    calcPlacementPos("bottom");
-    currentPlacement.value = "bottom";
-    return;
-  }
+  const edges: {
+    condition: boolean;
+    placement: TooltipPlacement;
+  }[] = [
+    { condition: tooltipContentTop.value - window.scrollY <= 0, placement: "bottom" },
+    { condition: tooltipContentLeft.value <= 0, placement: "right" },
+    { condition: tooltipContentLeft.value + tooltipContentWidth.value >= windowWidth.value, placement: "left" },
+    {
+      condition: tooltipContentTop.value - window.scrollY + tooltipContentHeight.value >= windowHeight.value,
+      placement: "top"
+    }
+  ];
 
-  // Touch the left edge
-  if (tooltipContentLeft.value <= 0) {
-    calcPlacementPos("right");
-    currentPlacement.value = "right";
-    return;
-  }
-
-  // Touch the right edge
-  if (tooltipContentLeft.value + tooltipContentWidth.value >= windowWidth.value) {
-    calcPlacementPos("left");
-    currentPlacement.value = "left";
-    return;
-  }
-
-  // Touch the bottom edge
-  if (tooltipContentTop.value - window.scrollY + tooltipContentHeight.value >= windowHeight.value) {
-    calcPlacementPos("top");
-    currentPlacement.value = "top";
+  for (const edge of edges) {
+    if (edge.condition) {
+      calcPlacementPos(edge.placement);
+      currentPlacement.value = edge.placement;
+      return;
+    }
   }
 }
 
@@ -101,15 +95,18 @@ function isScrollContainer(ele: HTMLElement): boolean {
   const overflowRegex = /(auto|scroll)/;
   return overflowRegex.test(style.overflow);
 }
+
 function collectScroll(ele: HTMLElement): HTMLElement[] {
   const scrollList: HTMLElement[] = [];
   let current = ele?.parentElement;
+
   while (current) {
     if (isScrollContainer(current)) {
       scrollList.push(current);
     }
     current = current.parentElement;
   }
+
   return scrollList;
 }
 
@@ -143,10 +140,7 @@ watch(
   { immediate: true }
 );
 
-watch(
-  () => windowWidth.value,
-  () => triggerPlacement()
-);
+watch(windowWidth, () => triggerPlacement());
 
 onMounted(() => {
   [window, ...collectScroll(tooltipRef.value!)].forEach(ele => {
