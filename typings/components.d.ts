@@ -21,6 +21,11 @@ declare module "@vue/runtime-core" {
     SBreadcrumb: (typeof import("../packages/components"))["SBreadcrumb"];
     SField: (typeof import("../packages/components"))["SField"];
     SLink: (typeof import("../packages/components"))["SLink"];
+    SContainer: (typeof import("../packages/components"))["SContainer"];
+    SHeader: (typeof import("../packages/components"))["SHeader"];
+    SAside: (typeof import("../packages/components"))["SAside"];
+    SMain: (typeof import("../packages/components"))["SMain"];
+    SFooter: (typeof import("../packages/components"))["SFooter"];
   }
 
   interface ComponentCustomProperties {
