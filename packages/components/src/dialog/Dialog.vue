@@ -12,31 +12,34 @@ defineOptions({
 const instance = getCurrentInstance()!;
 dialogInstances.push(instance);
 
-const props = withDefaults(defineProps<DialogProps>(), {
-  visible: false,
-  size: "md",
-  closeOnOverlay: true,
-  showClose: true,
-  appendToBody: true
-});
-const { onConfirm, onCancel, onClose, beforeClose } = props;
+const {
+  visible = false,
+  size = "md",
+  closeOnOverlay = true,
+  showClose = true,
+  appendToBody = true,
+  onConfirm,
+  onCancel,
+  onClose,
+  vanish
+} = defineProps<DialogProps>();
 
 const emits = defineEmits<{
   "update:visible": [value: boolean];
-  "on-confirm": [done: () => void];
-  "on-close": [done: () => void];
-  "on-cancel": [done: () => void];
+  "on-confirm": [];
+  "on-close": [];
+  "on-cancel": [];
 }>();
 
 defineSlots<{
-  header?: () => any;
-  body?: () => any;
-  footer?: (props: DialogSlotAction) => any;
+  header?: () => unknown;
+  body?: () => unknown;
+  footer?: (props: DialogSlotAction) => unknown;
 }>();
 
 const isVisible = ref<boolean | Ref<boolean>>(false);
-const contentClasses = computed(() => ["su-dialog__content", `su-dialog__content--${props.size}`]);
-const getModelValue = computed(() => (isRef(props.visible) ? Boolean(props.visible.value) : Boolean(props.visible)));
+const contentClasses = computed(() => ["su-dialog__content", `su-dialog__content--${size}`]);
+const getModelValue = computed(() => (isRef(visible) ? Boolean(visible.value) : Boolean(visible)));
 
 function handleToggle(visible = false): void {
   emits("update:visible", visible);
@@ -44,23 +47,20 @@ function handleToggle(visible = false): void {
 
 function handleClose(): void {
   onClose?.();
-  emits("on-close", handleToggle);
-
-  if (typeof beforeClose === "function") beforeClose(handleToggle);
+  emits("on-close");
+  handleToggle(false);
 }
 
 function handleCancel(): void {
   onCancel?.();
-  emits("on-cancel", handleToggle);
-
-  if (typeof beforeClose === "function") beforeClose(handleToggle);
+  emits("on-cancel");
+  handleToggle(false);
 }
 
 function handleConfirm(): void {
   onConfirm?.();
-  emits("on-confirm", handleToggle);
-
-  if (typeof beforeClose === "function") beforeClose(handleToggle);
+  emits("on-confirm");
+  handleToggle(false);
 }
 
 watch(getModelValue, val => {
@@ -82,7 +82,7 @@ defineExpose<DialogExposeAction>({
 
 <template>
   <Teleport to="body" :disabled="!appendToBody">
-    <Transition name="fade" @after-leave="props.vanish">
+    <Transition name="fade" @after-leave="vanish">
       <div v-show="isVisible" :id="id" class="su-dialog" @click.self="() => closeOnOverlay && handleClose()">
         <div :class="contentClasses">
           <div class="su-dialog__header">
@@ -91,9 +91,11 @@ defineExpose<DialogExposeAction>({
               <SIcon name="close" :width="24" :height="24"></SIcon>
             </button>
           </div>
+
           <div class="su-dialog__body">
             <slot name="body">This is a message</slot>
           </div>
+
           <div class="su-dialog__footer">
             <slot name="footer" :close="handleClose" :confirm="handleConfirm" :cancel="handleCancel">
               <div class="su-dialog__default-btn">

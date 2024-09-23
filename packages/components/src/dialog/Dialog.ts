@@ -7,7 +7,8 @@ import type {
   DialogServiceReturnType,
   DialogSlot,
   DialogExposeAction,
-  DialogSlotAction
+  DialogSlotAction,
+  DialogServiceAction
 } from "./types";
 
 // TODO: Does it need to be a global type?
@@ -22,14 +23,26 @@ function executeExposeAction(id: string | number, action: (exposed: DialogExpose
 }
 
 function dialogService(): DialogServiceReturnType {
-  const confirm = (props?: DialogServiceProps): Promise<string> => {
+  const confirm = (props?: DialogServiceProps): Promise<DialogServiceAction> => {
     const isVisible = ref(true);
 
-    const { header, body, footer, ...args } = props ?? {};
+    const { header, body, footer, beforeClose, ...args } = props ?? {};
 
     return new Promise(resolve => {
       const createSlot = (slot: DialogSlot): ((fn?: DialogSlotAction) => NonFunction<typeof slot>) =>
         typeof slot === "function" ? slot : (): unknown => slot;
+
+      const closeAction = (type: DialogServiceAction): void => {
+        if (typeof beforeClose === "function") {
+          beforeClose(() => {
+            isVisible.value = false;
+            resolve(type);
+          }, type);
+          return;
+        }
+        isVisible.value = false;
+        resolve(type);
+      };
 
       const { unmount } = mountInstance(() =>
         h(
@@ -38,10 +51,9 @@ function dialogService(): DialogServiceReturnType {
             ...args,
             visible: isVisible,
             appendToBody: false,
-            "onUpdate:visible": (val: boolean) => (isVisible.value = val),
-            onConfirm: () => resolve("confirm"),
-            onCancel: () => resolve("cancel"),
-            onClose: () => resolve("close"),
+            onConfirm: () => closeAction("confirm"),
+            onCancel: () => closeAction("cancel"),
+            onClose: () => closeAction("close"),
             vanish: () => unmount()
           },
           {

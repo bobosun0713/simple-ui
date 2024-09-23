@@ -12,7 +12,6 @@ export interface DialogProps {
   onConfirm?: () => void;
   onClose?: () => void;
   onCancel?: () => void;
-  beforeClose?: (done: () => void) => void;
   vanish?: () => void;
 }
 
@@ -34,6 +33,8 @@ export interface DialogServiceSlots {
   footer?: DialogSlot;
 }
 
+export type DialogServiceAction = "confirm" | "cancel" | "close";
+
 export interface DialogServiceProps {
   size?: DialogSize;
   showClose?: boolean;
@@ -42,11 +43,11 @@ export interface DialogServiceProps {
   header?: DialogSlot;
   body?: DialogSlot;
   footer?: DialogSlot;
-  beforeClose?: (done: () => void) => void;
+  beforeClose?: (done: () => void, type?: DialogServiceAction) => void;
 }
 
 export interface DialogServiceReturnType {
-  confirm: (props?: DialogServiceProps) => Promise<string>;
+  confirm: (props?: DialogServiceProps) => Promise<DialogServiceAction>;
   showDialog: (id: string | number) => void;
   closeDialog: (id: string | number) => void;
   closeAll: () => void;
