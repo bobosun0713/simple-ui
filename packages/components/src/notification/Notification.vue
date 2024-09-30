@@ -7,37 +7,34 @@ defineOptions({
   name: "SNotification"
 });
 
-const props = withDefaults(defineProps<NotificationProps>(), {
-  width: 300,
-  offsetTop: 10,
-  eleSpacing: 10,
-  duration: 3000,
-  position: "top-right"
-});
+const {
+  width = 300,
+  offsetTop = 10,
+  eleSpacing = 10,
+  duration = 3000,
+  position = "top-right"
+} = defineProps<NotificationProps>();
 
 const notificationList = ref<NotificationContentProps[]>([]);
-const notificationIdx = ref(0);
+let notificationIdx = 0;
 
 const verticalDirection = computed(() =>
-  /bottom/.test(props.position) ? "su-notification-wrap--bottom" : "su-notification-wrap--top"
+  /bottom/.test(position) ? "su-notification-wrap--bottom" : "su-notification-wrap--top"
 );
 const horizontalDirection = computed(() =>
-  /right/.test(props.position) ? "su-notification-wrap--right" : "su-notification-wrap--left"
+  /right/.test(position) ? "su-notification-wrap--right" : "su-notification-wrap--left"
 );
 const animationType = computed(() =>
   horizontalDirection.value.includes("right") ? "notification-right" : "notification-left"
 );
 
 function handleAdd(data: NotificationContentProps): void {
-  if (notificationList.value.length === 0) notificationIdx.value = 0;
+  if (notificationList.value.length === 0) notificationIdx = 0;
 
-  notificationIdx.value += 1;
-  const addItem = { ...data, id: notificationIdx.value };
+  notificationIdx += 1;
 
-  //@ts-ignore
-  // TODO: FIx this issue with the type of notificationList (deep and possibly infinite.)
-  if (verticalDirection.value === "su-notification-wrap--bottom") notificationList.value.push(addItem);
-  else notificationList.value.unshift(addItem);
+  const aryMethod = notificationList.value.length ? "unshift" : "push";
+  notificationList.value[aryMethod]({ ...data, id: notificationIdx });
 }
 
 function handleRemove(idx: string | number): void {
@@ -48,6 +45,12 @@ function handleRemove(idx: string | number): void {
 function handleRemoveAll(): void {
   notificationList.value = [];
 }
+
+defineSlots<{
+  title?: (props: { message: string }) => unknown;
+  message?: (props: { message: string }) => unknown;
+  cancel?: (props: { handleClose: () => void }) => unknown;
+}>();
 
 defineExpose({ handleAdd, handleRemoveAll });
 </script>
@@ -80,8 +83,8 @@ defineExpose({ handleAdd, handleRemoveAll });
         <slot name="message" :message="notice.message"></slot>
       </template>
 
-      <template #cancel>
-        <slot name="cancel"></slot>
+      <template #cancel="{ handleClose }">
+        <slot name="cancel" :handle-close="handleClose"></slot>
       </template>
     </NotificationContent>
   </TransitionGroup>

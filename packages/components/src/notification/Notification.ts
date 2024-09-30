@@ -17,25 +17,25 @@ function notification(props?: NotificationServiceProps): NotificationReturnType 
 
   const vm = _notificationInstance.component!;
 
-  function open(notice: NotificationServiceOpen): void {
+  const open = (notice: NotificationServiceOpen): void => {
     vm.exposed!.handleAdd(notice);
-  }
+  };
 
-  function info(notice: NotificationServiceCall): void {
+  const info = (notice: NotificationServiceCall): void => {
     vm.exposed!.handleAdd({ ...notice, type: "info" });
-  }
+  };
 
-  function success(notice: NotificationServiceCall): void {
+  const success = (notice: NotificationServiceCall): void => {
     vm.exposed!.handleAdd({ ...notice, type: "success" });
-  }
+  };
 
-  function warning(notice: NotificationServiceCall): void {
+  const warning = (notice: NotificationServiceCall): void => {
     vm.exposed!.handleAdd({ ...notice, type: "warning" });
-  }
+  };
 
-  function error(notice: NotificationServiceCall): void {
+  const error = (notice: NotificationServiceCall): void => {
     vm.exposed!.handleAdd({ ...notice, type: "error" });
-  }
+  };
 
   return {
     open,
