@@ -1,48 +1,39 @@
 <script lang="ts" setup>
-import { ref, onMounted, computed, inject } from "vue";
-import { type CollapseItemProps, collapsePropsKey } from "./types";
+import { computed } from "vue";
+import SIcon from "../icon/Icon.vue";
+import { type CollapseItemProps } from "./types";
 
-const collapse = inject(collapsePropsKey);
-
-const props = withDefaults(defineProps<CollapseItemProps>(), {
-  name: "",
-  title: "Tips",
-  content: "Collapse Content"
+defineOptions({
+  name: "SCollapseItem"
 });
 
-const contentRef = ref<HTMLDivElement | null>(null);
-const contentHeight = ref(0);
+const { name = "", title = "Tips", content = "Collapse Content", activeNames = [] } = defineProps<CollapseItemProps>();
+const emits = defineEmits(["active"]);
 
-const isActive = computed(() => collapse!.activeNames.value?.indexOf(props.name) > -1);
-const getContentHeight = computed(() => (isActive.value ? `${contentHeight.value}px` : `0px`));
+const isActive = computed(() => activeNames.indexOf(name) > -1);
 
 function handleClick(): void {
-  collapse?.handleActive(props.name);
+  emits("active", name);
 }
-
-onMounted(() => {
-  contentHeight.value = Number(contentRef.value?.getBoundingClientRect().height);
-});
 </script>
 
 <template>
   <div class="su-collapse-item" @click="handleClick">
     <div class="su-collapse-item__header" :class="{ 'su-collapse-item__header--active': isActive }">
       <slot name="title">
-        {{ props.title }}
+        {{ title }}
       </slot>
       <slot name="icon">
         <SIcon
-          class="su-collapse-item__icon"
-          :class="{ 'su-collapse-item__icon--active': isActive }"
+          :class="['su-collapse-item__icon', { 'su-collapse-item__icon--active': isActive }]"
           name="arrowLeft"
         ></SIcon>
       </slot>
     </div>
-    <div class="su-collapse-item__body" :style="`height:${getContentHeight}`">
-      <div ref="contentRef" class="su-collapse-item__content">
+    <div :class="['su-collapse-item__body', { 'su-collapse-item__body--open': isActive }]">
+      <div class="su-collapse-item__content">
         <slot name="default">
-          {{ props.content }}
+          {{ content }}
         </slot>
       </div>
     </div>

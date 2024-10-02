@@ -5,6 +5,8 @@
 }
 
 .su-collapse-item {
+  overflow: hidden;
+  border-radius: 4px;
   box-shadow:
     0 0.5rem 1rem -0.125rem hsla(0, 0%, 4%, 0.1),
     0 0 0 1px hsla(0, 0%, 4%, 0.02);
@@ -12,15 +14,11 @@
   &__header {
     background-color: var(--su-collapse—grey);
     padding: 12px 16px;
-    border-radius: 4px;
-    border-bottom: 2px solid var(--su-collapse-dark-grey);
     font-weight: 700;
     font-size: 1.6rem;
-
     display: flex;
     align-items: center;
     justify-content: space-between;
-
     cursor: pointer;
 
     &--active {
@@ -29,24 +27,31 @@
   }
 
   &__body {
+    display: grid;
+    grid-template-rows: 0fr;
     transition: var(--su-collapse-transition);
-    overflow: hidden;
+
+    &--open {
+      grid-template-rows: 1fr;
+    }
   }
 
   &__content {
-    border: 1px solid var(--su-collapse-dark-grey);
-    padding: 1.6rem;
+    border-top: 1px solid var(--su-collapse-dark-grey);
+    line-height: 3;
     font-size: 1.6rem;
+    padding: 0 1.6rem;
     word-break: break-word;
+    overflow: hidden;
   }
 
   &__icon {
+    -webkit-user-select: none;
     width: 1.6rem;
     height: 1.6rem;
     transform: rotate(-90deg);
     transform-origin: center center;
     transition: var(--su-collapse-transition);
-    -webkit-user-select: none;
 
     &--active {
       transform: rotate(90deg);

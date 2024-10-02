@@ -1,32 +1,40 @@
 <script setup lang="ts">
-import { ref, provide, type PropType } from "vue";
-import { type CollapseProps, collapsePropsKey } from "./types";
+import { computed, ref, useSlots, type PropType, type Component } from "vue";
+import { type CollapseProps } from "./types";
+
+defineOptions({
+  name: "SCollapse"
+});
 
 const modelValue = defineModel({ type: Array as PropType<string[] | string>, default: () => [] });
+const { accordion = false } = defineProps<CollapseProps>();
 
-const props = withDefaults(defineProps<CollapseProps>(), {
-  accordion: false
-});
+const slots = useSlots();
 
 const activeNames = ref(Array.isArray(modelValue.value) ? [...modelValue.value] : []);
 
 function handleActive(name: string): void {
-  if (props.accordion) {
+  if (accordion) {
     activeNames.value = activeNames.value.includes(name) ? [] : [name];
-  } else {
-    const getCurrentIndex = activeNames.value.indexOf(name);
-    if (getCurrentIndex > -1) activeNames.value.splice(getCurrentIndex, 1);
-    else activeNames.value.push(name);
+    return;
   }
 
-  modelValue.value = props.accordion ? activeNames.value[0] : activeNames.value;
+  const getCurrentIndex = activeNames.value.indexOf(name);
+  if (getCurrentIndex > -1) activeNames.value.splice(getCurrentIndex, 1);
+  else activeNames.value.push(name);
+
+  modelValue.value = accordion ? activeNames.value[0] : activeNames.value;
 }
 
-provide(collapsePropsKey, { activeNames, handleActive });
+const collapseItems = computed(
+  () => slots.default?.().filter(slot => (slot.type as Component).name === "SCollapseItem") ?? []
+);
 </script>
 
 <template>
   <div class="su-collapse">
-    <slot name="default"></slot>
+    <template v-for="slot in collapseItems" :key="slot">
+      <component :is="slot" :active-names @active="handleActive"></component>
+    </template>
   </div>
 </template>
