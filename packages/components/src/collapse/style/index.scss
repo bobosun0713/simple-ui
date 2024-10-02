@@ -38,11 +38,13 @@
 
   &__content {
     border-top: 1px solid var(--su-collapse-dark-grey);
-    line-height: 3;
     font-size: 1.6rem;
-    padding: 0 1.6rem;
     word-break: break-word;
     overflow: hidden;
+
+    &-box {
+      padding: 1.6rem;
+    }
   }
 
   &__icon {

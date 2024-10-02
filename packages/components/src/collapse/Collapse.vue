@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed, ref, useSlots, type PropType, type Component } from "vue";
-import { type CollapseProps } from "./types";
+import { computed, ref, useSlots, provide, type PropType, type Component } from "vue";
+import { type CollapseProps, collapsePropsKey } from "./types";
 
 defineOptions({
   name: "SCollapse"
@@ -29,12 +29,14 @@ function handleActive(name: string): void {
 const collapseItems = computed(
   () => slots.default?.().filter(slot => (slot.type as Component).name === "SCollapseItem") ?? []
 );
+
+provide(collapsePropsKey, { activeNames });
 </script>
 
 <template>
   <div class="su-collapse">
     <template v-for="slot in collapseItems" :key="slot">
-      <component :is="slot" :active-names @active="handleActive"></component>
+      <component :is="slot" @active="handleActive"></component>
     </template>
   </div>
 </template>

@@ -1,16 +1,18 @@
 <script lang="ts" setup>
-import { computed } from "vue";
+import { computed, inject } from "vue";
 import SIcon from "../icon/Icon.vue";
-import { type CollapseItemProps } from "./types";
+import { type CollapseItemProps, collapsePropsKey } from "./types";
+
+const collapse = inject(collapsePropsKey);
 
 defineOptions({
   name: "SCollapseItem"
 });
 
-const { name = "", title = "Tips", content = "Collapse Content", activeNames = [] } = defineProps<CollapseItemProps>();
+const { name = "", title = "Tips", content = "Collapse Content" } = defineProps<CollapseItemProps>();
 const emits = defineEmits(["active"]);
 
-const isActive = computed(() => activeNames.indexOf(name) > -1);
+const isActive = computed(() => collapse && collapse.activeNames.value.indexOf(name) > -1);
 
 function handleClick(): void {
   emits("active", name);
@@ -32,9 +34,11 @@ function handleClick(): void {
     </div>
     <div :class="['su-collapse-item__body', { 'su-collapse-item__body--open': isActive }]">
       <div class="su-collapse-item__content">
-        <slot name="default">
-          {{ content }}
-        </slot>
+        <div class="su-collapse-item__content-box">
+          <slot name="default">
+            {{ content }}
+          </slot>
+        </div>
       </div>
     </div>
   </div>
