@@ -8,9 +8,7 @@ type SFCInstallWithContext<T> = SFCWithInstall<T> & {
 export const withInstall = <T>(component: T & Component): SFCWithInstall<T> => {
   (component as SFCWithInstall<T>).install = (app: App): void => {
     const { name } = component;
-    if (name) {
-      app.component(name, component as SFCWithInstall<T>);
-    }
+    if (name) app.component(name, component);
   };
 
   return component as SFCWithInstall<T>;
