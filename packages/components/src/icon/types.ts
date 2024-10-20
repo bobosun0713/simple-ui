@@ -30,7 +30,7 @@ export type IconNames =
 
 export interface IconProps {
   name: IconNames;
-  width: number | string;
-  height: number | string;
+  width?: number | string;
+  height?: number | string;
   fill?: string;
 }
