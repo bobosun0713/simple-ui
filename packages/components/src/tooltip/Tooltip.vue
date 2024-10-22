@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { ref, computed, nextTick, watch, onMounted, onUnmounted } from "vue";
-import { useElementBounding, useWindowSize } from "@vueuse/core";
+import { useWindowSize } from "@vueuse/core";
 import type { TooltipProps, TooltipPlacement } from "./types";
 
 defineOptions({
@@ -29,36 +29,38 @@ const currentPlacement = ref("");
 const placementPos = computed(() => `inset:${tooltipContentTop.value}px auto auto ${tooltipContentLeft.value}px;`);
 
 const { width: windowWidth, height: windowHeight } = useWindowSize();
-const {
-  width: tooltipWidth,
-  height: tooltipHeight,
-  y: tooltipY,
-  x: tooltipX
-} = useElementBounding(tooltipRef as unknown as HTMLElement);
 
 function calcPlacementPos(placement: TooltipPlacement): void {
-  const { width: contentWidth, height: contentHeight } = tooltipContentRef.value?.getBoundingClientRect() ?? {};
+  const {
+    width: tooltipWidth = 0,
+    height: tooltipHeight = 0,
+    y: tooltipY = 0,
+    x: tooltipX = 0
+  } = tooltipRef.value?.getBoundingClientRect() ?? {};
+
+  const { width: contentWidth = 0, height: contentHeight = 0 } = tooltipContentRef.value?.getBoundingClientRect() ?? {};
+
   tooltipContentWidth.value = contentWidth ?? 0;
   tooltipContentHeight.value = contentHeight ?? 0;
 
-  const commonTopValue = window.scrollY + tooltipY.value + (tooltipHeight.value - tooltipContentHeight.value) / 2;
-  const commonLeftValue = tooltipX.value + (tooltipWidth.value - tooltipContentWidth.value) / 2;
+  const commonTopValue = window.scrollY + tooltipY + (tooltipHeight - tooltipContentHeight.value) / 2;
+  const commonLeftValue = tooltipX + (tooltipWidth - tooltipContentWidth.value) / 2;
 
   const placementMap = {
     top(): void {
       tooltipContentLeft.value = commonLeftValue;
-      tooltipContentTop.value = window.scrollY + tooltipY.value - tooltipContentHeight.value - Number(props.offset);
+      tooltipContentTop.value = window.scrollY + tooltipY - tooltipContentHeight.value - Number(props.offset);
     },
     right(): void {
-      tooltipContentLeft.value = tooltipX.value + tooltipWidth.value + Number(props.offset);
+      tooltipContentLeft.value = tooltipX + tooltipWidth + Number(props.offset);
       tooltipContentTop.value = commonTopValue;
     },
     bottom(): void {
       tooltipContentLeft.value = commonLeftValue;
-      tooltipContentTop.value = window.scrollY + tooltipY.value + tooltipHeight.value + Number(props.offset);
+      tooltipContentTop.value = window.scrollY + tooltipY + tooltipHeight + Number(props.offset);
     },
     left(): void {
-      tooltipContentLeft.value = tooltipX.value - tooltipContentWidth.value - Number(props.offset);
+      tooltipContentLeft.value = tooltipX - tooltipContentWidth.value - Number(props.offset);
       tooltipContentTop.value = commonTopValue;
     }
   };
