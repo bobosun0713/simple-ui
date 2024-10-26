@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { ref, computed, nextTick, watch, onMounted, onUnmounted } from "vue";
-import { useWindowSize } from "@vueuse/core";
+import { useWindowSize, useElementBounding } from "@vueuse/core";
 import type { TooltipProps, TooltipPlacement } from "./types";
 
 defineOptions({
@@ -12,7 +12,7 @@ const props = withDefaults(defineProps<TooltipProps>(), {
   content: "Tooltip!",
   offset: 4,
   trigger: "hover",
-  placement: "top"
+  placement: "bottom"
 });
 
 const emits = defineEmits(["update:modelValue"]);
@@ -20,74 +20,90 @@ const emits = defineEmits(["update:modelValue"]);
 const isVisible = ref(false);
 const tooltipRef = ref<HTMLElement | null>(null);
 const tooltipContentRef = ref<HTMLElement | null>(null);
-const tooltipContentTop = ref(0);
-const tooltipContentLeft = ref(0);
-const tooltipContentWidth = ref(0);
-const tooltipContentHeight = ref(0);
-const currentPlacement = ref("");
+const tooltipContentRect = ref({
+  width: 0,
+  height: 0,
+  top: 0,
+  left: 0
+});
 
-const placementPos = computed(() => `inset:${tooltipContentTop.value}px auto auto ${tooltipContentLeft.value}px;`);
+const placementPos = computed(
+  () => `transform: translate3d(${tooltipContentRect.value.left}px, ${tooltipContentRect.value.top}px, 0);`
+);
 
 const { width: windowWidth, height: windowHeight } = useWindowSize();
 
+const {
+  width: tooltipWidth,
+  height: tooltipHeight,
+  y: tooltipY,
+  x: tooltipX,
+  update: updateTooltip
+} = useElementBounding(tooltipRef);
+
 function calcPlacementPos(placement: TooltipPlacement): void {
-  const {
-    width: tooltipWidth = 0,
-    height: tooltipHeight = 0,
-    y: tooltipY = 0,
-    x: tooltipX = 0
-  } = tooltipRef.value?.getBoundingClientRect() ?? {};
+  // Update tooltip position
+  updateTooltip();
 
   const { width: contentWidth = 0, height: contentHeight = 0 } = tooltipContentRef.value?.getBoundingClientRect() ?? {};
 
-  tooltipContentWidth.value = contentWidth ?? 0;
-  tooltipContentHeight.value = contentHeight ?? 0;
+  tooltipContentRect.value.width = contentWidth;
+  tooltipContentRect.value.height = contentHeight;
 
-  const commonTopValue = window.scrollY + tooltipY + (tooltipHeight - tooltipContentHeight.value) / 2;
-  const commonLeftValue = tooltipX + (tooltipWidth - tooltipContentWidth.value) / 2;
+  const commonTopValue = window.scrollY + tooltipY.value + (tooltipHeight.value - tooltipContentRect.value.height) / 2;
+  const commonLeftValue = tooltipX.value + (tooltipWidth.value - tooltipContentRect.value.width) / 2;
 
   const placementMap = {
     top(): void {
-      tooltipContentLeft.value = commonLeftValue;
-      tooltipContentTop.value = window.scrollY + tooltipY - tooltipContentHeight.value - Number(props.offset);
+      tooltipContentRect.value.left = commonLeftValue;
+      tooltipContentRect.value.top =
+        window.scrollY + tooltipY.value - tooltipContentRect.value.height - Number(props.offset);
     },
     right(): void {
-      tooltipContentLeft.value = tooltipX + tooltipWidth + Number(props.offset);
-      tooltipContentTop.value = commonTopValue;
+      tooltipContentRect.value.left = tooltipX.value + tooltipWidth.value + Number(props.offset);
+      tooltipContentRect.value.top = commonTopValue;
     },
     bottom(): void {
-      tooltipContentLeft.value = commonLeftValue;
-      tooltipContentTop.value = window.scrollY + tooltipY + tooltipHeight + Number(props.offset);
+      tooltipContentRect.value.left = commonLeftValue;
+      tooltipContentRect.value.top = window.scrollY + tooltipY.value + tooltipHeight.value + Number(props.offset);
     },
     left(): void {
-      tooltipContentLeft.value = tooltipX - tooltipContentWidth.value - Number(props.offset);
-      tooltipContentTop.value = commonTopValue;
+      tooltipContentRect.value.left = tooltipX.value - tooltipContentRect.value.width - Number(props.offset);
+      tooltipContentRect.value.top = commonTopValue;
     }
   };
 
   placementMap[placement]?.();
 }
 function checkTouchEdge(): void {
-  currentPlacement.value = props.placement;
+  const isTouchLeft = tooltipContentRect.value.left <= 0;
+  const isTouchRight = tooltipContentRect.value.left + tooltipContentRect.value.width >= windowWidth.value;
+  const isTouchTop = tooltipContentRect.value.top - window.scrollY <= 0;
+  const isTouchBottom =
+    tooltipContentRect.value.top - window.scrollY + tooltipContentRect.value.height >= windowHeight.value;
 
   const edges: {
     condition: boolean;
     placement: TooltipPlacement;
   }[] = [
-    { condition: tooltipContentTop.value - window.scrollY <= 0, placement: "bottom" },
-    { condition: tooltipContentLeft.value <= 0, placement: "right" },
-    { condition: tooltipContentLeft.value + tooltipContentWidth.value >= windowWidth.value, placement: "left" },
     {
-      condition: tooltipContentTop.value - window.scrollY + tooltipContentHeight.value >= windowHeight.value,
+      condition: !isTouchRight && isTouchTop,
+      placement: "bottom"
+    },
+    {
+      condition: isTouchRight,
+      placement: "left"
+    },
+    {
+      condition: !isTouchRight && isTouchBottom,
       placement: "top"
-    }
+    },
+    { condition: isTouchLeft, placement: "right" }
   ];
 
   for (const edge of edges) {
     if (edge.condition) {
       calcPlacementPos(edge.placement);
-      currentPlacement.value = edge.placement;
-      return;
     }
   }
 }
@@ -168,13 +184,7 @@ onUnmounted(() => {
     </div>
     <Teleport to="body">
       <Transition name="fade">
-        <div
-          v-show="isVisible"
-          ref="tooltipContentRef"
-          :style="placementPos"
-          :data-placement="currentPlacement"
-          class="su-tooltip__content"
-        >
+        <div v-show="isVisible" ref="tooltipContentRef" :style="placementPos" class="su-tooltip__content">
           <template v-if="$slots.content">
             <slot name="content"></slot>
           </template>
