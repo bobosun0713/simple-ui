@@ -1,26 +1,28 @@
+@use "sass:color";
+
 $primary: #3e8ed0 !default;
-$primary-light: lighten($primary, 10%) !default;
-$primary-dark: darken($primary, 10%) !default;
+$primary-light: color.adjust($primary, $lightness: 10%) !default;
+$primary-dark: color.adjust($primary, $lightness: -10%) !default;
 
 $secondary: #98c2ec !default;
-$secondary-light: lighten($secondary, 10%) !default;
-$secondary-dark: darken($secondary, 20%) !default;
+$secondary-light: color.adjust($secondary, $lightness: 10%) !default;
+$secondary-dark: color.adjust($secondary, $lightness: -20%) !default;
 
 $success: #48c78e !default;
-$success-light: lighten($success, 10%) !default;
-$success-dark: darken($success, 20%) !default;
+$success-light: color.adjust($success, $lightness: 10%) !default;
+$success-dark: color.adjust($success, $lightness: -20%) !default;
 
 $warning: #e6a23c !default;
-$warning-light: lighten($warning, 10%) !default;
-$warning-dark: darken($warning, 20%) !default;
+$warning-light: color.adjust($warning, $lightness: 10%) !default;
+$warning-dark: color.adjust($warning, $lightness: -20%) !default;
 
 $error: #f14668 !default;
-$error-light: lighten($error, 10%) !default;
-$error-dark: darken($error, 20%) !default;
+$error-light: color.adjust($error, $lightness: 10%) !default;
+$error-dark: color.adjust($error, $lightness: -20%) !default;
 
 $dark: #333 !default;
-$dark-light: lighten($dark, 10%) !default;
-$dark-dark: darken($dark, 20%) !default;
+$dark-light: color.adjust($dark, $lightness: 10%) !default;
+$dark-dark: color.adjust($dark, $lightness: -20%) !default;
 
 $light: #fff !default;
 $light-grey: #dbdbdb !default;
