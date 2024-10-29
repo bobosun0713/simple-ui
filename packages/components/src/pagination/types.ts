@@ -1,7 +1,7 @@
 export interface PaginationProps {
   perPage?: number;
   total?: number;
-  page?: number;
+  pager?: number;
   rounded?: boolean;
   disabled?: boolean;
 }
