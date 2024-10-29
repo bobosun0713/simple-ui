@@ -34,6 +34,16 @@ function getBuildConfig(buildConfig: BuildConfig): InlineConfig {
         tsconfigPath: resolve(filename, "../tsconfig.web.json")
       })
     ],
+    css: {
+      preprocessorOptions: {
+        // Since Sass v2.0.0 will deprecate the JSAPI, a warning message will appear during compilation for versions above ^1.79.
+        // To eliminate this warning message, you can add api: 'modern-compiler' in css.preprocessorOptions in vite.config
+        // https://sass-lang.com/documentation/breaking-changes/legacy-js-api/#bundlers
+        scss: {
+          api: "modern-compiler"
+        }
+      }
+    },
     build: {
       minify,
       rollupOptions: {
