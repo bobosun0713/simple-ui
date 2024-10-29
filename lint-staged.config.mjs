@@ -1,12 +1,16 @@
 function mapFiles(filenames, { lint = true, ts = false } = {}) {
-  const commands = ["pnpm format"];
+  const commands = [];
   const lintCheck = "pnpm lint";
   const typeCheck = "pnpm type-check";
+  const formatCheck = "pnpm format";
 
-  if (lint) commands.unshift(`${lintCheck} ${filenames.join(" ")}`);
-  if (ts && filenames.length) commands.unshift(typeCheck);
+  if (filenames.length) {
+    if (lint) commands.unshift(lintCheck);
+    if (ts && filenames.length) commands.unshift(typeCheck);
+    commands.push(formatCheck);
+  }
 
-  return commands.map(cmd => ([lintCheck, typeCheck].includes(cmd) ? cmd : `${cmd} ${filenames.join(" ")}`));
+  return commands.map(cmd => `${cmd} ${filenames.join(" ")}`);
 }
 
 export default {
