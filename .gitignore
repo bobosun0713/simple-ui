@@ -13,3 +13,6 @@ simple
 .eslintcache
 coverage
 docs/.vitepress/cache
+
+# Cache
+.cache

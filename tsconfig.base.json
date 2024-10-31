@@ -17,6 +17,9 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
 
+    "noEmit": true,
+    "tsBuildInfoFile": "./.cache/tsconfig.tsbuildinfo",
+
     "baseUrl": ".",
     "paths": {
       "@components/*": ["packages/components/src/*"],
