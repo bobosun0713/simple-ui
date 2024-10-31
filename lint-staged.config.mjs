@@ -10,7 +10,9 @@ function mapFiles(filenames, { lint = true, ts = false } = {}) {
     commands.push(formatCheck);
   }
 
-  return commands.map(cmd => `${cmd} ${filenames.join(" ")}`);
+  console.log(commands.map(cmd => (cmd.endsWith("type-check") ? cmd : `${cmd} ${filenames.join(" ")}`)));
+
+  return commands.map(cmd => (cmd.endsWith("type-check") ? cmd : `${cmd} ${filenames.join(" ")}`));
 }
 
 export default {
