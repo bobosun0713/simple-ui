@@ -12,12 +12,13 @@ export interface NotificationProps {
   position?: NotificationPlacement;
 }
 
-export interface NotificationContentProps extends Pick<NotificationProps, "duration"> {
+export interface NotificationContentProps {
   id?: number | string;
   type?: NotificationTypes;
   title?: MessageHRender;
   message?: MessageHRender;
   cancel?: MessageHRender;
+  duration?: string | number;
 }
 
 export type NotificationServiceProps = NotificationProps;

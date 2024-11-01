@@ -14,29 +14,29 @@ function message(props?: MessageServiceProps): MessageServiceReturnType {
 
   const vm = _loadingInstances.component!;
 
-  function open(data: MessageServiceOpen): void {
+  const open = (data: MessageServiceOpen): void => {
     vm.exposed!.handleAdd(data);
-  }
+  };
 
-  function info(message: string): void {
+  const info = (message: string): void => {
     vm.exposed!.handleAdd({ message, type: "info" });
-  }
+  };
 
-  function success(message: string): void {
+  const success = (message: string): void => {
     vm.exposed!.handleAdd({ message, type: "success" });
-  }
+  };
 
-  function warning(message: string): void {
+  const warning = (message: string): void => {
     vm.exposed!.handleAdd({ message, type: "warning" });
-  }
+  };
 
-  function error(message: string): void {
+  const error = (message: string): void => {
     vm.exposed!.handleAdd({ message, type: "error" });
-  }
+  };
 
-  function closeAll(): void {
+  const closeAll = (): void => {
     vm.exposed!.handleRemoveAll();
-  }
+  };
 
   return {
     open,

@@ -32,9 +32,11 @@ function handleAdd(data: NotificationContentProps): void {
   if (notificationList.value.length === 0) notificationIdx = 0;
 
   notificationIdx += 1;
+  data.id = notificationIdx;
 
-  const aryMethod = notificationList.value.length ? "unshift" : "push";
-  notificationList.value[aryMethod]({ ...data, id: notificationIdx });
+  const aryMethod = verticalDirection.value === "su-notification-wrap--bottom" ? "unshift" : "push";
+  //@ts-ignore
+  notificationList.value[aryMethod](data);
 }
 
 function handleRemove(idx: string | number): void {
@@ -47,7 +49,7 @@ function handleRemoveAll(): void {
 }
 
 defineSlots<{
-  title?: (props: { message: string }) => unknown;
+  title?: (props: { title: string }) => unknown;
   message?: (props: { message: string }) => unknown;
   cancel?: (props: { handleClose: () => void }) => unknown;
 }>();

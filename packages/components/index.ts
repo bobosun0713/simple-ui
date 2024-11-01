@@ -4,7 +4,7 @@ import "./styles/reset.scss";
 
 export * from "./src";
 export default {
-  install: (app: App) => {
+  install: (app: App): void => {
     for (const cmp in components) {
       app.use(components[cmp as keyof typeof components]);
     }

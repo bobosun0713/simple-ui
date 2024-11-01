@@ -8,7 +8,10 @@ export interface TableColumn {
   align?: "start" | "center" | "end";
 }
 
-export type TableRow<T> = T & { checked?: boolean };
+export interface TableRow<T> {
+  [key: string]: T | boolean | undefined;
+  checked?: boolean;
+}
 
 export interface TableProps<T> {
   modelValue?: unknown[];

@@ -24,13 +24,13 @@ function loadingService(props?: LoadingServiceProps): LoadingServiceReturnType {
 
   document.body.appendChild(_loadingInstances.el as HTMLElement);
 
-  function open(): void {
+  const open = (): void => {
     isVisible.value = true;
-  }
+  };
 
-  function close(): void {
+  const close = (): void => {
     isVisible.value = false;
-  }
+  };
 
   return { open, close };
 }

@@ -1,6 +1,6 @@
 import { withInstall, withInstallFunction } from "@simple/utils";
 import Loading from "./Loading.vue";
-import LoadingService from "./Loading";
+import LoadingService from "./method";
 
 const SLoading = withInstall(Loading);
 const SLoadingService = withInstallFunction(LoadingService, "$loading");
