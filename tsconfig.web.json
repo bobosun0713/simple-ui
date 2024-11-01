@@ -12,7 +12,9 @@
     "packages/directives/src/**/*.ts",
     "packages/use/*.ts",
     "packages/use/src/**/*.ts",
+    "packages/utils/*.ts",
     "typings/components.d.ts",
     "typings/vite-env.d.ts"
-  ]
+  ],
+  "exclude": ["node_modules"]
 }
