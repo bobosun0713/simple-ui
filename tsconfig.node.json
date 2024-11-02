@@ -3,7 +3,8 @@
   "compilerOptions": {
     "composite": true,
     "lib": ["ESNext"],
-    "types": ["node"]
+    "types": ["node"],
+    "tsBuildInfoFile": "./.cache/tsconfig.node.tsbuildinfo"
   },
   "include": ["vite.config.*", "vitest.config.*", "typings/vite-env.d.ts"]
 }
