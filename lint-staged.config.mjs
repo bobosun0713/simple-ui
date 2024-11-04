@@ -1,13 +1,11 @@
 function mapFiles(filenames, { lint = true, ts = false } = {}) {
-  const commands = [];
+  const commands = ["pnpm format"];
   const lintCheck = "pnpm lint";
   const typeCheck = "pnpm type-check";
-  const formatCheck = "pnpm format";
 
   if (filenames.length) {
     if (lint) commands.unshift(lintCheck);
-    if (ts && filenames.length) commands.unshift(typeCheck);
-    commands.push(formatCheck);
+    if (ts) commands.unshift(typeCheck);
   }
 
   return commands.map(cmd => (cmd.endsWith("type-check") ? cmd : `${cmd} ${filenames.join(" ")}`));

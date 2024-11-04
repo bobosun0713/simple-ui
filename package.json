@@ -36,11 +36,11 @@
     "test:cg": "vitest --coverage -c ./packages/vitest.config.mts",
     "test:cmp": "pnpm test ./packages/tests/components/*.test.ts",
     "test:use": "pnpm test ./packages/tests/use/*.test.ts",
-    "lint": "eslint --fix --cache  --cache-location .cache/.eslintcache",
+    "lint": "eslint --fix --cache --cache-location .cache/.eslintcache",
     "lint:all": "pnpm lint .",
     "type-check": "vue-tsc --build",
     "type-check:force": "pnpm type-check --force",
-    "format": "prettier --write --ignore-unknown",
+    "format": "prettier --write '!(package|pnpm-lock).*' --ignore-unknown",
     "format:all": "pnpm format .",
     "prepare": "husky"
   },
