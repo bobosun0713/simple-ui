@@ -41,9 +41,23 @@ const {
   update: updateTooltip
 } = useElementBounding(tooltipRef);
 
+/**
+ * Get the width overflow of the window
+ * If there is a horizontal scroll bar, add scroll left.
+ */
+function getViewportOverflow(): number {
+  const clientWidth = window.innerWidth;
+  const scrollWidth = document.documentElement.scrollWidth;
+  const scrollLeft = document.documentElement.scrollLeft;
+
+  return scrollWidth > clientWidth ? scrollLeft : 0;
+}
+
 function calcPlacementPos(placement: TooltipPlacement): void {
   // Update tooltip position
   updateTooltip();
+
+  const viewportOverflow = getViewportOverflow();
 
   const { width: contentWidth = 0, height: contentHeight = 0 } = tooltipContentRef.value?.getBoundingClientRect() ?? {};
 
@@ -51,7 +65,7 @@ function calcPlacementPos(placement: TooltipPlacement): void {
   tooltipContentRect.value.height = contentHeight;
 
   const commonTopValue = window.scrollY + tooltipY.value + (tooltipHeight.value - tooltipContentRect.value.height) / 2;
-  const commonLeftValue = tooltipX.value + (tooltipWidth.value - tooltipContentRect.value.width) / 2;
+  const commonLeftValue = tooltipX.value + (tooltipWidth.value - tooltipContentRect.value.width) / 2 + viewportOverflow;
 
   const placementMap = {
     top(): void {
@@ -60,7 +74,7 @@ function calcPlacementPos(placement: TooltipPlacement): void {
         window.scrollY + tooltipY.value - tooltipContentRect.value.height - Number(props.offset);
     },
     right(): void {
-      tooltipContentRect.value.left = tooltipX.value + tooltipWidth.value + Number(props.offset);
+      tooltipContentRect.value.left = tooltipX.value + tooltipWidth.value + Number(props.offset) + viewportOverflow;
       tooltipContentRect.value.top = commonTopValue;
     },
     bottom(): void {
@@ -68,16 +82,21 @@ function calcPlacementPos(placement: TooltipPlacement): void {
       tooltipContentRect.value.top = window.scrollY + tooltipY.value + tooltipHeight.value + Number(props.offset);
     },
     left(): void {
-      tooltipContentRect.value.left = tooltipX.value - tooltipContentRect.value.width - Number(props.offset);
+      tooltipContentRect.value.left =
+        tooltipX.value - tooltipContentRect.value.width - Number(props.offset) + viewportOverflow;
       tooltipContentRect.value.top = commonTopValue;
     }
   };
 
   placementMap[placement]?.();
 }
+
 function checkTouchEdge(): void {
-  const isTouchLeft = tooltipContentRect.value.left <= 0;
-  const isTouchRight = tooltipContentRect.value.left + tooltipContentRect.value.width >= windowWidth.value;
+  const viewportOverflow = getViewportOverflow();
+
+  const isTouchLeft = tooltipContentRect.value.left - viewportOverflow <= 0;
+  const isTouchRight =
+    tooltipContentRect.value.left + tooltipContentRect.value.width - viewportOverflow >= windowWidth.value;
   const isTouchTop = tooltipContentRect.value.top - window.scrollY <= 0;
   const isTouchBottom =
     tooltipContentRect.value.top - window.scrollY + tooltipContentRect.value.height >= windowHeight.value;
@@ -134,6 +153,7 @@ function handleToggle(): void {
 
   triggerPlacement();
 }
+
 function handleMouseover(visible: boolean): void {
   isVisible.value = visible;
   emits("update:modelValue", visible);
@@ -157,8 +177,6 @@ watch(
   },
   { immediate: true }
 );
-
-watch(windowWidth, () => triggerPlacement());
 
 onMounted(() => {
   [window, ...collectScroll(tooltipRef.value!)].forEach(ele => {
