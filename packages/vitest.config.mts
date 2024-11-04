@@ -14,6 +14,7 @@ export default defineConfig({
     coverage: {
       enabled: true,
       provider: "v8",
+      reportsDirectory: "../.cache/coverage",
       exclude: [
         "**/{index,types}.ts",
         "**/svg/*.vue",
