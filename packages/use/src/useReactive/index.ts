@@ -3,7 +3,7 @@ import { deepClone } from "@simple/utils";
 
 type ReactiveWithReset<T> = UnwrapNestedRefs<T> & { reset: () => void };
 
-export function useReactive<T extends object>(target: T): ReactiveWithReset<T> | T {
+export function useReactive<T extends object>(target: T): ReactiveWithReset<T> {
   if (typeof target !== "object" || target === null) {
     console.warn("[useReactive] only accepts objects");
     return target;

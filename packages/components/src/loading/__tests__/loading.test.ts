@@ -1,8 +1,8 @@
 import { nextTick } from "vue";
 import { mount, type VueWrapper } from "@vue/test-utils";
 
-import Loading from "@components/loading/Loading.vue";
-import LoadingService from "@components/loading/Loading";
+import Loading from "../Loading.vue";
+import LoadingService from "../method";
 
 describe("Loading.vue", () => {
   it("should render default structure", () => {
@@ -47,7 +47,7 @@ describe("Loading.vue", () => {
 
       vi.advanceTimersToNextTimer();
 
-      expect(wrapper.emitted("update:visible")[0][0]).toBe(false);
+      expect(wrapper.emitted("update:visible")?.[0][0]).toBe(false);
 
       vi.useRealTimers();
     });
@@ -73,19 +73,19 @@ describe("Loading.vue", () => {
 
   describe("when use service API", () => {
     it("should show and close loading", async () => {
-      const { open, close } = LoadingService({ duration: 0 });
+      const { open, close } = LoadingService();
 
-      open();
+      open({ duration: 0 });
 
       await nextTick();
 
-      expect(document.querySelector(".su-loading").getAttribute("style")).not.toBe("display: none;");
+      expect(document.querySelector(".su-loading")?.getAttribute("style")).not.toBe("display: none;");
 
       close();
 
       await nextTick();
 
-      expect(document.querySelector(".su-loading").getAttribute("style")).toBe("display: none;");
+      expect(document.querySelector(".su-loading")?.getAttribute("style")).toBe("display: none;");
     });
   });
 });

@@ -1,4 +1,4 @@
-import { h, nextTick, ref } from "vue";
+import { h, nextTick } from "vue";
 import { mountInstance } from "@simple/utils";
 import { dialogInstances } from "./instance";
 import SDialog from "./Dialog.vue";
@@ -23,10 +23,8 @@ function executeExposeAction(id: string | number, action: (exposed: DialogExpose
 }
 
 function dialogService(): DialogServiceReturnType {
-  const confirm = (props?: DialogServiceProps): Promise<DialogServiceAction> => {
-    const isVisible = ref(true);
-
-    const { header, body, footer, beforeClose, ...args } = props ?? {};
+  const confirm = (props: DialogServiceProps = {}): Promise<DialogServiceAction> => {
+    const { header, body, footer, beforeClose, ...args } = props;
 
     return new Promise(resolve => {
       const createSlot = (slot: DialogSlot): ((fn?: DialogSlotAction) => NonFunction<typeof slot>) =>
@@ -35,12 +33,10 @@ function dialogService(): DialogServiceReturnType {
       const closeAction = (type: DialogServiceAction): void => {
         if (typeof beforeClose === "function") {
           beforeClose(() => {
-            isVisible.value = false;
             resolve(type);
           }, type);
           return;
         }
-        isVisible.value = false;
         resolve(type);
       };
 
@@ -49,7 +45,7 @@ function dialogService(): DialogServiceReturnType {
           SDialog,
           {
             ...args,
-            visible: isVisible,
+            visible: true,
             appendToBody: false,
             onConfirm: () => closeAction("confirm"),
             onCancel: () => closeAction("cancel"),

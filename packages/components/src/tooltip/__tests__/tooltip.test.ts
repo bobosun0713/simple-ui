@@ -1,7 +1,7 @@
-import { mount } from "@vue/test-utils";
+import { mount, VueWrapper } from "@vue/test-utils";
 import { nextTick } from "vue";
 
-import Tooltip from "@components/tooltip/Tooltip.vue";
+import Tooltip from "../Tooltip.vue";
 
 describe("Tooltip.vue", () => {
   it("should render default structure", () => {
@@ -17,7 +17,7 @@ describe("Tooltip.vue", () => {
   });
 
   describe("when set props", () => {
-    let wrapper;
+    let wrapper: VueWrapper;
 
     beforeEach(() => {
       wrapper = mount(Tooltip, {
@@ -85,7 +85,7 @@ describe("Tooltip.vue", () => {
       await wrapper.find(".su-tooltip__trigger").trigger("click");
 
       expect(wrapper.emitted("update:modelValue")).toBeTruthy();
-      expect(wrapper.emitted("update:modelValue")[0][0]).toBe(true);
+      expect(wrapper.emitted("update:modelValue")?.[0][0]).toBe(true);
     });
 
     it("should emit update:modelValue event when mouse enters the tooltip trigger", async () => {
@@ -97,7 +97,7 @@ describe("Tooltip.vue", () => {
       await wrapper.find(".su-tooltip__trigger").trigger("mouseenter");
 
       expect(wrapper.emitted("update:modelValue")).toBeTruthy();
-      expect(wrapper.emitted("update:modelValue")[0][0]).toBe(true);
+      expect(wrapper.emitted("update:modelValue")?.[0][0]).toBe(true);
     });
 
     it("should emit update:modelValue event when mouse leaves the tooltip trigger", async () => {
@@ -110,7 +110,7 @@ describe("Tooltip.vue", () => {
       await wrapper.find(".su-tooltip__trigger").trigger("mouseleave");
 
       expect(wrapper.emitted("update:modelValue")).toBeTruthy();
-      expect(wrapper.emitted("update:modelValue")[0][0]).toBe(false);
+      expect(wrapper.emitted("update:modelValue")?.[0][0]).toBe(false);
     });
   });
 });

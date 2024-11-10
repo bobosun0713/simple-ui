@@ -11,6 +11,6 @@ export interface LoadingServiceProps extends Pick<LoadingProps, "duration"> {
 }
 
 export interface LoadingServiceReturnType {
-  open: () => void;
+  open: (props?: LoadingServiceProps) => void;
   close: () => void;
 }

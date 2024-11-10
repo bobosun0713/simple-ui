@@ -5,9 +5,9 @@ export interface CollapseProps {
 }
 
 export interface CollapseItemProps {
-  name: string;
-  title: string;
-  content: string;
+  name?: string;
+  title?: string;
+  content?: string;
 }
 
 export const collapsePropsKey: InjectionKey<{ activeNames: Ref<string[]> }> = Symbol("collapseProps");

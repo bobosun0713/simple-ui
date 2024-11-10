@@ -1,9 +1,9 @@
-import type { Ref, h } from "vue";
+import type { h } from "vue";
 
 export type DialogSize = "sm" | "md" | "lg" | "xl";
 
 export interface DialogProps {
-  visible?: boolean | Ref<boolean>;
+  visible?: boolean;
   id?: string;
   size?: DialogSize;
   showClose?: boolean;

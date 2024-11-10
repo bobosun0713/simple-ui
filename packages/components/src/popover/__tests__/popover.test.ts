@@ -1,7 +1,7 @@
 import { nextTick } from "vue";
 import { mount } from "@vue/test-utils";
 
-import Popover from "@components/popover/Popover.vue";
+import Popover from "../Popover.vue";
 
 describe("Popover", () => {
   it("should render default structure", () => {

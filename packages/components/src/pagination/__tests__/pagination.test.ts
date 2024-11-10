@@ -1,6 +1,6 @@
 import { shallowMount } from "@vue/test-utils";
 
-import Pagination from "@components/pagination/Pagination.vue";
+import Pagination from "../Pagination.vue";
 
 describe("Pagination", () => {
   it("should render default structure", () => {
@@ -13,10 +13,10 @@ describe("Pagination", () => {
       }
     });
 
-    expect(wrapper.findAll(".su-pagination__btn").at(0).exists()).toBeTruthy();
-    expect(wrapper.findAll(".su-pagination__btn").at(1).classes()).toBeTruthy();
+    expect(wrapper.findAll(".su-pagination__btn").at(0)?.exists()).toBeTruthy();
+    expect(wrapper.findAll(".su-pagination__btn").at(1)?.classes()).toBeTruthy();
     expect(wrapper.findAll(".su-pagination__pager")).toHaveLength(5);
-    expect(wrapper.findAll(".su-pagination__pager").at(0).classes()).toContain("su-pagination__pager--active");
+    expect(wrapper.findAll(".su-pagination__pager").at(0)?.classes()).toContain("su-pagination__pager--active");
   });
 
   describe("when pager button is clicked", () => {
@@ -30,10 +30,10 @@ describe("Pagination", () => {
         }
       });
 
-      await wrapper.findAll(".su-pagination__pager").at(2).trigger("click");
+      await wrapper.findAll(".su-pagination__pager").at(2)?.trigger("click");
 
       expect(wrapper.emitted("update:current")).toBeTruthy();
-      expect(wrapper.emitted("update:current")[0]).toEqual([3]);
+      expect(wrapper.emitted("update:current")?.[0]).toEqual([3]);
     });
   });
 
@@ -49,11 +49,11 @@ describe("Pagination", () => {
         }
       });
 
-      expect(wrapper.findAll(".su-pagination__btn").at(0).classes()).toContain("su-pagination__btn--rounded");
-      expect(wrapper.findAll(".su-pagination__btn").at(1).classes()).toContain("su-pagination__btn--rounded");
+      expect(wrapper.findAll(".su-pagination__btn").at(0)?.classes()).toContain("su-pagination__btn--rounded");
+      expect(wrapper.findAll(".su-pagination__btn").at(1)?.classes()).toContain("su-pagination__btn--rounded");
 
       for (let i = 0; i < wrapper.findAll(".su-pagination__btn").length; i++) {
-        expect(wrapper.findAll(".su-pagination__pager").at(i).classes()).toContain("su-pagination__pager--rounded");
+        expect(wrapper.findAll(".su-pagination__pager").at(i)?.classes()).toContain("su-pagination__pager--rounded");
       }
     });
     it("should disabled all buttons when disabled prop is set", () => {
@@ -67,11 +67,11 @@ describe("Pagination", () => {
         }
       });
 
-      expect(wrapper.findAll(".su-pagination__btn").at(0).classes()).toContain("su-pagination__btn--disabled");
-      expect(wrapper.findAll(".su-pagination__btn").at(1).classes()).toContain("su-pagination__btn--disabled");
+      expect(wrapper.findAll(".su-pagination__btn").at(0)?.classes()).toContain("su-pagination__btn--disabled");
+      expect(wrapper.findAll(".su-pagination__btn").at(1)?.classes()).toContain("su-pagination__btn--disabled");
 
       for (let i = 0; i < wrapper.findAll(".su-pagination__btn").length; i++) {
-        expect(wrapper.findAll(".su-pagination__pager").at(i).classes()).toContain("su-pagination__pager--disabled");
+        expect(wrapper.findAll(".su-pagination__pager").at(i)?.classes()).toContain("su-pagination__pager--disabled");
       }
     });
   });
@@ -87,7 +87,7 @@ describe("Pagination", () => {
         }
       });
 
-      expect(wrapper.findAll(".su-pagination__btn").at(0).classes()).toContain("su-pagination__btn--disabled");
+      expect(wrapper.findAll(".su-pagination__btn").at(0)?.classes()).toContain("su-pagination__btn--disabled");
     });
 
     it("should disabled next button on last page", () => {
@@ -100,7 +100,7 @@ describe("Pagination", () => {
         }
       });
 
-      expect(wrapper.findAll(".su-pagination__btn").at(1).classes()).toContain("su-pagination__btn--disabled");
+      expect(wrapper.findAll(".su-pagination__btn").at(1)?.classes()).toContain("su-pagination__btn--disabled");
     });
   });
 });

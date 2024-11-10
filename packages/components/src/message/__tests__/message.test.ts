@@ -1,8 +1,9 @@
 import { nextTick } from "vue";
 import { mount } from "@vue/test-utils";
 
-import Message from "@components/message/Message.vue";
-import MessageService from "@components/message/Message";
+import Message from "../Message.vue";
+import MessageService from "../method";
+import type { MessageServiceReturnType } from "../types";
 
 describe("Message.vue", () => {
   it("should render default structure", () => {
@@ -21,7 +22,7 @@ describe("Message.vue", () => {
 
       await nextTick();
 
-      expect(wrapper.findAll(".su-message").at(0).text()).toBe("test");
+      expect(wrapper.findAll(".su-message").at(0)?.text()).toBe("test");
     });
   });
 
@@ -33,7 +34,7 @@ describe("Message.vue", () => {
 
       await nextTick();
 
-      expect(wrapper.findAll(".su-message").at(0).find(".su-message__cancel").exists()).toBeFalsy();
+      expect(wrapper.findAll(".su-message").at(0)?.find(".su-message__cancel").exists()).toBeFalsy();
     });
 
     it("should have offsetTop style set to 20", async () => {
@@ -54,10 +55,10 @@ describe("Message.vue", () => {
 
       await nextTick();
 
-      expect(wrapper.findAll(".su-message").at(1).attributes("style")).toContain("margin-top: 15px;");
+      expect(wrapper.findAll(".su-message").at(1)?.attributes("style")).toContain("margin-top: 15px;");
     });
 
-    it("should have width style set to 200", async () => {
+    it("should have width style set to 200", () => {
       const wrapper = mount(Message, { props: { width: 200 } });
 
       expect(wrapper.find(".su-message-wrap").attributes("style")).toContain("width: 200px;");
@@ -89,7 +90,7 @@ describe("Message.vue", () => {
     ])("should display %s type within the message", async (type, expected) => {
       const messageService = MessageService();
 
-      messageService[type]?.();
+      messageService[type as keyof MessageServiceReturnType]?.("test");
 
       await nextTick();
 

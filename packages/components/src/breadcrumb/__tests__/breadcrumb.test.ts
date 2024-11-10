@@ -1,5 +1,5 @@
 import { mount } from "@vue/test-utils";
-import Breadcrumb from "@components/breadcrumb/Breadcrumb.vue";
+import Breadcrumb from "../Breadcrumb.vue";
 
 const push = vi.fn();
 
@@ -54,6 +54,7 @@ describe("Breadcrumb.vue", () => {
   describe("when set slots", () => {
     it("should render breadcrumb with `prepend` slot", () => {
       const wrapper = mount(Breadcrumb, {
+        props: { items: ["Home", "Product"] },
         slots: {
           prepend: "prepend slot"
         }

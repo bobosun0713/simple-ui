@@ -1,6 +1,9 @@
+export type LinkType = "success" | "warning" | "danger" | "default";
+export type LinkTarget = "_blank" | "_self" | "_parent" | "_top";
+
 export interface LinkProps {
-  type?: "success" | "warning" | "danger" | "default";
-  target?: "_blank" | "_self" | "_parent" | "_top";
+  type?: LinkType;
+  target?: LinkTarget;
   underline?: boolean;
   disabled?: boolean;
   href?: string;

@@ -1,9 +1,8 @@
 import { mount, flushPromises, type VueWrapper } from "@vue/test-utils";
-import { withSetup } from "@utils/index";
-import Dialog from "@components/dialog/Dialog.vue";
-import DialogService from "@components/dialog/Dialog";
+import Dialog from "../Dialog.vue";
+import DialogService from "../method";
 import type { defineComponent } from "vue";
-import type { DialogServiceReturnType, DialogSize } from "@components/dialog/types";
+import type { DialogSize } from "@components/dialog/types";
 
 describe("Dialog.vue", () => {
   it("should render default structure", () => {
@@ -168,12 +167,10 @@ describe("Dialog.vue", () => {
   });
 
   describe("when use DialogService API", () => {
-    const [result, app] = withSetup(() => DialogService());
-    const { confirm, showDialog, closeDialog, closeAll } = (result as unknown as DialogServiceReturnType) || {};
+    const { confirm, showDialog, closeDialog, closeAll } = DialogService();
 
     afterEach(() => {
       document.body.innerHTML = "";
-      app!.unmount();
     });
 
     it("should show dialog", () => {
@@ -182,9 +179,6 @@ describe("Dialog.vue", () => {
         body: "API-Content"
       });
 
-      // await flushPromises();
-
-      // expect(result).toHaveBeenCalledTimes(1)
       expect(document.querySelector(".su-dialog__header")?.innerHTML).toContain("API-Title");
       expect(document.querySelector(".su-dialog__content")?.innerHTML).toContain("API-Content");
     });
@@ -248,8 +242,6 @@ describe("Dialog.vue", () => {
       });
 
       afterEach(() => {
-        // Cannot test in a simulated browser environment, so we test internal parameters.
-        // Therefore, we must manually execute unmount to destroy the instance
         wrapper.unmount();
       });
 
@@ -257,8 +249,6 @@ describe("Dialog.vue", () => {
         showDialog("dialog1");
 
         await flushPromises();
-
-        console.log(wrapper.vm.isVisible1);
 
         expect(wrapper.vm.isVisible1).toBe(true);
       });

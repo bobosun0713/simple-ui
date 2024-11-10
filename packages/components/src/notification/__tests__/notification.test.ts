@@ -1,9 +1,9 @@
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 
-import Notification from "@components/notification/Notification.vue";
-import NotificationService from "@components/notification/Notification";
-import type { NotificationPlacement } from "@components/notification/types";
+import Notification from "../Notification.vue";
+import NotificationService from "../method";
+import type { NotificationPlacement } from "../types";
 
 describe("Notification.vue", () => {
   it("should render <Notification />", async () => {
@@ -24,7 +24,7 @@ describe("Notification.vue", () => {
   });
 
   describe("when set props", () => {
-    it("should have `width` style set to 200", async () => {
+    it("should have `width` style set to 200", () => {
       const wrapper = mount(Notification, {
         props: {
           width: 200
@@ -37,7 +37,7 @@ describe("Notification.vue", () => {
       expect(wrapper.find(".su-notification-wrap").attributes("style")).toContain("width: 200px");
     });
 
-    it("should have `top` style set to 20", async () => {
+    it("should have `top` style set to 20", () => {
       const wrapper = mount(Notification, {
         props: {
           offsetTop: 20
@@ -98,7 +98,7 @@ describe("Notification.vue", () => {
       ["top-left", "su-notification-wrap--top su-notification-wrap--left"],
       ["bottom-right", "su-notification-wrap--bottom su-notification-wrap--right"],
       ["bottom-left", "su-notification-wrap--bottom su-notification-wrap--left"]
-    ])("should have `%s` classes", async (position, expected) => {
+    ])("should have `%s` classes", (position, expected) => {
       const wrapper = mount(Notification, {
         props: {
           position: position as NotificationPlacement
@@ -180,8 +180,7 @@ describe("Notification.vue", () => {
 
       expect(wrapper.find(".su-notification").exists()).toBeTruthy();
 
-      wrapper.find(".su-notification__cancel").trigger("click");
-
+      await wrapper.find(".su-notification__cancel").trigger("click");
       await wrapper.vm.$nextTick();
 
       expect(wrapper.find(".su-notification").exists()).toBeFalsy();

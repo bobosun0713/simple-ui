@@ -1,6 +1,6 @@
 import { mount } from "@vue/test-utils";
 
-import SIcon from "@components/icon/Icon.vue";
+import SIcon from "../Icon.vue";
 
 describe("Icon.vue", () => {
   it("should render default structure", async () => {

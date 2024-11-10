@@ -1,14 +1,13 @@
 import { createComponent } from "@utils/index";
 
-import SCollapse from "@components/collapse/Collapse.vue";
-import SCollapseItem from "@components/collapse/CollapseItem.vue";
+import SCollapse from "../Collapse.vue";
+import SCollapseItem from "../CollapseItem.vue";
+import { VueWrapper } from "@vue/test-utils";
 
-function mountCollapse(template: string) {
+function createCollapse(template: string): VueWrapper {
   return createComponent(
-    {
-      template,
-      components: { SCollapse, SCollapseItem }
-    },
+    template,
+    { components: { SCollapse, SCollapseItem } },
     {
       global: {
         stubs: {
@@ -21,7 +20,7 @@ function mountCollapse(template: string) {
 
 describe("Collapse.vue", () => {
   it("should render default structure", () => {
-    const wrapper = mountCollapse(`
+    const wrapper = createCollapse(`
     <SCollapse>
 
        <SCollapseItem></SCollapseItem>
@@ -36,7 +35,7 @@ describe("Collapse.vue", () => {
 
   describe("when set props", () => {
     it("should show `title` prop content", () => {
-      const wrapper = mountCollapse(`
+      const wrapper = createCollapse(`
       <SCollapse>
 
         <SCollapseItem title="Vitest"></SCollapseItem>
@@ -47,7 +46,7 @@ describe("Collapse.vue", () => {
     });
 
     it("should show `content` prop content", () => {
-      const wrapper = mountCollapse(`
+      const wrapper = createCollapse(`
       <SCollapse>
 
         <SCollapseItem content="Vitest"></SCollapseItem>
@@ -60,7 +59,7 @@ describe("Collapse.vue", () => {
 
   describe("when set slot", () => {
     it("should render `title` slot", () => {
-      const wrapper = mountCollapse(`
+      const wrapper = createCollapse(`
       <SCollapse>
 
         <SCollapseItem>
@@ -76,7 +75,7 @@ describe("Collapse.vue", () => {
     });
 
     it("should render `default` slot", () => {
-      const wrapper = mountCollapse(`
+      const wrapper = createCollapse(`
       <SCollapse>
 
         <SCollapseItem>
@@ -94,7 +93,7 @@ describe("Collapse.vue", () => {
 
   describe("when click events", () => {
     it("should toggle collapse item", async () => {
-      const wrapper = mountCollapse(`
+      const wrapper = createCollapse(`
       <SCollapse>
 
         <SCollapseItem></SCollapseItem>
@@ -114,7 +113,7 @@ describe("Collapse.vue", () => {
     });
 
     it("should toggle multiple collapse item in `accordion` mode", async () => {
-      const wrapper = mountCollapse(`
+      const wrapper = createCollapse(`
       <SCollapse accordion>
 
         <SCollapseItem name="v1"></SCollapseItem>

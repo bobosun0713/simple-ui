@@ -1,10 +1,10 @@
 import { shallowMount } from "@vue/test-utils";
 
-import Link from "@components/link/Link.vue";
+import Link from "../Link.vue";
 import type { LinkType, LinkTarget } from "@components/link/types";
 
 describe("Link.vue", () => {
-  it("should render default structure", async () => {
+  it("should render default structure", () => {
     const wrapper = shallowMount(Link);
 
     expect(wrapper.attributes("class")).toContain("su-link su-link--default su-link--underline");
@@ -15,8 +15,8 @@ describe("Link.vue", () => {
       ["success", "su-link--success"],
       ["warning", "su-link--warning"],
       ["danger", "su-link--danger"]
-    ])("should have `su-link--%s` class", (type: LinkType, expected) => {
-      const wrapper = shallowMount(Link, { props: { type } });
+    ])("should have `su-link--%s` class", (type, expected) => {
+      const wrapper = shallowMount(Link, { props: { type: type as LinkType } });
 
       expect(wrapper.classes(expected)).toBeTruthy();
     });
@@ -34,8 +34,8 @@ describe("Link.vue", () => {
       expect(wrapper.attributes("target")).toBeUndefined();
     });
 
-    it.each(["_blank", "_self", "_parent", "_top"])("should have `%s` target attribute", (target: LinkTarget) => {
-      const wrapper = shallowMount(Link, { props: { href: "javascript:;", target } });
+    it.each(["_blank", "_self", "_parent", "_top"])("should have `%s` target attribute", target => {
+      const wrapper = shallowMount(Link, { props: { href: "javascript:;", target: target as LinkTarget } });
 
       expect(wrapper.attributes("target")).toBe(target);
     });

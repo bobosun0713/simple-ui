@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { onUnmounted, watch, computed, isRef, ref } from "vue";
+import { onUnmounted, watch } from "vue";
 import SIcon from "../icon/Icon.vue";
 
 import { LoadingProps } from "./types";
@@ -8,23 +8,22 @@ defineOptions({
   name: "SLoading"
 });
 
-const props = withDefaults(defineProps<LoadingProps>(), {
-  visible: false,
-  duration: 2000
+const visibleModel = defineModel("visible", {
+  type: Boolean,
+  default: false
 });
 
-const emits = defineEmits(["update:visible"]);
+const { duration = 2000 } = defineProps<LoadingProps>();
 
 let timer: number;
 
-const isVisible = ref(props.visible);
-const visibleValue = computed(() => (isRef(props.visible) ? Boolean(props.visible.value) : Boolean(props.visible)));
+watch(visibleModel, () => {
+  if (!duration) return;
 
-watch(visibleValue, val => {
-  isVisible.value = val;
-  if (!props.duration) return;
   if (timer) clearTimeout(timer);
-  timer = window.setTimeout(() => emits("update:visible", false), props.duration);
+  timer = window.setTimeout(() => {
+    visibleModel.value = false;
+  }, duration);
 });
 
 onUnmounted(() => {
@@ -34,7 +33,7 @@ onUnmounted(() => {
 
 <template>
   <Transition name="loading">
-    <div v-show="isVisible" class="su-loading">
+    <div v-show="visible" class="su-loading">
       <div class="su-loading-content">
         <slot name="spinner">
           <SIcon name="loading" width="60" height="60" fill="#3e8ed0" class="su-loading-spinner"></SIcon>

@@ -1,9 +1,9 @@
 import { shallowMount } from "@vue/test-utils";
 
-import Divider from "@components/divider/Divider.vue";
+import Divider from "../Divider.vue";
 
 describe("Divider.vue", () => {
-  it("should render default structure", async () => {
+  it("should render default structure", () => {
     const wrapper = shallowMount(Divider);
 
     expect(wrapper.classes()).toContain("su-divider--horizontal");
@@ -13,7 +13,7 @@ describe("Divider.vue", () => {
   });
 
   describe("when set props", () => {
-    it("should have `su-divider--vertical` class", async () => {
+    it("should have `su-divider--vertical` class", () => {
       const wrapper = shallowMount(Divider, {
         props: {
           vertical: true
@@ -23,7 +23,7 @@ describe("Divider.vue", () => {
       expect(wrapper.classes("su-divider--vertical")).toBeTruthy();
     });
 
-    it("should show with custom thickness, spacing, and border style", async () => {
+    it("should show with custom thickness, spacing, and border style", () => {
       const wrapper = shallowMount(Divider, {
         props: {
           thickness: 2,

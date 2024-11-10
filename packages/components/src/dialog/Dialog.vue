@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, getCurrentInstance, ref, watch, onMounted, onUnmounted, isRef, type Ref } from "vue";
+import { computed, getCurrentInstance, ref, watch, onMounted, onUnmounted } from "vue";
 import { dialogInstances } from "./instance";
 import SIcon from "../icon/Icon.vue";
 import SButton from "../button/Button.vue";
@@ -12,8 +12,12 @@ defineOptions({
 const instance = getCurrentInstance()!;
 dialogInstances.push(instance);
 
+const visibleModel = defineModel("visible", {
+  type: Boolean,
+  default: false
+});
+
 const {
-  visible = false,
   size = "md",
   closeOnOverlay = true,
   showClose = true,
@@ -37,12 +41,11 @@ defineSlots<{
   footer?: (props: DialogSlotAction) => unknown;
 }>();
 
-const isVisible = ref<boolean | Ref<boolean>>(false);
+const isVisible = ref(false);
 const contentClasses = computed(() => ["su-dialog__content", `su-dialog__content--${size}`]);
-const getModelValue = computed(() => (isRef(visible) ? Boolean(visible.value) : Boolean(visible)));
 
-function handleToggle(visible = false): void {
-  emits("update:visible", visible);
+function handleToggle(val = false): void {
+  visibleModel.value = val;
 }
 
 function handleClose(): void {
@@ -63,12 +66,12 @@ function handleConfirm(): void {
   handleToggle(false);
 }
 
-watch(getModelValue, val => {
+watch(visibleModel, val => {
   isVisible.value = val;
 });
 
 onMounted(() => {
-  isVisible.value = getModelValue.value;
+  isVisible.value = visibleModel.value;
 });
 
 onUnmounted(() => {

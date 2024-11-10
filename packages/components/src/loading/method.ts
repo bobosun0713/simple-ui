@@ -1,30 +1,34 @@
-import { ref } from "vue";
-import { dynamicCreate } from "@simple/utils";
-import Loading from "./Loading.vue";
-import type { VNode } from "vue";
+import { ref, h } from "vue";
+import { mountInstance } from "@simple/utils";
+import SLoading from "./Loading.vue";
 import type { LoadingServiceProps, LoadingServiceReturnType } from "./types";
 
-let _loadingInstances: VNode;
+let _loadingInstances: ReturnType<typeof mountInstance>;
 
-function loadingService(props?: LoadingServiceProps): LoadingServiceReturnType {
-  const { spinner, ...args } = props ?? {};
+function loadingService(): LoadingServiceReturnType {
   const isVisible = ref(false);
 
-  _loadingInstances =
-    _loadingInstances ||
-    dynamicCreate(
-      Loading,
-      {
-        ...args,
-        visible: isVisible,
-        "onUpdate:visible": (val: boolean) => (isVisible.value = val)
-      },
-      { spinner }
-    );
+  const open = (props?: LoadingServiceProps): void => {
+    const { spinner, ...args } = props ?? {};
 
-  document.body.appendChild(_loadingInstances.el as HTMLElement);
+    _loadingInstances =
+      _loadingInstances ||
+      mountInstance(() =>
+        h(
+          SLoading,
+          {
+            ...args,
+            visible: isVisible.value,
+            "onUpdate:visible": (val: boolean) => {
+              isVisible.value = val;
+            }
+          },
+          {
+            spinner: typeof spinner === "function" ? spinner : (): unknown => spinner
+          }
+        )
+      );
 
-  const open = (): void => {
     isVisible.value = true;
   };
 

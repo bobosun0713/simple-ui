@@ -1,5 +1,5 @@
 import { mount } from "@vue/test-utils";
-import Button from "@components/button/Button.vue";
+import Button from "../Button.vue";
 
 describe("Button.vue", () => {
   it("should render default structure", () => {
@@ -51,7 +51,7 @@ describe("Button.vue", () => {
 
       expect(wrapper.classes()).toContain("su-button-size-sm");
     });
-    it("should have md class", async () => {
+    it("should have md class", () => {
       const wrapper = mount(Button, {
         props: {
           size: "md"
@@ -60,7 +60,7 @@ describe("Button.vue", () => {
 
       expect(wrapper.classes()).toContain("su-button-size-md");
     });
-    it("should have lg class", async () => {
+    it("should have lg class", () => {
       const wrapper = mount(Button, {
         props: {
           size: "lg"
@@ -69,7 +69,7 @@ describe("Button.vue", () => {
 
       expect(wrapper.classes()).toContain("su-button-size-lg");
     });
-    it("should have xl class", async () => {
+    it("should have xl class", () => {
       const wrapper = mount(Button, {
         props: {
           size: "xl"

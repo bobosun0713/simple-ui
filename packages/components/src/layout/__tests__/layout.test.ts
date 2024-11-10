@@ -1,9 +1,9 @@
 import { mount } from "@vue/test-utils";
-import Container from "@components/layout/Container.vue";
-import Aside from "@components/layout/Aside.vue";
-import Header from "@components/layout/Header.vue";
-import Main from "@components/layout/Main.vue";
-import Footer from "@components/layout/Footer.vue";
+import Container from "../Container.vue";
+import Aside from "../Aside.vue";
+import Header from "../Header.vue";
+import Main from "../Main.vue";
+import Footer from "../Footer.vue";
 
 const TEST_TXT = "test";
 
