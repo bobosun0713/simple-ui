@@ -1,22 +1,17 @@
 <script setup lang="ts">
-import { inject, computed } from "vue";
-import { rowGutterKey } from "../row/types";
+import { computed } from "vue";
 import type { ColProps } from "./types";
 
 defineOptions({
   name: "SCol"
 });
 
-const props = withDefaults(defineProps<ColProps>(), {
-  col: 3
-});
-
-const gutter = inject(rowGutterKey);
+const { col = 3, gutter = 0 } = defineProps<ColProps>();
 
 const styles = computed(() => ({
-  paddingLeft: `${gutter!.value}px`,
-  paddingRight: `${gutter!.value}px`,
-  width: props.col % 12 ? `calc(${props.col / 12} * 100%)` : "100%"
+  paddingLeft: `${gutter}px`,
+  paddingRight: `${gutter}px`,
+  width: col % 12 ? `calc(${col / 12} * 100%)` : "100%"
 }));
 </script>
 
