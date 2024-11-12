@@ -1,39 +1,25 @@
 <script setup lang="ts">
-import { provide, computed, watch, ref } from "vue";
-import { rowGutterKey, type RowProps } from "./types";
+import { computed, useSlots, type Component } from "vue";
+import { type RowProps } from "./types";
 
 defineOptions({
   name: "SRow"
 });
 
-const props = withDefaults(defineProps<RowProps>(), {
-  gutter: 0
-});
+const { gutter = 0, align = "center" } = defineProps<RowProps>();
 
-const gutter = ref(props.gutter);
+const slots = useSlots();
 
-const classes = computed(() => [
-  props.justify ? `su-row--justify-${props.justify}` : "",
-  props.align ? `su-row--align-${props.align}` : ""
-]);
-const styles = computed(() => ({
-  marginLeft: `-${gutter.value}px`,
-  marginRight: `-${gutter.value}px`
-}));
+const rowClasses = computed(() => `su-row--${align}`);
 
-watch(
-  () => props.gutter,
-  val => {
-    gutter.value = val;
-  }
-);
-
-provide(rowGutterKey, gutter);
+const colItems = computed(() => slots.default?.().filter(slot => (slot.type as Component).name === "SCol") ?? []);
 </script>
 
 <template>
-  <div class="su-row" :class="classes" :style="styles">
-    <slot name="default"></slot>
+  <div :class="['su-row', rowClasses]">
+    <template v-for="slot in colItems" :key="slot">
+      <component :is="slot" :gutter></component>
+    </template>
   </div>
 </template>
 

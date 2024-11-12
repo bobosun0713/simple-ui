@@ -1,9 +1,4 @@
-import { InjectionKey, Ref } from "vue";
-
 export interface RowProps {
-  justify?: "end" | "center" | "between" | "around";
-  align?: "center" | "bottom";
-  gutter?: number;
+  gutter?: string | number;
+  align?: "top" | "middle" | "bottom";
 }
-
-export const rowGutterKey: InjectionKey<Ref<number>> = Symbol("gutter");

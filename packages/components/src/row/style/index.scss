@@ -1,4 +1,16 @@
 .su-row {
   display: flex;
   flex-wrap: wrap;
+
+  &--top {
+    align-items: flex-start;
+  }
+
+  &--middle {
+    align-items: center;
+  }
+
+  &--bottom {
+    align-items: flex-end;
+  }
 }
