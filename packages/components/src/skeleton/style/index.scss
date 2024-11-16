@@ -1,17 +1,4 @@
 .su-skeleton {
-  &--loading &-item {
-    background: linear-gradient(
-        45deg,
-        rgba(255, 255, 255, 0) 40%,
-        rgba(255, 255, 255, 1) 50%,
-        rgba(255, 255, 255, 0) 60%
-      )
-      #ededed;
-    background-size: 200% 100%;
-    background-position-x: 180%;
-    animation: 1.4s skeleton-loading ease infinite;
-  }
-
   &-item {
     display: inline-block;
     width: 100%;
@@ -50,6 +37,19 @@
       width: 150px;
       height: 150px;
       border-radius: 50%;
+    }
+
+    &--animated {
+      background: linear-gradient(
+          45deg,
+          rgba(255, 255, 255, 0) 40%,
+          rgba(255, 255, 255, 1) 50%,
+          rgba(255, 255, 255, 0) 60%
+        )
+        #ededed;
+      background-size: 200% 100%;
+      background-position-x: 180%;
+      animation: 1.4s skeleton-loading ease infinite;
     }
   }
 }
