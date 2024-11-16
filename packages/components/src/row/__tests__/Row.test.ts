@@ -5,53 +5,49 @@ import Col from "../../col/Col.vue";
 
 describe("Row.vue", () => {
   it("should render default structure", () => {
-    const wrapper = createComponent("<SRow></SRow>", {
+    const wrapper = createComponent(`<SRow></SRow>`, {
       components: {
         SRow: Row,
         SCol: Col
-      },
-      props: ["data", "defaultSort", "stickyHeader"]
+      }
     });
 
-    expect(wrapper.attributes("style")).toMatch("margin-left");
-    expect(wrapper.attributes("style")).toMatch("margin-right");
+    expect(wrapper.classes()).toContain("su-row--middle");
   });
 
   describe("when set props", () => {
     it("should have `gutter` attribute", () => {
-      const wrapper = createComponent("<SRow :gutter='5'></SRow>", {
-        components: {
-          SRow: Row,
-          SCol: Col
-        },
-        props: ["data", "defaultSort", "stickyHeader"]
-      });
+      const wrapper = createComponent(
+        `<SRow :gutter='5'>
+          <SCol>test</SCol>
+        </SRow>
+        `,
+        {
+          components: {
+            SRow: Row,
+            SCol: Col
+          }
+        }
+      );
 
-      expect(wrapper.attributes("style")).toContain("margin-left: -5px; margin-right: -5px");
+      expect(wrapper.findComponent({ name: "SCol" })?.attributes("style")).toContain(
+        "padding-left: 5px; padding-right: 5px;"
+      );
     });
 
-    it("should have 'su-row--justify-center' class", () => {
-      const wrapper = createComponent("<SRow justify='center'></SRow>", {
+    it.each([
+      { align: "top", expected: "su-row--top" },
+      { align: "middle", expected: "su-row--middle" },
+      { align: "bottom", expected: "su-row--bottom" }
+    ])("should have $expected class", ({ align, expected }) => {
+      const wrapper = createComponent(`<SRow align='${align}'></SRow>`, {
         components: {
           SRow: Row,
           SCol: Col
-        },
-        props: ["data", "defaultSort", "stickyHeader"]
+        }
       });
 
-      expect(wrapper.classes("su-row--justify-center")).toBeTruthy();
-    });
-
-    it("should have 'su-row--align-center' class", () => {
-      const wrapper = createComponent("<SRow align='center'></SRow>", {
-        components: {
-          SRow: Row,
-          SCol: Col
-        },
-        props: ["data", "defaultSort", "stickyHeader"]
-      });
-
-      expect(wrapper.classes("su-row--align-center")).toBeTruthy();
+      expect(wrapper.classes()).toContain(expected);
     });
   });
 
@@ -60,21 +56,20 @@ describe("Row.vue", () => {
       const wrapper = createComponent(
         `
           <SRow>
-            <SCol>Col 1</SCol>
+            <SCol>test</SCol>
           </SRow>
         `,
         {
           components: {
             SRow: Row,
             SCol: Col
-          },
-          props: ["data", "defaultSort", "stickyHeader"]
+          }
         }
       );
 
       const col = wrapper.find(".su-col");
 
-      expect(col.text()).toBe("Col 1");
+      expect(col.text()).toBe("test");
       expect(col.attributes("style")).toMatch("padding-left");
       expect(col.attributes("style")).toMatch("padding-right");
       expect(col.attributes("style")).toMatch("width");

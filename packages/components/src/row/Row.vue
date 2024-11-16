@@ -6,7 +6,7 @@ defineOptions({
   name: "SRow"
 });
 
-const { gutter = 0, align = "center" } = defineProps<RowProps>();
+const { gutter = 0, align = "middle" } = defineProps<RowProps>();
 
 const slots = useSlots();
 
