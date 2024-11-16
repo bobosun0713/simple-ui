@@ -4,6 +4,6 @@ export interface SkeletonProps {
   animated?: boolean;
 }
 
-export interface SkeletonItemProps {
+export interface SkeletonItemProps extends Pick<SkeletonProps, "animated"> {
   variant?: "h" | "p" | "circle" | "image";
 }
