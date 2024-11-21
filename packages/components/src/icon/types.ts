@@ -2,6 +2,8 @@ export type IconNames =
   | "add"
   | "arrowLeft"
   | "arrowRight"
+  | "arrowTop"
+  | "arrowBottom"
   | "check"
   | "clock"
   | "close"

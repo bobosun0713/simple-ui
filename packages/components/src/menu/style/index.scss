@@ -1,0 +1,216 @@
+.j-nav {
+  outline: #b8b8b8 1px solid;
+  padding: 0;
+  background-color: white;
+  transition: all 0.1s;
+}
+
+.j-nav--horizontal {
+  display: flex;
+  align-items: center;
+  padding: 0 48px;
+}
+
+.j-nav--horizontal .j-nav-item__name {
+  min-height: 60px;
+  line-height: 60px;
+}
+
+.j-nav--vertical .j-nav-item__name {
+  min-height: 56px;
+  line-height: 56px;
+}
+
+.j-nav--vertical.j-nav--expand {
+  max-width: 240px;
+}
+
+.j-nav--vertical.j-nav--collapse {
+  max-width: 56px;
+}
+
+.j-nav-item {
+  cursor: pointer;
+  list-style: none;
+  background-color: white;
+}
+
+.j-nav-item__content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 16px;
+  padding-right: 10px;
+
+  &:hover {
+    background-color: #f7f7f7;
+  }
+}
+
+.j-nav-item__name {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  white-space: nowrap;
+  font-size: 14px;
+}
+
+.j-nav-item__icon {
+  padding-right: 16px;
+  width: 40px;
+  height: 40px;
+  color: #b8b8b8;
+  flex-shrink: 0;
+}
+
+/* ****************************** */
+/* 當 Active 時 */
+/* ****************************** */
+
+.j-nav-item--checked > .j-nav-item__icon {
+  border-left: 6px solid var(--primary);
+  background-color: #b8b8b8;
+  padding-left: 10px;
+}
+
+.j-nav-item__sub > .j-nav-item--checked .j-nav-item__content {
+  border: none;
+  color: var(--primary);
+}
+
+/* ****************************** */
+/* 當有 Subitem 時 */
+/* ****************************** */
+.j-nav-item__sub {
+  background-color: white;
+  padding: 0;
+}
+
+.j-nav-item__sub .j-nav-item__content {
+  padding: 0 24px 0 56px;
+}
+
+.j-nav-item__sub-icon {
+  padding-left: 10px;
+  width: 24px;
+  height: 24px;
+}
+
+.j-nav-item__sub-title {
+  display: none;
+  font-size: 14px;
+  padding: 16px 24px;
+  white-space: nowrap;
+  cursor: default;
+}
+
+/* ****************************** */
+/* 當 collapse 時 */
+/* ****************************** */
+.j-nav--collapse .j-nav-item__sub {
+  border-radius: 4px;
+  box-shadow: 0px 2px 16px 0px rgba(0, 0, 0, 0.16);
+}
+
+.j-nav--collapse .j-nav-item__sub .j-nav-item:last-child {
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+.j-nav--collapse .j-nav-item__sub-title {
+  font-size: 14px;
+}
+
+.j-nav--collapse .j-nav-item--children .j-nav-item__name > span,
+.j-nav--collapse .j-nav-item--children .j-nav-item__sub-icon {
+  display: none;
+}
+
+.j-nav--collapse .j-nav-item__sub:has(.j-nav-item--children) .j-nav-item__sub-icon {
+  display: block;
+}
+
+/* ****************************** */
+/* 當 collapse 時，沒 children 時*/
+/* ****************************** */
+.j-nav--collapse > .j-nav-item--no-children:hover .j-nav-item__sub-title {
+  display: block;
+}
+
+.j-nav--collapse > .j-nav-item--no-children:hover > .j-nav-item__sub {
+  position: absolute;
+  top: 0;
+  right: -205px;
+  z-index: 1;
+  width: 200px;
+
+  &::before {
+    content: "";
+    position: absolute;
+    left: -5px;
+    top: 0;
+    z-index: -1;
+    height: 100%;
+    width: 100%;
+    background-color: transparent;
+  }
+}
+
+/* ****************************** */
+/* 當 collapse 時，打開 children 時*/
+/* ****************************** */
+.j-nav--collapse .j-nav-item--children:hover > .j-nav-item__sub > .j-nav-item__sub-title {
+  display: block;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.j-nav--collapse .j-nav-item--children:hover > .j-nav-item__sub .j-nav-item__content {
+  padding: 0 24px;
+}
+
+.j-nav--collapse .j-nav-item--children > .j-nav-item__sub {
+  display: none;
+}
+
+.j-nav--collapse .j-nav-item--children,
+.j-nav--collapse .j-nav-item--no-children {
+  position: relative;
+}
+
+// .j-nav--collapse .j-nav-item--children .j-nav-item__name > span {
+//   display: block !important;
+// }
+
+.j-nav--collapse .j-nav-item--children:hover > .j-nav-item__sub {
+  display: block;
+  position: absolute;
+  top: 0;
+  right: -205px;
+  z-index: 1;
+  width: 200px;
+
+  &::before {
+    content: "";
+    position: absolute;
+    left: -5px;
+    top: 0;
+    z-index: -1;
+    height: 100%;
+    width: 100%;
+    background-color: transparent;
+  }
+}
+
+// .j-nav--collapse .j-nav-item--children:hover > .j-nav-item__sub .j-nav-item {
+//   display: block !important;
+// }
+
+// 測試
+.j-nav-item--show {
+  display: block;
+}
+
+.j-nav-item--hide {
+  display: none;
+}

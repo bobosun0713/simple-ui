@@ -26,6 +26,7 @@ declare module "@vue/runtime-core" {
     SAside: (typeof import("../packages/components"))["SAside"];
     SMain: (typeof import("../packages/components"))["SMain"];
     SFooter: (typeof import("../packages/components"))["SFooter"];
+    SMenu: (typeof import("../packages/components"))["SMenu"];
   }
 
   interface ComponentCustomProperties {
