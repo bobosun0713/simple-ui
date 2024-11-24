@@ -1,3 +1,5 @@
+@use "../../../styles/variables" as *;
+
 .j-nav {
   outline: #b8b8b8 1px solid;
   padding: 0;
@@ -7,8 +9,19 @@
 
 .j-nav--horizontal {
   display: flex;
-  align-items: center;
   padding: 0 48px;
+}
+
+.j-nav--horizontal-left {
+  justify-content: flex-start;
+}
+
+.j-nav--horizontal-center {
+  justify-content: center;
+}
+
+.j-nav--horizontal-right {
+  justify-content: flex-end;
 }
 
 .j-nav--horizontal .j-nav-item__name {
@@ -68,15 +81,17 @@
 /* 當 Active 時 */
 /* ****************************** */
 
-.j-nav-item--checked > .j-nav-item__icon {
-  border-left: 6px solid var(--primary);
+.j-nav-item--checked {
+  border-left: 6px solid black;
   background-color: #b8b8b8;
   padding-left: 10px;
 }
 
-.j-nav-item__sub > .j-nav-item--checked .j-nav-item__content {
+.j-nav-item__sub .j-nav-item--checked {
   border: none;
-  color: var(--primary);
+  background-color: transparent;
+  font-weight: bold;
+  color: var($primary);
 }
 
 /* ****************************** */
@@ -122,8 +137,15 @@
   font-size: 14px;
 }
 
-.j-nav--collapse .j-nav-item--children .j-nav-item__name > span,
-.j-nav--collapse .j-nav-item--children .j-nav-item__sub-icon {
+// TODO: (1)原本
+// .j-nav--collapse .j-nav-item--children .j-nav-item__name > span,
+// .j-nav--collapse .j-nav-item--children .j-nav-item__sub-icon {
+//   display: none;
+// }
+
+// TODO: (2)修改
+.j-nav--collapse .j-nav-item__name > span,
+.j-nav--collapse .j-nav-item__sub-icon {
   display: none;
 }
 
@@ -178,10 +200,6 @@
   position: relative;
 }
 
-// .j-nav--collapse .j-nav-item--children .j-nav-item__name > span {
-//   display: block !important;
-// }
-
 .j-nav--collapse .j-nav-item--children:hover > .j-nav-item__sub {
   display: block;
   position: absolute;
@@ -202,12 +220,9 @@
   }
 }
 
-// .j-nav--collapse .j-nav-item--children:hover > .j-nav-item__sub .j-nav-item {
-//   display: block !important;
-// }
-
 // 測試
-.j-nav-item--show {
+// .j-nav-item--show,
+.j-nav-item--show .j-nav-item__name > span {
   display: block;
 }
 

@@ -1,67 +1,44 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, provide, ref } from "vue";
 
 import MenuItem from "./MenuItem.vue";
+import { MENU_INJECT_KEY } from "./types";
+import type { MenuProvide, MenuProps } from "./types";
 
-const props = defineProps({
+const {
   // 預設 vertical 共 2 種模式: vertical, horizontal
-  mode: {
-    type: String,
-    default: "vertical"
-  },
-
+  mode = "vertical",
+  items = [],
   // 僅在 horizontal 模式下有效
-  placement: {
-    type: String,
-    default: "center"
-  },
-
+  placement = "center",
   // 僅在 vertical 模式下有效
-  isExpand: {
-    type: Boolean
-    // default: true
-  }
-});
-
-const items = ref([
-  {
-    name: "Menu-",
-    icon: "home"
-  },
-  {
-    name: "Menu-2",
-    icon: "home",
-    children: [
-      {
-        name: "text 2 child"
-      }
-    ]
-  }
-]);
-
-const activeItems = ref([]);
+  isExpand = true
+} = defineProps<MenuProps>();
 
 const expandClasses = computed(() => {
-  if (props.mode === "horizontal") return undefined;
-  return props.isExpand ? "j-nav--expand" : "j-nav--collapse";
+  if (mode === "horizontal") return undefined;
+  return isExpand ? "j-nav--expand" : "j-nav--collapse";
 });
 
-const ttt = a => {
-  alert("11");
-  activeItems.value.push(a);
+const switchModeClasses = computed(() => [
+  `j-nav--${mode}`,
+  mode === "horizontal" ? `j-nav--horizontal-${placement}` : undefined
+]);
+
+const rootActiveIds = ref<string[]>([]);
+const rooSetActiveIds: MenuProvide["rooSetActiveIds"] = (ids): void => {
+  rootActiveIds.value = [...ids];
 };
+
+provide(MENU_INJECT_KEY, {
+  rootActiveIds,
+  rooSetActiveIds
+});
 </script>
 
 <template>
-  <ul :class="['j-nav', `j-nav--${mode}`, expandClasses]">
-    <MenuItem
-      v-for="(item, itemIdx) in items"
-      :key="`${item.name}-${itemIdx}`"
-      :item
-      :mode
-      :is-expand
-      @on-click:item="ttt"
-    ></MenuItem>
+  <ul :class="['j-nav', switchModeClasses, , expandClasses]">
+    <MenuItem v-for="item in items" :key="item.id" :active-ids="[item.id]" :item :mode :is-expand></MenuItem>
   </ul>
 </template>
 
