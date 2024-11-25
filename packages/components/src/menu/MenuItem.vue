@@ -3,6 +3,7 @@ import { computed, ref, inject } from "vue";
 
 import SIcon from "../icon/Icon.vue";
 import { MENU_INJECT_KEY } from "./types";
+import type { MenuItemProps } from "./types";
 
 defineOptions({
   name: "SMenuItem"
@@ -10,49 +11,32 @@ defineOptions({
 
 const MENU_INJECTION = inject(MENU_INJECT_KEY);
 
-const props = defineProps({
-  mode: {
-    type: String,
-    default: "horizontal"
-  },
-  item: {
-    type: Object,
-    default: () => ({})
-  },
-  activeIds: {
-    type: Array,
-    default: () => []
-  },
-  isExpand: {
-    type: Boolean,
-    default: false
-  }
-});
+const { mode, item, activeIds, isExpand } = defineProps<MenuItemProps>();
 const emits = defineEmits(["on-click:item"]);
 
 const isToggleSub = ref(false);
 
-const isNotHorizontal = computed(() => props.mode !== "horizontal");
-const hasChildren = computed(() => props.item.children?.length > 0);
+const isNotHorizontal = computed(() => mode !== "horizontal");
+const hasChildren = computed(() => (item.children ?? []).length > 0);
 const toggleChildrenBtnIcon = computed(() => {
-  if (isToggleSub.value && props.isExpand) return "arrowTop";
-  if (isNotHorizontal.value && hasChildren.value && !props.isExpand) return "arrowRight";
+  if (isToggleSub.value && isExpand) return "arrowTop";
+  if (isNotHorizontal.value && hasChildren.value && !isExpand) return "arrowRight";
   return "arrowBottom";
 });
 
-const isActive = (id: string): boolean => {
+const isActive = (id: string | number): boolean => {
   return !!MENU_INJECTION?.rootActiveIds.value.includes(id);
 };
 
 const handleMouseover = (e: MouseEvent): void => {
-  if (props.isExpand) return;
+  if (isExpand) return;
   if (!(e.currentTarget as HTMLElement).contains(e.relatedTarget as Node)) isToggleSub.value = true;
   else isToggleSub.value = false;
 };
 
 const handleClick = (data: object): void => {
   if (hasChildren.value) return;
-  MENU_INJECTION?.rooSetActiveIds(props.activeIds as string[]);
+  MENU_INJECTION?.rooSetActiveIds(activeIds);
 
   emits("on-click:item", data);
 };

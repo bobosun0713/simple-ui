@@ -25,7 +25,7 @@ const switchModeClasses = computed(() => [
   mode === "horizontal" ? `j-nav--horizontal-${placement}` : undefined
 ]);
 
-const rootActiveIds = ref<string[]>([]);
+const rootActiveIds: MenuProvide["rootActiveIds"] = ref<string[]>([]);
 const rooSetActiveIds: MenuProvide["rooSetActiveIds"] = (ids): void => {
   rootActiveIds.value = [...ids];
 };

@@ -1,26 +1,27 @@
 import type { InjectionKey, Ref } from "vue";
+import type { IconNames } from "../icon/types";
 
 export interface MenuProvide {
-  rootActiveIds: Ref<string[]>;
-  rooSetActiveIds: (ids: string[]) => void;
+  rootActiveIds: Ref<(string | number)[]>;
+  rooSetActiveIds: (ids: (string | number)[]) => void;
 }
 
-export interface Item {
+export interface MenuItem {
   id: string | number;
   name: string | number;
-  icon?: string;
-  children?: Item[];
+  icon?: IconNames;
+  children?: MenuItem[];
 }
 
 export interface MenuProps {
   mode?: "vertical" | "horizontal";
-  placement?: "left" | "center" | "right";
-  items: Item[];
+  items: MenuItem[];
   isExpand?: boolean;
+  placement?: "left" | "center" | "right";
 }
 
 export interface MenuItemProps extends Pick<MenuProps, "mode" | "isExpand"> {
-  item: Item;
+  item: MenuItem;
   activeIds: (string | number)[];
 }
 
