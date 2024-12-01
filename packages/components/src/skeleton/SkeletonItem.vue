@@ -20,7 +20,7 @@ const { variant = "p", animated = true } = defineProps<SkeletonItemProps>();
       }
     ]"
   >
-    <SIcon v-if="variant === 'image'" fill="#4C4D4F" name="image" width="30%" height="30%"></SIcon>
+    <SIcon v-if="variant === 'image'" name="image" width="40" height="40"></SIcon>
   </div>
 </template>
 
