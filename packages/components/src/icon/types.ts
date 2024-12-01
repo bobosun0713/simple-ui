@@ -34,5 +34,4 @@ export interface IconProps {
   name?: IconNames;
   width?: number | string;
   height?: number | string;
-  fill?: string;
 }
