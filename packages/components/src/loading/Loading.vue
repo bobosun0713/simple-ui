@@ -1,4 +1,4 @@
-<script lang="ts" setup>
+<script setup lang="ts">
 import { onUnmounted, watch } from "vue";
 import SIcon from "../icon/Icon.vue";
 
@@ -8,7 +8,7 @@ defineOptions({
   name: "SLoading"
 });
 
-const visibleModel = defineModel("visible", {
+const visibleValue = defineModel("visible", {
   type: Boolean,
   default: false
 });
@@ -17,12 +17,12 @@ const { duration = 2000 } = defineProps<LoadingProps>();
 
 let timer: number;
 
-watch(visibleModel, () => {
+watch(visibleValue, () => {
   if (!duration) return;
 
   if (timer) clearTimeout(timer);
   timer = window.setTimeout(() => {
-    visibleModel.value = false;
+    visibleValue.value = false;
   }, duration);
 });
 
@@ -33,7 +33,7 @@ onUnmounted(() => {
 
 <template>
   <Transition name="loading">
-    <div v-show="visible" class="su-loading">
+    <div v-show="visibleValue" class="su-loading">
       <div class="su-loading-content">
         <slot name="spinner">
           <SIcon name="loading" width="60" height="60" fill="#3e8ed0" class="su-loading-spinner"></SIcon>

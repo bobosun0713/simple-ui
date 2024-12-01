@@ -1,3 +1,5 @@
+@use "../../../styles/variables" as *;
+
 .su-loading {
   position: fixed;
   top: 0;
@@ -15,6 +17,7 @@
   transition: all 0.3s;
 
   &-spinner {
+    color: $primary;
     transform-origin: center center;
     animation: spinner 1.3s infinite linear;
 
