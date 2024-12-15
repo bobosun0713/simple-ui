@@ -1,52 +1,138 @@
 <script setup lang="ts">
-import { computed } from "vue";
-import STooltip from "../tooltip/Tooltip.vue";
+import { ref, watch, computed } from "vue";
+import type { StyleValue } from "vue";
+import { onClickOutside } from "@vueuse/core";
 
-import type { PopoverProps } from "./types";
+import { PopoverProps, PopoverTrigger } from "./types";
+import {
+  autoUpdate,
+  useFloating,
+  flip,
+  shift,
+  limitShift,
+  offset as floatingOffset,
+  arrow as floatingArrow
+} from "@floating-ui/vue";
 
 defineOptions({
-  name: "SPopover"
+  name: "SPopover2"
 });
 
-const props = withDefaults(defineProps<PopoverProps>(), {
-  offset: 0
+const {
+  content = undefined,
+  offset = 0,
+  hasArrow = true,
+  placement = "bottom",
+  trigger: propsTrigger = "click"
+} = defineProps<PopoverProps>();
+
+const modelValue = defineModel("modelValue", { type: Boolean, default: false });
+
+const isVisible = ref(modelValue.value);
+const popoverRef = ref<HTMLElement | null>(null);
+const popoverContentRef = ref<HTMLElement | null>(null);
+const popoverArrowRef = ref<HTMLElement | null>(null);
+
+const {
+  floatingStyles,
+  middlewareData,
+  placement: floatingPlacement
+} = useFloating(popoverRef, popoverContentRef, {
+  open: modelValue,
+  placement: () => placement,
+  whileElementsMounted: autoUpdate,
+  middleware: () => [
+    floatingOffset(Math.max(offset, 0) + (!hasArrow ? 0 : 5)),
+    flip(),
+    shift({
+      limiter: limitShift()
+    }),
+    ...(hasArrow ? [floatingArrow({ element: popoverArrowRef, padding: 0 })] : [])
+  ]
 });
 
-const emits = defineEmits(["update:modelValue"]);
+const arrowStyle = computed<StyleValue>(() => {
+  const { arrow } = middlewareData.value;
+  if (!arrow) return arrow;
 
-const calcOffset = computed(() => 6.5 + Number(props.offset));
+  const side = floatingPlacement.value as string;
+  const arrowX = arrow.x ? `${arrow.x}px` : "";
+  const arrowY = arrow.y ? `${arrow.y}px` : "";
 
-function triggerModelValue(visible: boolean): void {
-  emits("update:modelValue", visible);
+  const rotation = {
+    top: "",
+    left: "rotate(-90deg)",
+    bottom: "rotate(180deg)",
+    right: "rotate(90deg)"
+  }[side];
+
+  return {
+    position: "absolute",
+    left: arrowX,
+    top: arrowY,
+    transform: rotation,
+    [side]: "100%"
+  };
+});
+
+function withTrigger(cb: () => void, trigger: PopoverTrigger): void {
+  if (!(propsTrigger || []).includes(trigger)) return;
+  cb();
 }
+
+function handleToggle(val: boolean): void {
+  isVisible.value = val;
+  modelValue.value = val;
+}
+
+function handleMouseover(val: boolean): void {
+  withTrigger(() => handleToggle(val), "hover");
+}
+
+function handleClick(val: boolean): void {
+  withTrigger(() => handleToggle(val), "click");
+}
+
+onClickOutside(
+  popoverContentRef,
+  () => {
+    handleToggle(false);
+  },
+  {
+    ignore: [popoverRef]
+  }
+);
+
+watch(modelValue, val => {
+  isVisible.value = val;
+});
 </script>
 
 <template>
-  <STooltip
-    :model-value="modelValue"
-    :placement="placement"
-    :content="content"
-    :offset="calcOffset"
-    @update:model-value="triggerModelValue"
+  <div
+    ref="popoverRef"
+    class="su-popover"
+    @click="handleClick(!isVisible)"
+    @mouseenter="handleMouseover(true)"
+    @mouseleave="handleMouseover(false)"
   >
-    <template #default>
-      <slot name="default"></slot>
-    </template>
+    <slot name="default"></slot>
 
-    <template #content>
-      <div class="su-popover">
-        <div class="su-popover__inner">
+    <Teleport to="body">
+      <Transition name="fade">
+        <div v-show="isVisible" ref="popoverContentRef" :style="floatingStyles" class="su-popover__content">
           <template v-if="$slots.content">
             <slot name="content"></slot>
           </template>
           <template v-else>
             {{ content }}
           </template>
+
+          <div v-if="hasArrow" ref="popoverArrowRef" class="su-popover__arrow" :style="arrowStyle"></div>
         </div>
-        <span class="su-popover__arrow"></span>
-      </div>
-    </template>
-  </STooltip>
+      </Transition>
+    </Teleport>
+  </div>
 </template>
 
 <style lang="scss">

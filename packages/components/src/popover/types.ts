@@ -1,5 +1,10 @@
-import type { TooltipProps } from "../tooltip/types";
+export type PopoverPlacement = "top" | "bottom" | "left" | "right";
+export type PopoverTrigger = "hover" | "click";
 
-export interface PopoverProps extends TooltipProps {
+export interface PopoverProps {
+  content?: string;
   offset?: number;
+  trigger?: PopoverTrigger | PopoverTrigger[];
+  placement?: PopoverPlacement;
+  hasArrow?: boolean;
 }
