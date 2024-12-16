@@ -1,0 +1,13 @@
+.su-popup-reference {
+  display: inline-block;
+}
+
+.su-popup-fade-enter-active,
+.su-popup-fade-leave-active {
+  transition: opacity 0.15s ease;
+}
+
+.su-popup-fade-enter-from,
+.su-popup-fade-leave-to {
+  opacity: 0;
+}
