@@ -1,0 +1,13 @@
+.su-popper-reference {
+  display: inline-block;
+}
+
+.su-popper-fade-enter-active,
+.su-popper-fade-leave-active {
+  transition: opacity 0.15s ease;
+}
+
+.su-popper-fade-enter-from,
+.su-popper-fade-leave-to {
+  opacity: 0;
+}

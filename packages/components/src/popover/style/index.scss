@@ -4,41 +4,51 @@
   --su-popover-text-color: #{$dark};
   --su-popover-bg-color: #{$light};
   --su-popover-arrow-size: 1rem;
-  --su-popover-shadow: 0 0 3px #{$dark-grey};
+  --su-popover-shadow: 0 0 2px #{$dark-grey};
+}
+
+@mixin arrow($direction, $size: 6px, $color: var(--su-popover-bg-color)) {
+  border-style: solid;
+  border-width: $size;
+  border-color: transparent;
+
+  @if $direction == top {
+    border-top-color: $color;
+  } @else if $direction == bottom {
+    border-bottom-color: $color;
+  } @else if $direction == left {
+    border-left-color: $color;
+  } @else if $direction == right {
+    border-right-color: $color;
+  }
 }
 
 .su-popover {
   display: inline-block;
-
-  &__content {
-    border-radius: 4px;
-    padding: 4px;
-    box-shadow: var(--su-popover-shadow);
-  }
+  border-radius: 8px;
+  padding: 8px;
+  background-color: var(--su-popover-bg-color);
+  filter: drop-shadow(var(--su-popover-shadow));
 
   &__arrow {
-    width: 10px;
-    height: 10px;
+    position: relative;
+    height: 6px;
+    width: 6px;
 
-    &::before {
-      content: "";
-      position: absolute;
-      border-width: 5px;
-      border-color: white transparent transparent transparent;
-      border-style: solid;
-      width: 0;
-      height: 0;
-      filter: drop-shadow(0 1px 1px $dark-grey);
+    &--top {
+      @include arrow(top, 6px);
     }
 
-    &::after {
-      content: "";
-      position: absolute;
-      border-width: 6.25px;
-      border-color: white transparent transparent transparent;
-      border-style: solid;
-      top: -2px;
-      right: 0;
+    &--bottom {
+      @include arrow(bottom, 6px);
+    }
+
+    &--left {
+      @include arrow(left, 6px);
+    }
+
+    &--right {
+      @include arrow(right, 6px);
     }
   }
 }

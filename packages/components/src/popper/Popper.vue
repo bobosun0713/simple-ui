@@ -9,62 +9,71 @@ import {
   useFloating
 } from "@floating-ui/vue";
 import { onClickOutside } from "@vueuse/core";
-import { computed, ref, type StyleValue, watch } from "vue";
+import { computed, ref, watch } from "vue";
 
-import type { PopupProps, PopupTrigger, PopupSlots } from "./types";
+import type { PopperArrowData, PopperPlacement, PopperProps, PopperSlots, PopperTrigger } from "./types";
 
-const modelValue = defineModel("modelValue", { type: Boolean, default: false });
+const modelValue = defineModel<boolean>({ default: false });
 
 const {
   content = undefined,
-  arrowOptions = undefined,
   offset = 0,
   placement = "bottom",
-  transition = "su-popup-fade",
-  trigger: propsTrigger = "click"
-} = defineProps<PopupProps>();
+  allowPlacement = undefined,
+  transition = "su-popper-fade",
+  trigger: propsTrigger = "click",
+  arrowOptions = undefined,
+  hasShift = undefined
+} = defineProps<PopperProps>();
 
-const slots = defineSlots<PopupSlots>();
+const slots = defineSlots<PopperSlots>();
 
 const isVisible = ref(modelValue.value);
 const referenceRef = ref<HTMLElement | null>(null);
-const popupRef = ref<HTMLElement | null>(null);
+const popperRef = ref<HTMLElement | null>(null);
 
 const {
   floatingStyles,
   middlewareData,
   placement: floatingPlacement
-} = useFloating(referenceRef, popupRef, {
+} = useFloating(referenceRef, popperRef, {
   open: modelValue,
   placement: () => placement,
   whileElementsMounted: autoUpdate,
+
   middleware: () => [
     floatingOffset(Math.max(offset, 0)),
-    flip(),
-    shift({
-      limiter: limitShift()
+    flip({
+      ...(allowPlacement && { fallbackPlacements: Array.isArray(allowPlacement) ? allowPlacement : [allowPlacement] })
     }),
+    ...(hasShift ? [shift({ limiter: limitShift() })] : []),
     ...(arrowOptions ? [floatingArrow(arrowOptions)] : [])
   ]
 });
 
-const arrowStyle = computed<StyleValue>(() => {
+const arrowData = computed<PopperArrowData>(() => {
+  const arrowResult = {
+    style: {},
+    placement: floatingPlacement.value
+  };
+
   const { arrow } = middlewareData.value;
-  if (!arrow) return arrow;
+  if (!arrow) return arrowResult;
+  const [side] = floatingPlacement.value.split("-") as [PopperPlacement];
 
-  const side = floatingPlacement.value as string;
-  const arrowX = arrow.x ? `${arrow.x}px` : "";
-  const arrowY = arrow.y ? `${arrow.y}px` : "";
-
-  return {
+  arrowResult.style = {
     position: "absolute",
-    left: arrowX,
-    top: arrowY,
+    left: arrow.x ? `${arrow.x}px` : "",
+    top: arrow.y ? `${arrow.y}px` : "",
     [side]: "100%"
   };
+
+  arrowResult.placement = side;
+
+  return arrowResult;
 });
 
-function bindTrigger(cb: () => void, trigger: PopupTrigger): void {
+function bindTrigger(cb: () => void, trigger: PopperTrigger): void {
   if (!propsTrigger.includes(trigger)) return;
   cb();
 }
@@ -87,7 +96,7 @@ function handleClick(val: boolean): void {
 }
 
 onClickOutside(
-  popupRef,
+  popperRef,
   () => {
     handleToggle(false);
   },
@@ -104,7 +113,7 @@ watch(modelValue, val => {
 <template>
   <div
     ref="referenceRef"
-    class="su-popup-reference"
+    class="su-popper-reference"
     @click="handleClick(!isVisible)"
     @mouseenter="handleMouseover(true)"
     @mouseleave="handleMouseover(false)"
@@ -112,17 +121,13 @@ watch(modelValue, val => {
     <slot name="reference"></slot>
   </div>
 
-  <template v-if="slots.content || content">
+  <template v-if="(slots.content || content) && slots.reference">
     <Teleport to="body">
       <Transition :name="transition">
-        <div v-show="isVisible" ref="popupRef" :style="floatingStyles" class="jx-popup">
-          <slot name="content" :arrow-style="arrowStyle" :placement="floatingPlacement">{{ content }}</slot>
+        <div v-show="isVisible" ref="popperRef" :style="floatingStyles" class="su-popper">
+          <slot name="content" :arrow-style="arrowData.style" :placement="arrowData.placement">{{ content }}</slot>
         </div>
       </Transition>
     </Teleport>
   </template>
 </template>
-
-<style lang="scss">
-@use "./style";
-</style>
