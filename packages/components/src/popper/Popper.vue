@@ -22,6 +22,7 @@ const {
   allowPlacement = undefined,
   transition = "su-popper-fade",
   trigger: propsTrigger = "click",
+  appendToBody = true,
   arrowOptions = undefined,
   hasShift = undefined
 } = defineProps<PopperProps>();
@@ -122,7 +123,7 @@ watch(modelValue, val => {
   </div>
 
   <template v-if="(slots.content || content) && slots.reference">
-    <Teleport to="body">
+    <Teleport to="body" :disabled="!appendToBody">
       <Transition :name="transition">
         <div v-show="isVisible" ref="popperRef" :style="floatingStyles" class="su-popper">
           <slot name="content" :arrow-style="arrowData.style" :placement="arrowData.placement">{{ content }}</slot>

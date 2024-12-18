@@ -13,6 +13,7 @@ export interface PopperProps {
   transition?: string;
   arrowOptions?: ArrowOptions;
   hasShift?: boolean;
+  appendToBody?: boolean;
 }
 
 export interface PopperSlots {
