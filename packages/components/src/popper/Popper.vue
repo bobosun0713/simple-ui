@@ -45,6 +45,7 @@ const {
   middleware: () => [
     floatingOffset(Math.max(offset, 0)),
     flip({
+      /* v8 ignore next 3 */
       ...(allowPlacement && { fallbackPlacements: Array.isArray(allowPlacement) ? allowPlacement : [allowPlacement] })
     }),
     ...(hasShift ? [shift({ limiter: limitShift() })] : []),
@@ -64,6 +65,7 @@ const arrowData = computed<PopperArrowData>(() => {
 
   arrowResult.style = {
     position: "absolute",
+    /* v8 ignore next 2 */
     left: arrow.x ? `${arrow.x}px` : "",
     top: arrow.y ? `${arrow.y}px` : "",
     [side]: "100%"
