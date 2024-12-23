@@ -122,15 +122,15 @@ watch(modelValue, val => {
     @mouseleave="handleMouseover(false)"
   >
     <slot name="reference"></slot>
-  </div>
 
-  <template v-if="(slots.content || content) && slots.reference">
-    <Teleport to="body" :disabled="!appendToBody">
-      <Transition :name="transition">
-        <div v-show="isVisible" ref="popperRef" :style="floatingStyles" class="su-popper">
-          <slot name="content" :arrow-style="arrowData.style" :placement="arrowData.placement">{{ content }}</slot>
-        </div>
-      </Transition>
-    </Teleport>
-  </template>
+    <template v-if="(slots.content || content) && slots.reference">
+      <Teleport to="body" :disabled="!appendToBody">
+        <Transition :name="transition">
+          <div v-show="isVisible" ref="popperRef" :style="floatingStyles" class="su-popper">
+            <slot name="content" :arrow-style="arrowData.style" :placement="arrowData.placement">{{ content }}</slot>
+          </div>
+        </Transition>
+      </Teleport>
+    </template>
+  </div>
 </template>
