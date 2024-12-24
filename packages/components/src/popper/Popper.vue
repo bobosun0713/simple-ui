@@ -13,6 +13,10 @@ import { computed, ref, watch } from "vue";
 
 import type { PopperArrowData, PopperPlacement, PopperProps, PopperSlots, PopperTrigger } from "./types";
 
+defineOptions({
+  name: "SPopper"
+});
+
 const modelValue = defineModel<boolean>({ default: false });
 
 const {
@@ -116,21 +120,21 @@ watch(modelValue, val => {
 <template>
   <div
     ref="referenceRef"
-    class="su-popper-reference"
+    :class="['su-popper-reference', $attrs.class]"
     @click="handleClick(!isVisible)"
     @mouseenter="handleMouseover(true)"
     @mouseleave="handleMouseover(false)"
   >
     <slot name="reference"></slot>
-
-    <template v-if="(slots.content || content) && slots.reference">
-      <Teleport to="body" :disabled="!appendToBody">
-        <Transition :name="transition">
-          <div v-show="isVisible" ref="popperRef" :style="floatingStyles" class="su-popper">
-            <slot name="content" :arrow-style="arrowData.style" :placement="arrowData.placement">{{ content }}</slot>
-          </div>
-        </Transition>
-      </Teleport>
-    </template>
   </div>
+
+  <template v-if="(slots.content || content) && slots.reference">
+    <Teleport to="body" :disabled="!appendToBody">
+      <Transition :name="transition">
+        <div v-show="isVisible" ref="popperRef" :style="floatingStyles" class="su-popper">
+          <slot name="content" :arrow-style="arrowData.style" :placement="arrowData.placement">{{ content }}</slot>
+        </div>
+      </Transition>
+    </Teleport>
+  </template>
 </template>
