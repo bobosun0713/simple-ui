@@ -1,10 +1,3 @@
-export type PopoverPlacement = "top" | "bottom" | "left" | "right";
-export type PopoverTrigger = "hover" | "click";
+import type { PopperProps } from "../popper/types";
 
-export interface PopoverProps {
-  content?: string;
-  offset?: number;
-  trigger?: PopoverTrigger | PopoverTrigger[];
-  placement?: PopoverPlacement;
-  hasArrow?: boolean;
-}
+export type PopoverProps = Omit<PopperProps, "arrowOptions">;

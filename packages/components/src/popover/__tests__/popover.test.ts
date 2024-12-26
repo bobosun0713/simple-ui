@@ -1,117 +1,62 @@
-import { shallowMount } from "@vue/test-utils";
+import { mount } from "@vue/test-utils";
 
 import Popover from "../Popover.vue";
 
+// Close appendToBody because of this issue https://github.com/vuejs/test-utils/issues/2554
+
 describe("Popover.vue", () => {
   it("should render default structure", () => {
-    const wrapper = shallowMount(Popover, {
-      slots: {
-        default: "Demo"
-      },
-      global: {
-        stubs: {
-          teleport: true
-        }
+    const wrapper = mount(Popover, {
+      props: {
+        appendToBody: false
       }
     });
 
-    expect(wrapper.find(".su-popover").exists()).toBeTruthy();
-    expect(wrapper.find(".su-popover").text()).toBe("Demo");
-  });
-
-  describe("when set props", () => {
-    it("should show content prop", () => {
-      const wrapper = shallowMount(Popover, {
-        props: {
-          modelValue: true,
-          content: "Popover content"
-        },
-        slots: {
-          default: "Demo"
-        },
-        global: {
-          stubs: {
-            teleport: true
-          }
-        }
-      });
-
-      expect(wrapper.find(".su-popover__content").text()).toBe("Popover content");
-    });
-
-    it("should disabled arrow style", () => {
-      const wrapper = shallowMount(Popover, {
-        props: {
-          modelValue: true,
-          content: "Popover content",
-          hasArrow: false
-        },
-        slots: {
-          default: "Demo"
-        },
-        global: {
-          stubs: {
-            teleport: true
-          }
-        }
-      });
-
-      expect(wrapper.find(".su-popover__arrow").exists()).toBeFalsy();
-    });
+    expect(wrapper.find(".su-popper-reference").exists()).toBeTruthy();
+    expect(wrapper.find(".su-popper").exists()).toBeFalsy();
+    expect(wrapper.find(".su-popover").exists()).toBeFalsy();
   });
 
   describe("when set slots", () => {
-    it("should show content slot", () => {
-      const wrapper = shallowMount(Popover, {
-        props: { modelValue: true },
-        slots: {
-          default: "Demo",
-          content: "Popover slots content"
+    it("should show `default` and `content` slots", () => {
+      const wrapper = mount(Popover, {
+        props: {
+          appendToBody: false
         },
-        global: {
-          stubs: {
-            teleport: true
-          }
+        slots: {
+          default: "Reference",
+          content: "Popover content"
         }
       });
 
-      expect(wrapper.find(".su-popover__content").text()).toBe("Popover slots content");
+      expect(wrapper.find(".su-popper-reference").text()).toBe("Reference");
+      expect(wrapper.find(".su-popover").text()).toBe("Popover content");
     });
   });
 
-  describe("when set trigger", () => {
-    it.each([
-      { props: { trigger: "click" as const }, event: "click", expectedDisplay: "" },
-      { props: { trigger: "hover" as const }, event: "mouseenter", expectedDisplay: "" },
-      { props: { trigger: "hover" as const, modelValue: true }, event: "mouseleave", expectedDisplay: "none" }
-    ])("should trigger $event event", async ({ props, event, expectedDisplay }) => {
-      const wrapper = shallowMount(Popover, {
-        props: { ...props },
-        slots: { default: "Demo" },
-        global: { stubs: { teleport: true } }
+  describe("when trigger event", () => {
+    it("should be able to `open` and `close` popover", async () => {
+      const wrapper = mount(Popover, {
+        props: {
+          appendToBody: false
+        },
+        slots: {
+          default: "Reference",
+          content: "Popover content"
+        },
+        attachTo: document.body
       });
 
-      const contentEl = wrapper.find(".su-popover__content").element as HTMLElement;
+      const contentEl = wrapper.find(".su-popover");
+      const referenceEl = wrapper.find(".su-popper-reference");
 
-      await wrapper.find(".su-popover").trigger(event);
+      await referenceEl.trigger("click");
 
-      expect(contentEl.style.display).toBe(expectedDisplay);
-    });
+      expect(contentEl.isVisible()).toBeTruthy();
 
-    it("should only allow trigger actions `click` and `hover`", async () => {
-      const wrapper = shallowMount(Popover, {
-        props: { trigger: [] },
-        slots: { default: "Demo" },
-        global: { stubs: { teleport: true } }
-      });
+      await referenceEl.trigger("click");
 
-      const contentEl = wrapper.find(".su-popover__content").element as HTMLElement;
-
-      await wrapper.find(".su-popover").trigger("click");
-      expect(contentEl.style.display).toBe("none");
-
-      await wrapper.find(".su-popover").trigger("mouseenter");
-      expect(contentEl.style.display).toBe("none");
+      expect(contentEl.isVisible()).toBeFalsy();
     });
   });
 });

@@ -1,28 +1,53 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
-import SPopup from "../popper/Popper.vue";
+import type { PopoverProps } from "./types";
+import SPopper from "../popper/Popper.vue";
+
+defineOptions({
+  name: "SPopover"
+});
+
+const {
+  content = undefined,
+  offset = 0,
+  placement = "bottom",
+  allowPlacement = undefined,
+  transition = "su-popper-fade",
+  trigger = "click",
+  appendToBody = true,
+  hasShift = undefined
+} = defineProps<PopoverProps>();
 
 const popoverArrowRef = ref<HTMLElement | null>(null);
 </script>
 
 <template>
-  <SPopup :offset="6" :arrow-options="{ element: popoverArrowRef, padding: 5 }">
+  <SPopper
+    :offset="Math.max(0, offset + 6)"
+    :transition
+    :placement
+    :allow-placement
+    :trigger
+    :append-to-body
+    :has-shift
+    :arrow-options="{ element: popoverArrowRef, padding: 5 }"
+  >
     <template #reference>
       <slot name="default"></slot>
     </template>
-    <template #content="{ arrowStyle, placement }">
+
+    <template v-if="$slots.content || content" #content="{ arrowStyle, placement: PopperPlacement }">
       <div class="su-popover">
         <slot name="content"></slot>
-        {{ placement }}
         <div
           ref="popoverArrowRef"
-          :class="['su-popover__arrow', `su-popover__arrow--${placement}`]"
+          :class="['su-popover__arrow', `su-popover__arrow--${PopperPlacement}`]"
           :style="arrowStyle"
         ></div>
       </div>
     </template>
-  </SPopup>
+  </SPopper>
 </template>
 
 <style lang="scss">
