@@ -6,20 +6,10 @@
 }
 
 .su-tooltip {
-  display: inline-block;
-  position: relative;
-
-  &__content {
-    position: absolute;
-    width: auto;
-    left: 0;
-    top: 0;
-    padding: 0.4rem 0.8rem;
-    border-radius: 4px;
-    font-size: 1.4rem;
-    white-space: nowrap;
-    color: var(--su-tooltip-text-color);
-    background-color: var(--su-tooltip-bg-color);
-    transition: opacity 0.2s;
-  }
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  font-size: 1.4rem;
+  white-space: nowrap;
+  color: var(--su-tooltip-text-color);
+  background-color: var(--su-tooltip-bg-color);
 }

@@ -1,11 +1,3 @@
-export type TooltipPlacement = "top" | "bottom" | "left" | "right";
-export type TooltipTrigger = "hover" | "click";
-export type TooltipEventName = "in" | "out" | "click";
+import type { PopperProps } from "../popper/types";
 
-export interface TooltipProps {
-  modelValue?: boolean;
-  content?: string | number;
-  offset?: string | number;
-  trigger?: TooltipTrigger;
-  placement?: TooltipPlacement;
-}
+export type TooltipProps = Omit<PopperProps, "arrowOptions">;
