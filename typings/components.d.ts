@@ -26,7 +26,7 @@ declare module "@vue/runtime-core" {
     SAside: (typeof import("../packages/components"))["SAside"];
     SMain: (typeof import("../packages/components"))["SMain"];
     SFooter: (typeof import("../packages/components"))["SFooter"];
-    SPopup: (typeof import("../packages/components"))["SPopup"];
+    SPopper: (typeof import("../packages/components"))["SPopper"];
   }
 
   interface ComponentCustomProperties {

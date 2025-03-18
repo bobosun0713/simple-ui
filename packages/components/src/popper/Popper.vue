@@ -9,7 +9,7 @@ import {
   useFloating
 } from "@floating-ui/vue";
 import { onClickOutside } from "@vueuse/core";
-import { computed, ref, watch } from "vue";
+import { computed, ref } from "vue";
 
 import type { PopperArrowData, PopperPlacement, PopperProps, PopperSlots, PopperTrigger } from "./types";
 
@@ -111,10 +111,6 @@ onClickOutside(
     ignore: [referenceRef]
   }
 );
-
-watch(modelValue, val => {
-  isVisible.value = val;
-});
 </script>
 
 <template>
@@ -131,7 +127,7 @@ watch(modelValue, val => {
   <template v-if="(slots.content || content) && slots.reference">
     <Teleport to="body" :disabled="!appendToBody">
       <Transition :name="transition">
-        <div v-show="isVisible" ref="popperRef" :style="floatingStyles" class="su-popper">
+        <div v-show="modelValue" ref="popperRef" :style="floatingStyles" class="su-popper">
           <slot name="content" :arrow-style="arrowData.style" :placement="arrowData.placement">{{ content }}</slot>
         </div>
       </Transition>
