@@ -28,7 +28,7 @@ function dialogService(): DialogServiceReturnType {
 
     return new Promise(resolve => {
       const createSlot = (slot: DialogSlot): ((fn?: DialogSlotAction) => NonFunction<typeof slot>) =>
-        typeof slot === "function" ? slot : (): unknown => slot;
+        typeof slot === "function" ? slot : (): typeof slot => slot;
 
       const closeAction = (type: DialogServiceAction): void => {
         if (typeof beforeClose === "function") {
