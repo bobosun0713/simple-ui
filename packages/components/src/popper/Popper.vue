@@ -33,9 +33,8 @@ const {
 
 const slots = defineSlots<PopperSlots>();
 
-const isVisible = ref(modelValue.value);
-const referenceRef = ref<HTMLElement | null>(null);
-const popperRef = ref<HTMLElement | null>(null);
+const referenceRef = ref<HTMLDivElement | null>(null);
+const popperRef = ref<HTMLDivElement | null>(null);
 
 const {
   floatingStyles,
@@ -86,7 +85,6 @@ function bindTrigger(cb: () => void, trigger: PopperTrigger): void {
 }
 
 function handleToggle(val: boolean): void {
-  isVisible.value = val;
   modelValue.value = val;
 }
 
@@ -117,7 +115,7 @@ onClickOutside(
   <div
     ref="referenceRef"
     :class="['su-popper-reference', $attrs.class]"
-    @click="handleClick(!isVisible)"
+    @click="handleClick(!modelValue)"
     @mouseenter="handleMouseover(true)"
     @mouseleave="handleMouseover(false)"
   >
