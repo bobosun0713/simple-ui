@@ -47,7 +47,7 @@ function getBuildConfig(buildConfig: BuildConfig): InlineConfig {
     build: {
       minify,
       rollupOptions: {
-        external: ["vue"],
+        external: ["vue", "@floating-ui/vue"],
         input: path,
         output: {
           format,
