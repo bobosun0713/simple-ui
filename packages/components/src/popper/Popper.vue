@@ -11,7 +11,7 @@ import {
 import { onClickOutside } from "@vueuse/core";
 import { computed, ref } from "vue";
 
-import type { PopperArrowData, PopperPlacement, PopperProps, PopperSlots, PopperTrigger } from "./types";
+import type { PopperArrowData, PopperProps, PopperSlots, PopperTrigger } from "./types";
 
 defineOptions({
   name: "SPopper"
@@ -64,17 +64,17 @@ const arrowData = computed<PopperArrowData>(() => {
 
   const { arrow } = middlewareData.value;
   if (!arrow) return arrowResult;
-  const [side] = floatingPlacement.value.split("-") as [PopperPlacement];
+  const [side] = floatingPlacement.value.split("-") as [PopperProps["placement"]];
 
   arrowResult.style = {
     position: "absolute",
     /* v8 ignore next 2 */
     left: arrow.x ? `${arrow.x}px` : "",
     top: arrow.y ? `${arrow.y}px` : "",
-    [side]: "100%"
+    ...(side && { [side]: "100%" })
   };
 
-  arrowResult.placement = side;
+  if (side) arrowResult.placement = side;
 
   return arrowResult;
 });
