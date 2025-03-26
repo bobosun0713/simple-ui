@@ -34,5 +34,5 @@ provide(gridPropsKey, { col, gap });
 </template>
 
 <style lang="scss">
-@import "./style";
+@use "./style";
 </style>

@@ -28,5 +28,5 @@ const { rows = 2, loading = true, animated = true } = defineProps<SkeletonProps>
 </template>
 
 <style lang="scss">
-@import "./style/index.scss";
+@use "./style";
 </style>

@@ -25,12 +25,12 @@ const popoverArrowRef = ref<HTMLElement | null>(null);
 <template>
   <SPopper
     :offset="Math.max(0, offset + 6)"
-    :transition
-    :placement
-    :allow-placement
-    :trigger
-    :append-to-body
-    :has-shift
+    :transition="transition"
+    :placement="placement"
+    :allow-placement="allowPlacement"
+    :trigger="trigger"
+    :append-to-body="appendToBody"
+    :has-shift="hasShift"
     :arrow-options="{ element: popoverArrowRef, padding: 5 }"
   >
     <template #reference>

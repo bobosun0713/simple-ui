@@ -21,12 +21,12 @@ const {
 <template>
   <SPopper
     :offset="Math.max(0, offset + 4)"
-    :transition
-    :placement
-    :allow-placement
-    :trigger
-    :append-to-body
-    :has-shift
+    :transition="transition"
+    :placement="placement"
+    :allow-placement="allowPlacement"
+    :trigger="trigger"
+    :append-to-body="appendToBody"
+    :has-shift="hasShift"
   >
     <template #reference>
       <slot name="default"></slot>
