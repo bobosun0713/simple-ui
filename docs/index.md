@@ -9,7 +9,7 @@ hero:
   text: Vue 3 based component library
   tagline: A simple and user-friendly UI component library based on TypeScript for Vue 3
   image:
-    src: /logo.png
+    src: /logo-512x512.png
     alt: Simple UI
   actions:
     - theme: brand

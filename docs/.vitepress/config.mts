@@ -5,10 +5,10 @@ export default defineConfig({
   outDir: "./dist",
   base: "/simple-ui/",
   title: "Simple UI",
-  head: [["link", { rel: "icon", href: "/logo.png" }]],
+  head: [["link", { rel: "icon", href: "favicon.ico" }]],
   description: "A simple and user-friendly UI component library based on TypeScript for Vue 3",
   themeConfig: {
-    logo: "/logo.png",
+    logo: "/logo-48x48.png",
     nav: [
       { text: "Guide", link: "/guide/installation", activeMatch: "/guide/" },
       { text: "Component", link: "", activeMatch: "/component/" }
