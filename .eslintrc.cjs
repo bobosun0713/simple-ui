@@ -46,6 +46,7 @@ module.exports = {
     {
       // enable the rule specifically for TypeScript files
       files: ["*.ts", "*.mts", "*.cts", "*.tsx", "*.vue"],
+      excludedFiles: ["*.stories.ts"],
       rules: {
         "@typescript-eslint/explicit-function-return-type": "error"
       }
