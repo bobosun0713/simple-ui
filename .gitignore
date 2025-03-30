@@ -16,3 +16,4 @@ docs/.vitepress/cache
 
 # Cache
 .cache
+*storybook.log

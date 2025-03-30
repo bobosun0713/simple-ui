@@ -8,7 +8,8 @@ module.exports = {
     "plugin:vue/vue3-strongly-recommended",
     "plugin:@typescript-eslint/recommended-type-checked",
     "plugin:@typescript-eslint/stylistic-type-checked",
-    "prettier"
+    "prettier",
+    "plugin:storybook/recommended"
   ],
   plugins: ["vue", "@typescript-eslint"],
 
