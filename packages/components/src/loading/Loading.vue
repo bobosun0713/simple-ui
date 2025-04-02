@@ -1,29 +1,35 @@
 <script setup lang="ts">
-import { onUnmounted, watch } from "vue";
+import { onUnmounted, watch, computed } from "vue";
 import SIcon from "../icon/Icon.vue";
 
-import { LoadingProps } from "./types";
+import { LoadingProps, LoadingEmits } from "./types";
 
 defineOptions({
   name: "SLoading"
 });
 
-const visibleValue = defineModel("visible", {
-  type: Boolean,
-  default: false
+const props = withDefaults(defineProps<LoadingProps>(), {
+  duration: 2000
 });
 
-const { duration = 2000 } = defineProps<LoadingProps>();
+const emits = defineEmits<LoadingEmits>();
 
 let timer: number;
 
-watch(visibleValue, () => {
-  if (!duration) return;
+const visibleValue = computed({
+  get: () => props.visible,
+  set: val => {
+    emits("update:visible", val);
+  }
+});
 
+watch(visibleValue, () => {
+  if (!props.duration) return;
   if (timer) clearTimeout(timer);
+
   timer = window.setTimeout(() => {
     visibleValue.value = false;
-  }, duration);
+  }, props.duration);
 });
 
 onUnmounted(() => {

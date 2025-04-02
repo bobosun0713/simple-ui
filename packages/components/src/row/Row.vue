@@ -6,11 +6,14 @@ defineOptions({
   name: "SRow"
 });
 
-const { gutter = 0, align = "middle" } = defineProps<RowProps>();
-
 const slots = useSlots();
 
-const rowClasses = computed(() => `su-row--${align}`);
+const props = withDefaults(defineProps<RowProps>(), {
+  gutter: 0,
+  align: "middle"
+});
+
+const rowClasses = computed(() => `su-row--${props.align}`);
 
 const colItems = computed(() => slots.default?.().filter(slot => (slot.type as Component).name === "SCol") ?? []);
 </script>

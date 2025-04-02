@@ -1,26 +1,32 @@
 <script lang="ts" setup>
 import { computed, onMounted, onUnmounted, isVNode } from "vue";
 import SIcon from "../icon/Icon.vue";
-import type { NotificationContentProps } from "./types";
+import type { NotificationContentProps, NotificationContentEmits } from "./types";
 
-const { type = "info", title = "Tips", message = "Content", ...props } = defineProps<NotificationContentProps>();
+const props = withDefaults(defineProps<NotificationContentProps>(), {
+  id: "",
+  type: "info",
+  title: "Tips",
+  message: "Content",
+  duration: 3000
+});
 
-const emits = defineEmits(["on-close"]);
+const emits = defineEmits<NotificationContentEmits>();
 
 let timer: number | null = null;
 
-const classes = computed(() => ["su-notification", `su-notification--${type}`]);
+const classes = computed(() => ["su-notification", `su-notification--${props.type}`]);
 
-function handleTimer(): void {
+const handleTimer = (): void => {
   if (!props.duration) return;
   timer = window.setTimeout(() => {
-    emits("on-close", props.id);
+    emits("close", props.id);
   }, props.duration as number);
-}
+};
 
-function handleClose(id: string | number): void {
-  emits("on-close", id);
-}
+const handleClose = (id: string | number): void => {
+  emits("close", id);
+};
 
 onMounted(() => {
   handleTimer();

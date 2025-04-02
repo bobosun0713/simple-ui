@@ -9,30 +9,32 @@ import {
   useFloating
 } from "@floating-ui/vue";
 import { onClickOutside } from "@vueuse/core";
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 
-import type { PopperArrowData, PopperProps, PopperSlots, PopperTrigger } from "./types";
+import type { PopperArrowData, PopperProps, PopperEmits, PopperSlots, PopperTrigger } from "./types";
 
 defineOptions({
   name: "SPopper"
 });
 
-const modelValue = defineModel<boolean>({ default: false });
+const props = withDefaults(defineProps<PopperProps>(), {
+  modelValue: false,
+  content: undefined,
+  offset: 0,
+  placement: "bottom",
+  allowPlacement: undefined,
+  transition: "su-popper-fade",
+  trigger: "click",
+  appendToBody: true,
+  arrowOptions: undefined,
+  hasShift: undefined
+});
 
-const {
-  content = undefined,
-  offset = 0,
-  placement = "bottom",
-  allowPlacement = undefined,
-  transition = "su-popper-fade",
-  trigger: propsTrigger = "click",
-  appendToBody = true,
-  arrowOptions = undefined,
-  hasShift = undefined
-} = defineProps<PopperProps>();
+const emits = defineEmits<PopperEmits>();
 
 const slots = defineSlots<PopperSlots>();
 
+const isVisible = ref(props.modelValue);
 const referenceRef = ref<HTMLDivElement | null>(null);
 const popperRef = ref<HTMLDivElement | null>(null);
 
@@ -41,18 +43,20 @@ const {
   middlewareData,
   placement: floatingPlacement
 } = useFloating(referenceRef, popperRef, {
-  open: modelValue,
-  placement: () => placement,
+  open: props.modelValue,
+  placement: () => props.placement,
   whileElementsMounted: autoUpdate,
 
   middleware: () => [
-    floatingOffset(Math.max(offset, 0)),
+    floatingOffset(Math.max(props.offset, 0)),
     flip({
       /* v8 ignore next 3 */
-      ...(allowPlacement && { fallbackPlacements: Array.isArray(allowPlacement) ? allowPlacement : [allowPlacement] })
+      ...(props.allowPlacement && {
+        fallbackPlacements: Array.isArray(props.allowPlacement) ? props.allowPlacement : [props.allowPlacement]
+      })
     }),
-    ...(hasShift ? [shift({ limiter: limitShift() })] : []),
-    ...(arrowOptions ? [floatingArrow(arrowOptions)] : [])
+    ...(props.hasShift ? [shift({ limiter: limitShift() })] : []),
+    ...(props.arrowOptions ? [floatingArrow(props.arrowOptions)] : [])
   ]
 });
 
@@ -79,26 +83,27 @@ const arrowData = computed<PopperArrowData>(() => {
   return arrowResult;
 });
 
-function bindTrigger(cb: () => void, trigger: PopperTrigger): void {
-  if (!propsTrigger.includes(trigger)) return;
+const bindTrigger = (cb: () => void, trigger: PopperTrigger): void => {
+  if (!props.trigger.includes(trigger)) return;
   cb();
-}
+};
 
-function handleToggle(val: boolean): void {
-  modelValue.value = val;
-}
+const handleToggle = (val: boolean): void => {
+  isVisible.value = val;
+  emits("update:modelValue", isVisible.value);
+};
 
-function handleMouseover(val: boolean): void {
+const handleMouseover = (val: boolean): void => {
   bindTrigger(() => {
     handleToggle(val);
   }, "hover");
-}
+};
 
-function handleClick(val: boolean): void {
+const handleClick = (val: boolean): void => {
   bindTrigger(() => {
     handleToggle(val);
   }, "click");
-}
+};
 
 onClickOutside(
   popperRef,
@@ -109,13 +114,18 @@ onClickOutside(
     ignore: [referenceRef]
   }
 );
+
+watch(
+  () => props.modelValue,
+  val => (isVisible.value = val)
+);
 </script>
 
 <template>
   <div
     ref="referenceRef"
     :class="['su-popper-reference', $attrs.class]"
-    @click="handleClick(!modelValue)"
+    @click="handleClick(!isVisible)"
     @mouseenter="handleMouseover(true)"
     @mouseleave="handleMouseover(false)"
   >
@@ -125,7 +135,7 @@ onClickOutside(
   <template v-if="(slots.content || content) && slots.reference">
     <Teleport to="body" :disabled="!appendToBody">
       <Transition :name="transition">
-        <div v-show="modelValue" ref="popperRef" :style="floatingStyles" class="su-popper">
+        <div v-show="isVisible" ref="popperRef" :style="floatingStyles" class="su-popper">
           <slot name="content" :arrow-style="arrowData.style" :placement="arrowData.placement">{{ content }}</slot>
         </div>
       </Transition>

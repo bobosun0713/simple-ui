@@ -12,6 +12,17 @@ export interface NotificationProps {
   position?: NotificationPlacement;
 }
 
+export interface NotificationSlots {
+  title?: (props: { title: string }) => void;
+  message?: (props: { message: string }) => void;
+  cancel?: (props: { handleClose: () => void }) => void;
+}
+
+export interface NotificationExposeAction {
+  handleAdd: (props: NotificationContentProps) => void;
+  handleRemoveAll: () => void;
+}
+
 export interface NotificationContentProps {
   id?: number | string;
   type?: NotificationTypes;
@@ -20,6 +31,8 @@ export interface NotificationContentProps {
   cancel?: MessageHRender;
   duration?: string | number;
 }
+
+export type NotificationContentEmits = (e: "close", value: string | number) => void;
 
 export type NotificationServiceProps = NotificationProps;
 

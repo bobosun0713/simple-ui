@@ -6,8 +6,8 @@
   --su-dialog-body-padding: 20px 16px;
   --su-dialog-footer-padding: 0 16px 16px 16px;
   --su-dialog-header-font-size: 18px;
-  --su-dialog-body-font-size: 14px;
-  --su-dialog-footer-font-size: 14px;
+  --su-dialog-body-font-size: 16px;
+  --su-dialog-footer-font-size: 16px;
 }
 
 .su-dialog {
@@ -62,6 +62,7 @@
     height: 24px;
     border-radius: 50%;
     border: 0;
+    padding: 0;
     margin-left: auto;
     background-color: transparent;
     transition: $default-transition;
@@ -72,12 +73,13 @@
     }
   }
 
-  &__default-btn {
+  &__buttons {
     display: flex;
     justify-content: flex-end;
+    gap: 8px;
 
-    > button:first-child {
-      margin-right: 8px;
+    .su-button {
+      font-size: var(--su-dialog-footer-font-size);
     }
   }
 }

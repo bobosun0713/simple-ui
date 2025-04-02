@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted } from "vue";
 import SIcon from "../icon/Icon.vue";
-import type { MessageContentProps } from "./types";
+import type { MessageContentProps, MessageContentEmits } from "./types";
 
 defineOptions({
   name: "SMessageContent"
@@ -11,23 +11,23 @@ const props = withDefaults(defineProps<MessageContentProps>(), {
   type: "info",
   message: "Message Content"
 });
-const emit = defineEmits(["on-close"]);
+
+const emits = defineEmits<MessageContentEmits>();
 
 let timer: number | null = null;
 
-function handleClose(idx: string | number): void {
-  emit("on-close", idx);
-}
+const handleClose = (idx: string | number): void => {
+  emits("close", idx);
+};
 
-function handleAutoHide(): void {
+const handleAutoHide = (): void => {
   timer = window.setTimeout(() => {
     handleClose(props.id as number);
   }, Number(props.duration));
-}
+};
 
 onMounted(() => {
   if (!props.duration) return;
-
   handleAutoHide();
 });
 

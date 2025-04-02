@@ -22,23 +22,23 @@ const width = computed(() => `width:${props.width}px;`);
 const offsetTop = computed(() => `top:${props.offsetTop}px;`);
 const eleSpacing = computed(() => `margin-top:${props.eleSpacing}px;`);
 
-function handleAdd(data: MessageContentProps): void {
+const handleAdd = (data: MessageContentProps): void => {
   const message = { id: messagesIdx.value, ...data };
 
   if (messageList.value.length === 0) messagesIdx.value = 0;
 
   messagesIdx.value += 1;
   messageList.value.push(message);
-}
+};
 
-function handleRemove(idx: string | number): void {
+const handleRemove = (idx: string | number): void => {
   const findIdx = messageList.value.findIndex(item => item.id === idx);
   messageList.value.splice(findIdx, 1);
-}
+};
 
-function handleRemoveAll(): void {
+const handleRemoveAll = (): void => {
   messageList.value = [];
-}
+};
 
 defineExpose({ handleAdd, handleRemoveAll });
 </script>

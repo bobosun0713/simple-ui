@@ -2,15 +2,14 @@
 import { computed } from "vue";
 import SIcon from "../icon/Icon.vue";
 
-import type { PaginationProps } from "./types";
+import type { PaginationProps, PaginationEmits } from "./types";
 
 defineOptions({
   name: "SPagination"
 });
 
-const current = defineModel("current", { type: Number, default: 1 });
-
 const props = withDefaults(defineProps<PaginationProps>(), {
+  current: 1,
   perPage: 3,
   total: 0,
   pager: 5,
@@ -18,7 +17,12 @@ const props = withDefaults(defineProps<PaginationProps>(), {
   disabled: false
 });
 
-const totalPage = computed(() => Math.ceil(props.total / props.perPage) || 1);
+const emits = defineEmits<PaginationEmits>();
+
+const currentValue = computed({
+  get: () => props.current,
+  set: val => emits("update:current", val)
+});
 
 const pagerList = computed(() => {
   const pageButtons = [];
@@ -27,20 +31,20 @@ const pagerList = computed(() => {
   const pagerLastHalf = Math.floor(props.pager / 2);
 
   let startPage = 1;
-  let endPage = current.value + Number(props.pager) - 1;
+  let endPage = currentValue.value + Number(props.pager) - 1;
 
   if (totalPage.value <= props.pager) {
     startPage = 1;
     endPage = totalPage.value;
-  } else if (current.value <= pagerFirstHalf) {
+  } else if (currentValue.value <= pagerFirstHalf) {
     startPage = 1;
     endPage = props.pager;
-  } else if (current.value >= totalPage.value - pagerLastHalf) {
+  } else if (currentValue.value >= totalPage.value - pagerLastHalf) {
     startPage = totalPage.value - props.pager + 1;
     endPage = totalPage.value;
   } else {
-    startPage = current.value - pagerLastHalf;
-    endPage = current.value + pagerFirstHalf;
+    startPage = currentValue.value - pagerLastHalf;
+    endPage = currentValue.value + pagerFirstHalf;
   }
 
   for (let page = startPage; page <= endPage; page++) {
@@ -50,8 +54,9 @@ const pagerList = computed(() => {
   return pageButtons.slice(0, props.pager);
 });
 
-const isFirstPage = computed(() => current.value === 1);
-const isLastPage = computed(() => current.value === totalPage.value);
+const totalPage = computed(() => Math.ceil(props.total / props.perPage) || 1);
+const isFirstPage = computed(() => currentValue.value === 1);
+const isLastPage = computed(() => currentValue.value === totalPage.value);
 
 const buttonClasses = computed(() => ({
   main: {
@@ -72,17 +77,19 @@ const pagerClasses = computed(() => ({
   "su-pagination__pager--disabled": props.disabled
 }));
 
-function handlePrev(): void {
+const handlePrev = (): void => {
   if (isFirstPage.value || props.disabled) return;
-  current.value -= 1;
-}
-function handleNext(): void {
+  currentValue.value -= 1;
+};
+
+const handleNext = (): void => {
   if (isLastPage.value || props.disabled) return;
-  current.value += 1;
-}
-function handleClickPager(val: number): void {
-  current.value = val;
-}
+  currentValue.value += 1;
+};
+
+const handleClickPager = (val: number): void => {
+  currentValue.value = val;
+};
 </script>
 
 <template>

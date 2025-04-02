@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { computed, getCurrentInstance, ref, watch, onMounted, onUnmounted } from "vue";
+import { computed, getCurrentInstance, onUnmounted } from "vue";
 import { dialogInstances } from "./instance";
 import SIcon from "../icon/Icon.vue";
 import SButton from "../button/Button.vue";
-import type { DialogProps, DialogSlotAction, DialogExposeAction } from "./types";
+import type { DialogProps, DialogExposeAction, DialogEmits, DialogSlots } from "./types";
 
 defineOptions({
   name: "SDialog"
@@ -12,67 +12,54 @@ defineOptions({
 const instance = getCurrentInstance()!;
 dialogInstances.push(instance);
 
-const visibleModel = defineModel("visible", {
-  type: Boolean,
-  default: false
+const props = withDefaults(defineProps<DialogProps>(), {
+  id: "",
+  visible: false,
+  size: "md",
+  closeOnOverlay: true,
+  showClose: true,
+  appendToBody: true,
+  onConfirm: undefined,
+  onCancel: undefined,
+  onClose: undefined,
+  vanish: undefined
 });
 
-const {
-  size = "md",
-  closeOnOverlay = true,
-  showClose = true,
-  appendToBody = true,
-  onConfirm,
-  onCancel,
-  onClose,
-  vanish
-} = defineProps<DialogProps>();
+const emits = defineEmits<DialogEmits>();
 
-const emits = defineEmits<{
-  "update:visible": [value: boolean];
-  "on-confirm": [];
-  "on-close": [];
-  "on-cancel": [];
-}>();
+defineSlots<DialogSlots>();
 
-defineSlots<{
-  header?: () => unknown;
-  body?: () => unknown;
-  footer?: (props: DialogSlotAction) => unknown;
-}>();
+const contentClasses = computed(() => ["su-dialog__content", `su-dialog__content--${props.size}`]);
 
-const isVisible = ref(false);
-const contentClasses = computed(() => ["su-dialog__content", `su-dialog__content--${size}`]);
-
-function handleToggle(val = false): void {
-  visibleModel.value = val;
-}
-
-function handleClose(): void {
-  onClose?.();
-  emits("on-close");
-  handleToggle(false);
-}
-
-function handleCancel(): void {
-  onCancel?.();
-  emits("on-cancel");
-  handleToggle(false);
-}
-
-function handleConfirm(): void {
-  onConfirm?.();
-  emits("on-confirm");
-  handleToggle(false);
-}
-
-watch(visibleModel, val => {
-  isVisible.value = val;
+const visibleValue = computed({
+  get: () => props.visible,
+  set: val => {
+    emits("update:visible", val);
+  }
 });
 
-onMounted(() => {
-  isVisible.value = visibleModel.value;
-});
+const handleToggle = (val = false): void => {
+  visibleValue.value = val;
+};
+
+const handleClose = (): void => {
+  props.onClose?.();
+  emits("close");
+  visibleValue.value;
+  handleToggle(false);
+};
+
+const handleCancel = (): void => {
+  props.onCancel?.();
+  emits("cancel");
+  handleToggle(false);
+};
+
+const handleConfirm = (): void => {
+  props.onConfirm?.();
+  emits("confirm");
+  handleToggle(false);
+};
 
 onUnmounted(() => {
   dialogInstances.splice(dialogInstances.indexOf(instance), 1);
@@ -86,7 +73,7 @@ defineExpose<DialogExposeAction>({
 <template>
   <Teleport to="body" :disabled="!appendToBody">
     <Transition name="fade" @after-leave="vanish">
-      <div v-show="isVisible" :id="id" class="su-dialog" @click.self="() => closeOnOverlay && handleClose()">
+      <div v-show="visibleValue" :id="id" class="su-dialog" @click.self="() => closeOnOverlay && handleClose()">
         <div :class="contentClasses">
           <div class="su-dialog__header">
             <slot name="header">Tips</slot>
@@ -101,7 +88,7 @@ defineExpose<DialogExposeAction>({
 
           <div class="su-dialog__footer">
             <slot name="footer" :close="handleClose" :confirm="handleConfirm" :cancel="handleCancel">
-              <div class="su-dialog__default-btn">
+              <div class="su-dialog__buttons">
                 <SButton outlined @click="handleCancel">No</SButton>
                 <SButton @click="handleConfirm">Yes</SButton>
               </div>

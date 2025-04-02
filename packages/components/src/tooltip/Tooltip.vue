@@ -1,25 +1,34 @@
 <script lang="ts" setup>
-import type { TooltipProps } from "./types";
+import { computed } from "vue";
+import type { TooltipProps, TooltipEmits } from "./types";
 import SPopper from "../popper/Popper.vue";
 
 defineOptions({
   name: "STooltip"
 });
 
-const {
-  content = undefined,
-  offset = 0,
-  placement = "bottom",
-  allowPlacement = undefined,
-  transition = "su-fade",
-  trigger = "hover",
-  appendToBody = true,
-  hasShift = true
-} = defineProps<TooltipProps>();
+const props = withDefaults(defineProps<TooltipProps>(), {
+  content: undefined,
+  offset: 0,
+  placement: "bottom",
+  allowPlacement: undefined,
+  transition: "su-fade",
+  trigger: "hover",
+  appendToBody: true,
+  hasShift: true
+});
+
+const emits = defineEmits<TooltipEmits>();
+
+const modelValue = computed({
+  get: () => props.modelValue,
+  set: (value: boolean) => emits("update:modelValue", value)
+});
 </script>
 
 <template>
   <SPopper
+    v-model="modelValue"
     :offset="Math.max(0, offset + 4)"
     :transition="transition"
     :placement="placement"

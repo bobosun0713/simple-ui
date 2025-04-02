@@ -1,6 +1,7 @@
 import type { App } from "vue";
 import * as components from "./src";
-import "./styles/reset.scss";
+import "./styles/normalize.scss";
+import "./styles/base.scss";
 
 export * from "./src";
 export default {

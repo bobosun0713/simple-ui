@@ -6,7 +6,11 @@ defineOptions({
   name: "SSkeleton"
 });
 
-const { rows = 2, loading = true, animated = true } = defineProps<SkeletonProps>();
+withDefaults(defineProps<SkeletonProps>(), {
+  rows: 2,
+  loading: true,
+  animated: true
+});
 </script>
 
 <template>

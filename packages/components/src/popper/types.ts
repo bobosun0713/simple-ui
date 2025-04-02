@@ -4,6 +4,7 @@ import type { StyleValue } from "vue";
 export type PopperTrigger = "hover" | "click";
 
 export interface PopperProps {
+  modelValue?: boolean;
   content?: string;
   offset?: number;
   trigger?: PopperTrigger | PopperTrigger[];
@@ -14,6 +15,8 @@ export interface PopperProps {
   hasShift?: boolean;
   appendToBody?: boolean;
 }
+
+export type PopperEmits = (e: "update:modelValue", value: boolean) => void;
 
 export interface PopperSlots {
   reference?: () => unknown;

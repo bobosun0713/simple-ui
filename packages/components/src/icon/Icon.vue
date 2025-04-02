@@ -6,10 +6,14 @@ defineOptions({
   name: "SIcon"
 });
 
-const { name = "github", width = 20, height = 20 } = defineProps<IconProps>();
+const props = withDefaults(defineProps<IconProps>(), {
+  name: "github",
+  width: 20,
+  height: 20
+});
 
 const iconModules = import.meta.glob("./svg/*.vue");
-const currentIcon = computed(() => defineAsyncComponent(iconModules[`./svg/${name}.vue`] as any));
+const currentIcon = computed(() => defineAsyncComponent(iconModules[`./svg/${props.name}.vue`] as any));
 </script>
 
 <template>

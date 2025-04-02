@@ -15,6 +15,13 @@ export interface DialogProps {
   vanish?: () => void;
 }
 
+export interface DialogEmits {
+  (e: "close"): void;
+  (e: "cancel"): void;
+  (e: "confirm"): void;
+  (e: "update:visible", value: boolean): void;
+}
+
 export interface DialogExposeAction {
   handleToggle: (arg: boolean) => void;
 }
@@ -25,6 +32,12 @@ export interface DialogSlotAction {
   close: () => void;
   cancel: () => void;
   confirm: () => void;
+}
+
+export interface DialogSlots {
+  header?: () => void;
+  body?: () => void;
+  footer?: (props: DialogSlotAction) => void;
 }
 
 export interface DialogServiceSlots {

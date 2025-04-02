@@ -16,6 +16,8 @@ export interface MessageContentProps extends Omit<MessageProps, "width"> {
   message?: string | number;
 }
 
+export type MessageContentEmits = (e: "close", value: string | number) => void;
+
 export type MessageServiceOpen = Pick<MessageContentProps, "type" | "message">;
 
 export interface MessageServiceSlot {

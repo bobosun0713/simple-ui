@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed, inject } from "vue";
 import SIcon from "../icon/Icon.vue";
-import { type CollapseItemProps, collapsePropsKey } from "./types";
+import { type CollapseItemProps, type CollapseItemEmits, collapsePropsKey } from "./types";
 
 const collapse = inject(collapsePropsKey);
 
@@ -9,14 +9,19 @@ defineOptions({
   name: "SCollapseItem"
 });
 
-const { name = "", title = "Tips", content = "Collapse Content" } = defineProps<CollapseItemProps>();
-const emits = defineEmits(["active"]);
+const props = withDefaults(defineProps<CollapseItemProps>(), {
+  name: "",
+  title: "Tips",
+  content: "Collapse Content"
+});
 
-const isActive = computed(() => collapse && collapse.activeNames.value.indexOf(name) > -1);
+const emits = defineEmits<CollapseItemEmits>();
 
-function handleClick(): void {
-  emits("active", name);
-}
+const isActive = computed(() => collapse && collapse.activeNames.value.indexOf(props.name) > -1);
+
+const handleClick = (): void => {
+  emits("active", props.name);
+};
 </script>
 
 <template>

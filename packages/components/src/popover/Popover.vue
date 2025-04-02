@@ -1,29 +1,38 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, computed } from "vue";
 
-import type { PopoverProps } from "./types";
+import type { PopoverProps, PopoverEmits } from "./types";
 import SPopper from "../popper/Popper.vue";
 
 defineOptions({
   name: "SPopover"
 });
 
-const {
-  content = undefined,
-  offset = 0,
-  placement = "bottom",
-  allowPlacement = undefined,
-  transition = "su-popper-fade",
-  trigger = "click",
-  appendToBody = true,
-  hasShift = undefined
-} = defineProps<PopoverProps>();
+const props = withDefaults(defineProps<PopoverProps>(), {
+  modelValue: false,
+  content: undefined,
+  offset: 0,
+  placement: "bottom",
+  allowPlacement: undefined,
+  transition: "su-popper-fade",
+  trigger: "click",
+  appendToBody: true,
+  hasShift: undefined
+});
+
+const emits = defineEmits<PopoverEmits>();
+
+const modelValue = computed({
+  get: () => props.modelValue,
+  set: (value: boolean) => emits("update:modelValue", value)
+});
 
 const popoverArrowRef = ref<HTMLElement | null>(null);
 </script>
 
 <template>
   <SPopper
+    v-model="modelValue"
     :offset="Math.max(0, offset + 6)"
     :transition="transition"
     :placement="placement"

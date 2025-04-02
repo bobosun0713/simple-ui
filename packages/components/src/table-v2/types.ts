@@ -14,7 +14,7 @@ export interface TableRow<T> {
 }
 
 export interface TableProps<T> {
-  modelValue?: unknown[];
+  selected?: unknown[];
   columns: TableColumn[];
   rows: TableRow<T>[];
   defaultSort?: {
@@ -24,4 +24,9 @@ export interface TableProps<T> {
   checkable?: boolean;
   checkableKey?: string;
   stickyHeader?: boolean | string;
+}
+
+export interface TableEmits {
+  (e: "update:sort", value: TableProps<unknown>["defaultSort"]): void;
+  (e: "update:selected", value: unknown[]): void;
 }

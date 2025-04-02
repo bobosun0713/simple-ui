@@ -6,7 +6,10 @@ defineOptions({
   name: "SkeletonItem"
 });
 
-const { variant = "p", animated = true } = defineProps<SkeletonItemProps>();
+withDefaults(defineProps<SkeletonItemProps>(), {
+  variant: "p",
+  animated: true
+});
 </script>
 
 <template>

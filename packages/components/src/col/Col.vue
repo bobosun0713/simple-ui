@@ -6,12 +6,15 @@ defineOptions({
   name: "SCol"
 });
 
-const { col = 3, gutter = 0 } = defineProps<ColProps>();
+const props = withDefaults(defineProps<ColProps>(), {
+  col: 3,
+  gutter: 0
+});
 
 const styles = computed(() => ({
-  paddingLeft: `${gutter}px`,
-  paddingRight: `${gutter}px`,
-  width: col % 12 ? `calc(${col / 12} * 100%)` : "100%"
+  paddingLeft: `${props.gutter}px`,
+  paddingRight: `${props.gutter}px`,
+  width: props.col % 12 ? `calc(${props.col / 12} * 100%)` : "100%"
 }));
 </script>
 

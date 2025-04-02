@@ -1,34 +1,36 @@
 <script lang="ts" setup>
 import { ref, computed } from "vue";
 import NotificationContent from "./NotificationContent.vue";
-import type { NotificationProps, NotificationContentProps } from "./types";
+import type { NotificationProps, NotificationSlots, NotificationExposeAction, NotificationContentProps } from "./types";
 
 defineOptions({
   name: "SNotification"
 });
 
-const {
-  width = 300,
-  offsetTop = 10,
-  eleSpacing = 10,
-  duration = 3000,
-  position = "top-right"
-} = defineProps<NotificationProps>();
+const props = withDefaults(defineProps<NotificationProps>(), {
+  width: 300,
+  offsetTop: 10,
+  eleSpacing: 10,
+  duration: 3000,
+  position: "top-right"
+});
 
-const notificationList = ref<NotificationContentProps[]>([]);
+defineSlots<NotificationSlots>();
+
 let notificationIdx = 0;
+const notificationList = ref<NotificationContentProps[]>([]);
 
 const verticalDirection = computed(() =>
-  /bottom/.test(position) ? "su-notification-wrap--bottom" : "su-notification-wrap--top"
+  /bottom/.test(props.position) ? "su-notification-wrap--bottom" : "su-notification-wrap--top"
 );
 const horizontalDirection = computed(() =>
-  /right/.test(position) ? "su-notification-wrap--right" : "su-notification-wrap--left"
+  /right/.test(props.position) ? "su-notification-wrap--right" : "su-notification-wrap--left"
 );
 const animationType = computed(() =>
   horizontalDirection.value.includes("right") ? "notification-right" : "notification-left"
 );
 
-function handleAdd(data: NotificationContentProps): void {
+const handleAdd = (data: NotificationContentProps): void => {
   if (notificationList.value.length === 0) notificationIdx = 0;
 
   notificationIdx += 1;
@@ -37,24 +39,18 @@ function handleAdd(data: NotificationContentProps): void {
   const aryMethod = verticalDirection.value === "su-notification-wrap--bottom" ? "unshift" : "push";
   //@ts-ignore
   notificationList.value[aryMethod](data);
-}
+};
 
-function handleRemove(idx: string | number): void {
-  const findIdx = notificationList.value.findIndex(item => item.id === idx);
+const handleRemove = (data: string | number): void => {
+  const findIdx = notificationList.value.findIndex(item => item.id === data);
   if (findIdx !== -1) notificationList.value.splice(findIdx, 1);
-}
+};
 
-function handleRemoveAll(): void {
+const handleRemoveAll = (): void => {
   notificationList.value = [];
-}
+};
 
-defineSlots<{
-  title?: (props: { title: string }) => unknown;
-  message?: (props: { message: string }) => unknown;
-  cancel?: (props: { handleClose: () => void }) => unknown;
-}>();
-
-defineExpose({ handleAdd, handleRemoveAll });
+defineExpose<NotificationExposeAction>({ handleAdd, handleRemoveAll });
 </script>
 
 <template>

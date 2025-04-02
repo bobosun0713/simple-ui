@@ -87,6 +87,7 @@ $text-error: var(--su-button-error);
   font-size: $text-md;
   white-space: nowrap;
   color: $light;
+  cursor: pointer;
 
   @include hover(0.8, 1);
 

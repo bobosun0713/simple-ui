@@ -2,22 +2,23 @@
 import { ref, onMounted, watch } from "vue";
 import { deepClone } from "@simple/utils";
 import SIcon from "../icon/Icon.vue";
-import type { TableProps, TableRow, TableColumn } from "./types";
+import type { TableProps, TableEmits, TableRow, TableColumn } from "./types";
 
 defineOptions({
   name: "STableV2"
 });
 
-const {
-  rows = [],
-  columns = [],
-  defaultSort = { orderBy: "", sortBy: "desc" },
-  checkable = false,
-  checkableKey = "",
-  stickyHeader = false
-} = defineProps<TableProps<T>>();
+const props = withDefaults(defineProps<TableProps<T>>(), {
+  rows: () => [],
+  columns: () => [],
+  selected: () => [],
+  defaultSort: () => ({ orderBy: "", sortBy: "desc" }),
+  checkable: false,
+  checkableKey: "",
+  stickyHeader: false
+});
 
-const emits = defineEmits(["update:modelValue", "sort"]);
+const emits = defineEmits<TableEmits>();
 
 const tableCols = ref<TableColumn[]>([]);
 const tableRows = ref<TableRow<T>[]>([]);
@@ -28,20 +29,20 @@ const checked = ref<null | HTMLInputElement>(null);
 const isCheckAll = ref(false);
 
 function transformColumns(): void {
-  for (const col of columns) {
-    const sortState = col.sort ? defaultSort.orderBy === col.prop : "none";
+  for (const col of props.columns) {
+    const sortState = col.sort ? props.defaultSort.orderBy === col.prop : "none";
 
     tableCols.value.push({
       ...col,
       sort: sortState,
-      sortBy: defaultSort.sortBy
+      sortBy: props.defaultSort.sortBy
     });
   }
 
   // Find the currently sorted property,
   // If there are identical props, only the first one will be assigned.
   for (const col of tableCols.value) {
-    if (col.prop === defaultSort.orderBy && col.sort !== "none" && col.sort) {
+    if (col.prop === props.defaultSort.orderBy && col.sort !== "none" && col.sort) {
       col.sortActive = true;
       break;
     }
@@ -72,14 +73,14 @@ function handleSort(col: TableColumn): void {
 
   orderBy.value = col.prop ?? "";
 
-  emits("sort", { orderBy: orderBy.value, sortBy: col.sortBy });
+  emits("update:sort", { orderBy: orderBy.value, sortBy: col.sortBy });
 }
 
 function handleCheckAll(): void {
   isCheckAll.value = !isCheckAll.value;
 
   tableRows.value.forEach(row => {
-    const rowVal = row[checkableKey] ?? row;
+    const rowVal = row[props.checkableKey] ?? row;
 
     if (isCheckAll.value) {
       row.checked = true;
@@ -90,14 +91,16 @@ function handleCheckAll(): void {
     }
   });
 
-  emits("update:modelValue", checkedList.value);
+  emits("update:selected", checkedList.value);
 }
 
 function handleChecked(row: TableRow<T>): void {
-  const idx = checkedList.value.findIndex(item => (row[checkableKey] ? item === row[checkableKey] : item === row));
+  const idx = checkedList.value.findIndex(item =>
+    row[props.checkableKey] ? item === row[props.checkableKey] : item === row
+  );
 
   if (idx === -1) {
-    checkedList.value.push(row[checkableKey] ?? row);
+    checkedList.value.push(row[props.checkableKey] ?? row);
     row.checked = true;
   } else {
     checkedList.value.splice(idx, 1);
@@ -115,20 +118,20 @@ function handleChecked(row: TableRow<T>): void {
     checked.value!.indeterminate = false;
   }
 
-  emits("update:modelValue", checkedList.value);
+  emits("update:selected", checkedList.value);
 }
 
 watch(
-  () => rows,
+  () => props.rows,
   newVal => {
-    tableRows.value = deepClone(newVal).map(item => ({ ...item, ...(checkable ? { checked: false } : {}) }));
+    tableRows.value = deepClone(newVal).map(item => ({ ...item, ...(props.checkable ? { checked: false } : {}) }));
   },
   { immediate: true, deep: true }
 );
 
 onMounted(() => {
   transformColumns();
-  if (defaultSort.orderBy) orderBy.value = defaultSort.orderBy;
+  if (props.defaultSort.orderBy) orderBy.value = props.defaultSort.orderBy;
 });
 </script>
 
