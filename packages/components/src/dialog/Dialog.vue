@@ -45,7 +45,6 @@ const handleToggle = (val = false): void => {
 const handleClose = (): void => {
   props.onClose?.();
   emits("close");
-  visibleValue.value;
   handleToggle(false);
 };
 
