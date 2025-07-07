@@ -29,7 +29,7 @@ export type IconNames =
   | "heart";
 
 export interface IconProps {
-  name?: IconNames;
+  name?: IconNames | (string & {});
   width?: number | string;
   height?: number | string;
 }

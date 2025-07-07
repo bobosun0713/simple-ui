@@ -25,7 +25,11 @@ $dark-light: color.adjust($dark, $lightness: 10%) !default;
 $dark-dark: color.adjust($dark, $lightness: -20%) !default;
 
 $light: #fff !default;
+
 $light-grey: #dbdbdb !default;
+$light-light: color.adjust($light-grey, $lightness: 10%) !default;
+$light-dark: color.adjust($light-grey, $lightness: -20%) !default;
+
 $dark-grey: #b5b5b5 !default;
 
 $default-transition: all 0.3s ease;
