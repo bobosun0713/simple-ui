@@ -31,7 +31,8 @@ function getBuildConfig(buildConfig: BuildConfig): InlineConfig {
       dts({
         entryRoot: `packages/${folder}`,
         outDir: [ourDir],
-        tsconfigPath: resolve(filename, "../tsconfig.web.json")
+        tsconfigPath: resolve(filename, "../tsconfig.web.json"),
+        copyDtsFiles: true
       })
     ],
     css: {
@@ -79,7 +80,7 @@ async function buildFolder(folder: string): Promise<void> {
         folder: folder,
         format: format as Extract<BuildConfig, "format">,
         minify: true,
-        ourDir: resolve(filename, `dist/${format}/${folder}`)
+        ourDir: resolve(filename, `simple-ui/${format}/${folder}`)
       })
     );
   }

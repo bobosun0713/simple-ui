@@ -32,5 +32,5 @@ const clickOutSide: ObjectDirective = {
   }
 };
 
-const SClickOutSide = withInstallDirective(clickOutSide, "click-outside");
+export const SClickOutSide = withInstallDirective(clickOutSide, "click-outside");
 export default SClickOutSide;

@@ -1,0 +1,77 @@
+{
+  "name": "simple-ui",
+  "version": "0.0.0",
+  "license": "MIT",
+  "author": "bobosun0713",
+  "description": "Vue3 UI Library",
+  "type": "module",
+  "main": "cjs/components/index.cjs",
+  "module": "es/components/index.mjs",
+  "types": "es/components/index.d.ts",
+  "files": [
+    "es",
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bobosun0713/simple-ui.git"
+  },
+  "bugs": {
+    "url": "https://github.com/bobosun0713/simple-ui/issues"
+  },
+  "exports": {
+    ".": {
+      "types": "./es/components/index.d.ts",
+      "require": "./cjs/components/index.cjs",
+      "import": "./es/components/index.mjs"
+    },
+    "./global": {
+      "types": "./es/components/global.d.ts"
+    },
+    "./global/directives": {
+      "types": "./es/directives/global.d.ts"
+    },
+    "./components": {
+      "types": "./es/components/index.d.ts",
+      "import": "./es/components/index.mjs",
+      "require": "./lib/components/index.cjs.js"
+    },
+    "./components/*": {
+      "types": "./es/components/src/*/index.d.ts",
+      "import": "./es/components/src/*/index.mjs",
+      "require": "./lib/components/src/*/index.cjs.js"
+    },
+    "./directives": {
+      "types": "./es/directives/index.d.ts",
+      "import": "./es/directives/index.mjs",
+      "require": "./lib/directives/index.cjs.js"
+    },
+    "./directives/*": {
+      "types": "./es/directives/src/*/index.d.ts",
+      "import": "./es/directives/src/*/index.mjs",
+      "require": "./lib/directives/src/*/index.cjs.js"
+    },
+    "./use": {
+      "types": "./es/use/index.d.ts",
+      "import": "./es/use/index.mjs",
+      "require": "./lib/use/index.cjs.js"
+    },
+    "./use/*": {
+      "types": "./es/use/src/*/index.d.ts",
+      "import": "./es/use/src/*/index.mjs",
+      "require": "./lib/use/src/*/index.cjs.js"
+    },
+    "./style.css": {
+      "import": "./es/components/style.css",
+      "require": "./cjs/components/style.css"
+    }
+  },
+  "keywords": [
+    "Vue3",
+    "Simple UI"
+  ],
+  "peerDependencies": {
+    "@floating-ui/vue": "^1.1.5",
+    "vue": "^3.2.0"
+  }
+}

@@ -1,31 +1,6 @@
 {
-  "name": "simple-ui",
-  "version": "0.0.0",
-  "private": false,
+  "private": true,
   "type": "module",
-  "description": "",
-  "main": "dist/cjs/components/index.cjs",
-  "module": "dist/es/components/index.mjs",
-  "types": "dist/es/components/index.d.ts",
-  "exports": {
-    ".": {
-      "require": "./dist/cjs/components/index.cjs",
-      "import": "./dist/es/components/index.mjs",
-      "types": "./dist/es/components/index.d.ts"
-    },
-    "./es/*": {
-      "import": "./dist/es/*/index.mjs",
-      "types": "./dist/es/*/index.d.ts"
-    },
-    "./cjs/*": {
-      "require": "./dist/cjs/*/index.cjs",
-      "types": "./dist/cjs/*/index.d.ts"
-    }
-  },
-  "files": [
-    "dist",
-    "typings"
-  ],
   "scripts": {
     "dev": "pnpm -C examples run dev",
     "build": "tsx ./packages/vite.config.mts",
@@ -42,15 +17,11 @@
     "type-check:force": "pnpm type-check --force",
     "format": "prettier --write '!(package|pnpm-lock).*' --ignore-unknown",
     "format:all": "pnpm format .",
-    "prepare": "husky",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "prepare": "husky"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "peerDependencies": {
-    "@floating-ui/vue": "^1.1.5",
     "vue": "^3.2.0"
   },
   "devDependencies": {

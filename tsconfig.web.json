@@ -6,16 +6,15 @@
     "tsBuildInfoFile": "./.cache/tsconfig.web.tsbuildinfo"
   },
   "include": [
-    "./packages/components/*.ts",
-    "./packages/components/src/**/*.vue",
-    "./packages/components/src/**/*.ts",
-    "./packages/directives/*.ts",
-    "./packages/directives/src/**/*.ts",
-    "./packages/use/*.ts",
-    "./packages/use/src/**/*.ts",
-    "./packages/utils/*.ts",
-    "./typings/components.d.ts",
-    "./typings/vite-env.d.ts"
+    "packages/components/*.ts",
+    "packages/components/src/**/*.vue",
+    "packages/components/src/**/*.ts",
+    "packages/directives/*.ts",
+    "packages/directives/src/**/*.ts",
+    "packages/use/*.ts",
+    "packages/use/src/**/*.ts",
+    "packages/utils/*.ts",
+    "types/vite-env.d.ts"
   ],
-  "exclude": ["./packages/**/src/**/__tests__/*"]
+  "exclude": ["packages/**/src/**/__tests__/*"]
 }

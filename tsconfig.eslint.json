@@ -2,5 +2,5 @@
   "compilerOptions": {
     "strictNullChecks": true
   },
-  "include": [".eslintrc.cjs", ".lintstagedrc.js", "./packages/vite.config.mts", "./packages/vitest.config.mts"]
+  "include": [".eslintrc.cjs", ".lintstagedrc.js", "packages/vite.config.mts", "packages/vitest.config.mts"]
 }
