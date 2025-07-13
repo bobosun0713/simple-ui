@@ -1,6 +1,6 @@
 <p align="center">
 <a href="https://github.com/bobosun0713/simple-ui">
-  <img src="https://raw.githubusercontent.com/bobosun0713/simple-ui/master/packages/public/logo.png" alt="Simple-UI" width="240">
+  <img src="https://raw.githubusercontent.com/bobosun0713/simple-ui/master/docs/public/logo-512x512.png" alt="simple-ui" width="320">
 </a>
 <br>
 <br>
