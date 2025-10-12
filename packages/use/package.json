@@ -1,5 +1,6 @@
 {
   "name": "@simple/use",
+  "version": "0.0.0",
   "private": true,
   "description": "",
   "main": "index.js",
@@ -7,6 +8,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@simple/utils": "workspace:^1.0.0"
+    "@simple/utils": "workspace:^"
   }
 }
